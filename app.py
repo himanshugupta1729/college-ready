@@ -8,6 +8,7 @@ archetype, and a personalized daily practice plan.
 import os
 import io
 import csv
+import logging
 import json
 import random
 import sqlite3
@@ -2757,7 +2758,12 @@ def daily_practice():
         return redirect(url_for('test_intro'))
 
     # Get or create practice plan
-    plan = generate_practice_plan(student_id)
+    try:
+        plan = generate_practice_plan(student_id)
+    except Exception as e:
+        logging.error(f'Practice plan generation failed for {student_id}: {e}')
+        flash(f'Practice plan setup error. Please try again.', 'warning')
+        return redirect(url_for('dashboard'))
     if not plan:
         flash('Unable to generate practice plan.', 'warning')
         return redirect(url_for('dashboard'))
@@ -2792,7 +2798,11 @@ def daily_practice():
         ).fetchone()[0]
 
         # Use plan-based smart selection
-        question_ids = get_practice_session_questions(student_id, plan)
+        try:
+            question_ids = get_practice_session_questions(student_id, plan)
+        except Exception as e:
+            logging.error(f'Practice question selection failed: {e}')
+            question_ids = []
 
         if not question_ids:
             # Fallback to old random selection
