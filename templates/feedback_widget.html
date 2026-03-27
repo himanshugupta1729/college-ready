@@ -1,0 +1,171 @@
+{# Floating feedback widget — only renders for demo events #}
+{% if is_demo %}
+<style>
+.fb-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    width: 320px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05);
+    padding: 24px;
+    transform: translateY(120%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+}
+.fb-float.visible { transform: translateY(0); }
+.fb-float.submitted { transform: translateY(120%); }
+
+.fb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.fb-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+.fb-close {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: #f3f4f6;
+    color: #6b7280;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fb-close:hover { background: #e5e7eb; }
+
+.fb-question {
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.fb-stars {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+.fb-star {
+    font-size: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.15s;
+    filter: grayscale(1) opacity(0.3);
+}
+.fb-star:hover { transform: scale(1.2); }
+.fb-star.active { filter: none; }
+
+.fb-text {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #f9fafb;
+    color: #1a1a2e;
+    font-size: 13px;
+    resize: none;
+    font-family: inherit;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+}
+.fb-text:focus { outline: none; border-color: #FFBA07; }
+.fb-text::placeholder { color: #9ca3af; }
+
+.fb-submit {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #FFBA07;
+    color: #1a1a2e;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.fb-submit:hover { background: #E5A913; }
+.fb-submit:disabled { opacity: 0.5; cursor: default; }
+
+.fb-thanks {
+    text-align: center;
+    padding: 12px 0;
+}
+.fb-thanks-icon { font-size: 32px; margin-bottom: 8px; }
+.fb-thanks-text { font-size: 14px; color: #374151; font-weight: 600; }
+</style>
+
+<div class="fb-float" id="fbWidget">
+    <div id="fbForm">
+        <div class="fb-header">
+            <div class="fb-title">💬 Quick Feedback</div>
+            <button class="fb-close" onclick="dismissFeedback()">×</button>
+        </div>
+        <div class="fb-question" id="fbQuestion">{{ feedback_question | default('How was this experience?') }}</div>
+        <div class="fb-stars" id="fbStars">
+            <button class="fb-star" onclick="selectStar(1)">⭐</button>
+            <button class="fb-star" onclick="selectStar(2)">⭐</button>
+            <button class="fb-star" onclick="selectStar(3)">⭐</button>
+            <button class="fb-star" onclick="selectStar(4)">⭐</button>
+            <button class="fb-star" onclick="selectStar(5)">⭐</button>
+        </div>
+        <textarea class="fb-text" id="fbText" placeholder="What could be better? (optional)" rows="2"></textarea>
+        <button class="fb-submit" id="fbSubmitBtn" onclick="submitFloatFeedback()" disabled>Send Feedback</button>
+    </div>
+    <div class="fb-thanks" id="fbThanks" style="display:none;">
+        <div class="fb-thanks-icon">🙏</div>
+        <div class="fb-thanks-text">Thanks! Your feedback helps us improve.</div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var widget = document.getElementById('fbWidget');
+    var selectedRating = 0;
+    var feedbackStep = '{{ feedback_step | default("general") }}';
+
+    // Slide in after 3 seconds
+    setTimeout(function() {
+        widget.classList.add('visible');
+    }, 3000);
+
+    window.selectStar = function(n) {
+        selectedRating = n;
+        document.querySelectorAll('.fb-star').forEach(function(s, i) {
+            s.classList.toggle('active', i < n);
+        });
+        document.getElementById('fbSubmitBtn').disabled = false;
+    };
+
+    window.submitFloatFeedback = function() {
+        var text = document.getElementById('fbText').value;
+        fetch('/api/feedback', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({step: feedbackStep, rating: selectedRating, text: text})
+        }).then(function() {
+            document.getElementById('fbForm').style.display = 'none';
+            document.getElementById('fbThanks').style.display = 'block';
+            setTimeout(function() {
+                widget.classList.remove('visible');
+            }, 2000);
+        });
+    };
+
+    window.dismissFeedback = function() {
+        widget.classList.remove('visible');
+    };
+})();
+</script>
+{% endif %}

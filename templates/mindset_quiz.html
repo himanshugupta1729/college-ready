@@ -277,44 +277,9 @@
 
   </form>
 
-  {% if is_demo %}
-  <div id="mindset-feedback" style="display:none; text-align:center; padding: 24px 0 8px; max-width: 500px; margin: 0 auto;">
-      <div style="font-size: 14px; color: #888; margin-bottom: 12px;">How was the mindset quiz?</div>
-      <div id="fb-stars-mindset" style="display:flex; gap:8px; justify-content:center; margin-bottom: 12px;">
-          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',1,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
-          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',2,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
-          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',3,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
-          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',4,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
-          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',5,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
-      </div>
-      <textarea id="fb-text-mindset" placeholder="Any thoughts? (optional)" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; background:#fafafa; color:#333; font-size:13px; resize:none;" rows="2"></textarea>
-      <div id="fb-done-mindset" style="display:none; color:#16A34A; font-size:13px; margin-top:8px;">Thanks for the feedback!</div>
-  </div>
-  <script>
-  function rateFeedbackMindset(step, rating, btn) {
-      document.querySelectorAll('#fb-stars-mindset button').forEach(function(b, i) {
-          b.classList.toggle('selected', i < rating);
-          b.style.opacity = i < rating ? '1' : '0.4';
-      });
-      var text = document.getElementById('fb-text-mindset').value;
-      fetch('/api/feedback', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({step: step, rating: rating, text: text})
-      }).then(function() {
-          document.getElementById('fb-done-mindset').style.display = 'block';
-      });
-  }
-  // Show feedback widget when user reaches last section
-  var origShowSection = window.showSection;
-  window.showSection = function(idx) {
-      origShowSection(idx);
-      var totalSections = {{ sections|length }};
-      var fb = document.getElementById('mindset-feedback');
-      if (fb) fb.style.display = (idx === totalSections - 1) ? 'block' : 'none';
-  };
-  </script>
-  {% endif %}
+  {% with feedback_step='mindset_quiz', feedback_question='How was the mindset quiz?' %}
+      {% include 'feedback_widget.html' %}
+  {% endwith %}
 </div>
 
 <script>
