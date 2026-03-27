@@ -2866,6 +2866,7 @@ def daily_practice():
 def submit_practice():
     conn = get_db()
     student_id = session['student_id']
+    student = conn.execute("SELECT * FROM students WHERE id = ?", (student_id,)).fetchone()
     workout_id = request.form.get('workout_id')
     answers = request.form.to_dict()
 
