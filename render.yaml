@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: college-ready
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11.6"
+      - key: DATABASE_PATH
+        value: /opt/render/project/src/data/college_ready.db
+    disk:
+      name: college-ready-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
