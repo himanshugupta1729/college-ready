@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>College Ready — Product Showcase</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #F5F5F7;
+    color: #1d1d1f;
+}
+
+.header {
+    background: white;
+    border-bottom: 1px solid #d2d2d7;
+    padding: 20px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+.header .subtitle {
+    font-size: 14px;
+    color: #86868b;
+    font-weight: 500;
+}
+
+.nav-pills {
+    display: flex;
+    gap: 4px;
+    background: #f5f5f7;
+    border-radius: 10px;
+    padding: 4px;
+}
+.nav-pills a {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d1d1f;
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+.nav-pills a:hover { background: rgba(0,0,0,0.06); }
+.nav-pills a.active { background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+.showcase {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.block {
+    margin-bottom: 60px;
+    scroll-margin-top: 80px;
+}
+
+.block-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.block-num {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #1d1d1f;
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.block-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+.block-desc {
+    font-size: 15px;
+    color: #86868b;
+    margin-top: 2px;
+}
+.block-status {
+    margin-left: auto;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.status-done { background: #d1fae5; color: #065f46; }
+.status-wip { background: #fef3c7; color: #92400e; }
+.status-planned { background: #e5e7eb; color: #374151; }
+
+.frame-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.frame-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #d2d2d7;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.frame-label {
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #86868b;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.frame-label a {
+    font-size: 12px;
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+.frame-label a:hover { text-decoration: underline; }
+
+.frame-card iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+    display: block;
+}
+
+.frame-card.tall iframe {
+    height: 700px;
+}
+
+.flow-arrow {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 24px;
+    color: #d2d2d7;
+}
+
+.notes {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #92400e;
+    line-height: 1.6;
+}
+
+/* Flow diagram */
+.flow {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #d2d2d7;
+    padding: 32px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+.flow-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #86868b;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 12px;
+}
+.flow-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.flow-step {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #f5f5f7;
+    border: 1px solid #d2d2d7;
+}
+.flow-step.active { background: #1d1d1f; color: white; border-color: #1d1d1f; }
+.flow-step.future { background: #f5f5f7; color: #86868b; border-style: dashed; }
+.flow-arr { color: #d2d2d7; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1>College Ready Night</h1>
+        <div class="subtitle">Product Showcase — All Blocks</div>
+    </div>
+    <nav class="nav-pills">
+        <a href="#flow">Flow</a>
+        <a href="#b1">Registration</a>
+        <a href="#b2">Test</a>
+        <a href="#b3">Mindset</a>
+        <a href="#b4">Archetype</a>
+        <a href="#b5">Student Report</a>
+        <a href="#b6">Parent Report</a>
+        <a href="#b7">Share Card</a>
+        <a href="#b8">Practice Plan</a>
+        <a href="#b9">Admin</a>
+    </nav>
+</div>
+
+<div class="showcase">
+
+    <!-- FLOW DIAGRAM -->
+    <div class="flow" id="flow">
+        <div class="flow-title">Student Journey</div>
+        <div class="flow-steps">
+            <div class="flow-step active">Register</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step active">Math Test</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step active">Mindset Quiz</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step active">Archetype Reveal</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step active">Student Report</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step active">Share Card</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step future">4-Week Plan</div>
+            <div class="flow-arr">→</div>
+            <div class="flow-step future">Lite Quiz (Viral)</div>
+        </div>
+        <div style="margin-top: 16px; display: flex; justify-content: center; gap: 8px;">
+            <div class="flow-step" style="background: #d1fae5; color: #065f46; border-color: #a7f3d0;">Parent gets separate report</div>
+        </div>
+    </div>
+
+    <!-- BLOCK 1: Registration -->
+    <div class="block" id="b1">
+        <div class="block-header">
+            <div class="block-num">1</div>
+            <div>
+                <div class="block-title">Registration</div>
+                <div class="block-desc">Student signs up with event code, grade, track selection</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card">
+                <div class="frame-label">Student Login <a href="http://localhost:5050/" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/"></iframe>
+            </div>
+            <div class="frame-card">
+                <div class="frame-label">Student Registration <a href="http://localhost:5050/register" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/register"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCK 2: Test Experience -->
+    <div class="block" id="b2">
+        <div class="block-header">
+            <div class="block-num">2</div>
+            <div>
+                <div class="block-title">Math Test</div>
+                <div class="block-desc">Adaptive MST — 864 questions across 10 tracks, timed, FUAR scoring</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card">
+                <div class="frame-label">Test Intro <a href="http://localhost:5050/test/intro" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/test/intro"></iframe>
+            </div>
+        </div>
+        <div class="notes">Test questions shown one at a time with timer. Adaptive: Module 1 performance routes to harder/easier Module 2. Can't show live test without an active session.</div>
+    </div>
+
+    <!-- BLOCK 3: Mindset Quiz -->
+    <div class="block" id="b3">
+        <div class="block-header">
+            <div class="block-num">3</div>
+            <div>
+                <div class="block-title">Mindset Quiz (GRIC)</div>
+                <div class="block-desc">4-point scale, 12 questions across Growth, Relevance, Interest, Confidence</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card">
+                <div class="frame-label">Mindset Quiz <a href="http://localhost:5050/test/mindset" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/test/mindset"></iframe>
+            </div>
+        </div>
+        <div class="notes">Section-by-section flow: intro → 4 sections of 3 questions each. 4-point scale: Not really / Sometimes / Usually / Definitely me.</div>
+    </div>
+
+    <!-- BLOCK 4: Archetype Reveal -->
+    <div class="block" id="b4">
+        <div class="block-header">
+            <div class="block-num">4</div>
+            <div>
+                <div class="block-title">Archetype Reveal</div>
+                <div class="block-desc">8 Greek letter archetypes — σ δ π θ φ λ α γ — with glam reveal</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card tall">
+                <div class="frame-label">Archetype Reveal (Rig — α Alpha) <a href="http://localhost:5050/reveal" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/reveal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCK 5: Student Report -->
+    <div class="block" id="b5">
+        <div class="block-header">
+            <div class="block-num">5</div>
+            <div>
+                <div class="block-title">Student Report</div>
+                <div class="block-desc">Dark theme — scores, percentile, FUAR profile, topic heatmap with drill-down, 4-week plan teaser</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card tall">
+                <div class="frame-label">Student Report (Rig, AP Stats) <a href="http://localhost:5050/report/9992" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/report/9992"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCK 6: Parent Report -->
+    <div class="block" id="b6">
+        <div class="block-header">
+            <div class="block-num">6</div>
+            <div>
+                <div class="block-title">Parent Report</div>
+                <div class="block-desc">Light theme — plain language, FUAR explained, topics, percentile, actionable steps</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card tall">
+                <div class="frame-label">Parent Report (Rig's parent) <a href="http://localhost:5050/report/9992/parent" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/report/9992/parent"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCK 7: Share Card -->
+    <div class="block" id="b7">
+        <div class="block-header">
+            <div class="block-num">7</div>
+            <div>
+                <div class="block-title">Share Cards</div>
+                <div class="block-desc">1080×1920 Story-sized cards per archetype — shareable on Instagram/Snapchat</div>
+            </div>
+            <div class="block-status status-wip">WIP</div>
+        </div>
+        <div class="frame-row" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="frame-card">
+                <div class="frame-label">α Alpha <a href="http://localhost:5050/share/9992" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/share/9992" style="height: 400px;"></iframe>
+            </div>
+            <div class="frame-card">
+                <div class="frame-label">σ Sigma <a href="http://localhost:5050/share/preview/sigma" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/share/preview/sigma" style="height: 400px;"></iframe>
+            </div>
+            <div class="frame-card">
+                <div class="frame-label">δ Delta <a href="http://localhost:5050/share/preview/delta" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/share/preview/delta" style="height: 400px;"></iframe>
+            </div>
+            <div class="frame-card">
+                <div class="frame-label">θ Theta <a href="http://localhost:5050/share/preview/theta" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/share/preview/theta" style="height: 400px;"></iframe>
+            </div>
+        </div>
+        <div class="notes">Design iteration in progress. Need more visual personality — characters, better color handling for dark archetypes like Theta. Flow: Reveal → Share Card → Friend opens landing page → Lite quiz.</div>
+    </div>
+
+    <!-- BLOCK 8: Archetype Landing (Share destination) -->
+    <div class="block">
+        <div class="block-header">
+            <div class="block-num">7b</div>
+            <div>
+                <div class="block-title">Archetype Landing Page</div>
+                <div class="block-desc">Where the share link takes people — archetype info + CTA to take lite quiz</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card tall">
+                <div class="frame-label">Alpha Landing <a href="http://localhost:5050/type/alpha" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/type/alpha"></iframe>
+            </div>
+            <div class="frame-card tall">
+                <div class="frame-label">Sigma Landing <a href="http://localhost:5050/type/sigma" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/type/sigma"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOCK 8: Practice Plan -->
+    <div class="block" id="b8">
+        <div class="block-header">
+            <div class="block-num">8</div>
+            <div>
+                <div class="block-title">4-Week Practice Plan</div>
+                <div class="block-desc">20-25 min daily sessions, adaptive difficulty, weekly re-assessment, archetype evolution</div>
+            </div>
+            <div class="block-status status-wip">Backend Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card tall">
+                <div class="frame-label">Student Dashboard <a href="http://localhost:5050/dashboard" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/dashboard"></iframe>
+            </div>
+        </div>
+        <div class="notes">
+            <strong>Engine built:</strong> Plan generator (recommends 3/4/5 days based on gap), topic-level question selection, adaptive difficulty, weekly re-assessment, Week 4 archetype evolution.<br>
+            <strong>Remaining:</strong> Dashboard visuals for plan progress, weekly assessment template polish, practice session UI with show-explanation-after-each-answer.
+        </div>
+    </div>
+
+    <!-- BLOCK 9: Admin -->
+    <div class="block" id="b9">
+        <div class="block-header">
+            <div class="block-num">9</div>
+            <div>
+                <div class="block-title">Admin Portal</div>
+                <div class="block-desc">Event management, student list, question bank, reports</div>
+            </div>
+            <div class="block-status status-done">Done</div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-card tall">
+                <div class="frame-label">Admin Dashboard <a href="http://localhost:5050/admin" target="_blank">Open ↗</a></div>
+                <iframe src="http://localhost:5050/admin"></iframe>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Highlight active nav pill on scroll
+const blocks = document.querySelectorAll('.block');
+const navLinks = document.querySelectorAll('.nav-pills a');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    blocks.forEach(block => {
+        const top = block.offsetTop - 100;
+        if (window.scrollY >= top) current = block.id;
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+});
+</script>
+
+</body>
+</html>

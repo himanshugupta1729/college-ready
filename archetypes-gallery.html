@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathFit Archetype Gallery — 32 Cards</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --fluency: #3B82F6;
+    --understanding: #10B981;
+    --application: #F59E0B;
+    --reasoning: #8B5CF6;
+    --growth: #14B8A6;
+    --relevance: #F97316;
+    --interest: #EC4899;
+    --confidence: #EAB308;
+  }
+
+  body {
+    background: #08090c;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 60px 24px 80px;
+    color: #fff;
+  }
+
+  .page-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 20px;
+  }
+
+  .page-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .page-header .sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .section {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 56px 0 32px;
+    padding: 0 8px;
+  }
+
+  .section-header h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.15), transparent);
+  }
+
+  .section-header .count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1.5px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+    padding: 0 8px;
+  }
+
+  /* ============================================
+     THE CARD
+     ============================================ */
+  .card {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    cursor: default;
+  }
+
+  .card:hover {
+    transform: translateY(-6px) scale(1.01);
+  }
+
+  /* Badge area — top section */
+  .card-badge-area {
+    flex: 0 0 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Geometric grid overlay */
+  .card-badge-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+  }
+
+  /* Glow effect behind badge */
+  .card-badge-area::after {
+    content: '';
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(40px);
+    opacity: 0.25;
+  }
+
+  /* The badge */
+  .badge {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .badge-ring-outer {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge-ring-mid {
+    width: 102px;
+    height: 102px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge-core {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .badge-icon {
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 2px;
+    filter: grayscale(0.1) brightness(1.15);
+  }
+
+  .badge-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 6px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Accent dots around badge */
+  .badge-dot {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+  .badge-dot:nth-child(1) { top: -4px; left: 50%; transform: translateX(-50%); }
+  .badge-dot:nth-child(2) { bottom: -4px; left: 50%; transform: translateX(-50%); }
+  .badge-dot:nth-child(3) { left: -4px; top: 50%; transform: translateY(-50%); }
+  .badge-dot:nth-child(4) { right: -4px; top: 50%; transform: translateY(-50%); }
+
+  /* Content area */
+  .card-content {
+    flex: 1;
+    padding: 20px 24px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .card-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 24px;
+    right: 24px;
+    height: 1px;
+  }
+
+  .card-intro {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    opacity: 0.6;
+  }
+
+  .card-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    letter-spacing: -0.3px;
+  }
+
+  .card-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .card-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.55;
+    margin-top: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Dimension pills */
+  .card-dims {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .dim-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 12px;
+  }
+
+  .dim-x {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* Footer */
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .logo-mark {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 9px;
+    font-weight: 800;
+    color: white;
+  }
+
+  .logo-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 8px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .card-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 7px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+  }
+
+  /* ============================================
+     FUAR COLOR VARIANTS
+     ============================================ */
+
+  /* --- FLUENCY (Blue) --- */
+  .card-fluency {
+    background: linear-gradient(165deg, #1a3a5c 0%, #0f2440 45%, #0a1929 100%);
+    box-shadow: 0 8px 32px rgba(59,130,246,0.12), 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .card-fluency:hover { box-shadow: 0 16px 48px rgba(59,130,246,0.2), 0 4px 16px rgba(0,0,0,0.4); }
+  .card-fluency .card-badge-area::before {
+    background:
+      linear-gradient(45deg, transparent 48%, rgba(59,130,246,0.04) 49%, rgba(59,130,246,0.04) 51%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(59,130,246,0.03) 49%, rgba(59,130,246,0.03) 51%, transparent 52%);
+    background-size: 36px 36px;
+  }
+  .card-fluency .card-badge-area::after { background: #3B82F6; }
+  .card-fluency .badge-ring-outer { border: 2px solid rgba(59,130,246,0.3); }
+  .card-fluency .card-content::before { background: linear-gradient(90deg, rgba(59,130,246,0.4), transparent); }
+  .card-fluency .card-intro { color: #93C5FD; }
+  .card-fluency .logo-mark { background: linear-gradient(135deg, #3B82F6, #2563EB); }
+
+  /* --- UNDERSTANDING (Green) --- */
+  .card-understanding {
+    background: linear-gradient(165deg, #1a3d3a 0%, #0f2e2a 45%, #091a19 100%);
+    box-shadow: 0 8px 32px rgba(16,185,129,0.12), 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .card-understanding:hover { box-shadow: 0 16px 48px rgba(16,185,129,0.2), 0 4px 16px rgba(0,0,0,0.4); }
+  .card-understanding .card-badge-area::before {
+    background:
+      linear-gradient(45deg, transparent 48%, rgba(16,185,129,0.04) 49%, rgba(16,185,129,0.04) 51%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(16,185,129,0.03) 49%, rgba(16,185,129,0.03) 51%, transparent 52%);
+    background-size: 36px 36px;
+  }
+  .card-understanding .card-badge-area::after { background: #10B981; }
+  .card-understanding .badge-ring-outer { border: 2px solid rgba(16,185,129,0.3); }
+  .card-understanding .card-content::before { background: linear-gradient(90deg, rgba(16,185,129,0.4), transparent); }
+  .card-understanding .card-intro { color: #6EE7B7; }
+  .card-understanding .logo-mark { background: linear-gradient(135deg, #10B981, #059669); }
+
+  /* --- APPLICATION (Amber) --- */
+  .card-application {
+    background: linear-gradient(165deg, #3d2e0f 0%, #2a1f0a 45%, #1a1305 100%);
+    box-shadow: 0 8px 32px rgba(245,158,11,0.12), 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .card-application:hover { box-shadow: 0 16px 48px rgba(245,158,11,0.2), 0 4px 16px rgba(0,0,0,0.4); }
+  .card-application .card-badge-area::before {
+    background:
+      linear-gradient(45deg, transparent 48%, rgba(245,158,11,0.04) 49%, rgba(245,158,11,0.04) 51%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(245,158,11,0.03) 49%, rgba(245,158,11,0.03) 51%, transparent 52%);
+    background-size: 36px 36px;
+  }
+  .card-application .card-badge-area::after { background: #F59E0B; }
+  .card-application .badge-ring-outer { border: 2px solid rgba(245,158,11,0.3); }
+  .card-application .card-content::before { background: linear-gradient(90deg, rgba(245,158,11,0.4), transparent); }
+  .card-application .card-intro { color: #FCD34D; }
+  .card-application .logo-mark { background: linear-gradient(135deg, #F59E0B, #D97706); }
+
+  /* --- REASONING (Purple) --- */
+  .card-reasoning {
+    background: linear-gradient(165deg, #2d1f5e 0%, #1a1340 45%, #0f0a29 100%);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.12), 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .card-reasoning:hover { box-shadow: 0 16px 48px rgba(139,92,246,0.2), 0 4px 16px rgba(0,0,0,0.4); }
+  .card-reasoning .card-badge-area::before {
+    background:
+      linear-gradient(45deg, transparent 48%, rgba(139,92,246,0.04) 49%, rgba(139,92,246,0.04) 51%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(139,92,246,0.03) 49%, rgba(139,92,246,0.03) 51%, transparent 52%);
+    background-size: 36px 36px;
+  }
+  .card-reasoning .card-badge-area::after { background: #8B5CF6; }
+  .card-reasoning .badge-ring-outer { border: 2px solid rgba(139,92,246,0.3); }
+  .card-reasoning .card-content::before { background: linear-gradient(90deg, rgba(139,92,246,0.4), transparent); }
+  .card-reasoning .card-intro { color: #C4B5FD; }
+  .card-reasoning .logo-mark { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
+
+  /* ============================================
+     GRIC ACCENT COLORS (badge ring-mid + pills)
+     ============================================ */
+  .gric-growth .badge-ring-mid { border: 1.5px solid rgba(20,184,166,0.3); }
+  .gric-growth .badge-core { box-shadow: 0 4px 20px rgba(20,184,166,0.2); }
+  .gric-growth .badge-dot { background: #14B8A6; }
+  .gric-growth .dim-gric { color: #5EEAD4; background: rgba(20,184,166,0.12); border: 1px solid rgba(20,184,166,0.2); }
+
+  .gric-relevance .badge-ring-mid { border: 1.5px solid rgba(249,115,22,0.3); }
+  .gric-relevance .badge-core { box-shadow: 0 4px 20px rgba(249,115,22,0.2); }
+  .gric-relevance .badge-dot { background: #F97316; }
+  .gric-relevance .dim-gric { color: #FDBA74; background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.2); }
+
+  .gric-interest .badge-ring-mid { border: 1.5px solid rgba(236,72,153,0.3); }
+  .gric-interest .badge-core { box-shadow: 0 4px 20px rgba(236,72,153,0.2); }
+  .gric-interest .badge-dot { background: #EC4899; }
+  .gric-interest .dim-gric { color: #F9A8D4; background: rgba(236,72,153,0.12); border: 1px solid rgba(236,72,153,0.2); }
+
+  .gric-confidence .badge-ring-mid { border: 1.5px solid rgba(234,179,8,0.3); }
+  .gric-confidence .badge-core { box-shadow: 0 4px 20px rgba(234,179,8,0.2); }
+  .gric-confidence .badge-dot { background: #EAB308; }
+  .gric-confidence .dim-gric { color: #FDE68A; background: rgba(234,179,8,0.12); border: 1px solid rgba(234,179,8,0.2); }
+
+  /* FUAR pill colors */
+  .dim-fuar-fluency { color: #93C5FD; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.25); }
+  .dim-fuar-understanding { color: #6EE7B7; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.25); }
+  .dim-fuar-application { color: #FCD34D; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.25); }
+  .dim-fuar-reasoning { color: #C4B5FD; background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.25); }
+
+  /* Badge core gradient per FUAR+GRIC combo */
+  .card-fluency.gric-growth .badge-core { background: linear-gradient(145deg, #3B82F6 0%, #1D4ED8 55%, #14B8A6 100%); }
+  .card-fluency.gric-relevance .badge-core { background: linear-gradient(145deg, #3B82F6 0%, #1D4ED8 55%, #F97316 100%); }
+  .card-fluency.gric-interest .badge-core { background: linear-gradient(145deg, #3B82F6 0%, #1D4ED8 55%, #EC4899 100%); }
+  .card-fluency.gric-confidence .badge-core { background: linear-gradient(145deg, #3B82F6 0%, #1D4ED8 55%, #EAB308 100%); }
+
+  .card-understanding.gric-growth .badge-core { background: linear-gradient(145deg, #10B981 0%, #059669 55%, #14B8A6 100%); }
+  .card-understanding.gric-relevance .badge-core { background: linear-gradient(145deg, #10B981 0%, #059669 55%, #F97316 100%); }
+  .card-understanding.gric-interest .badge-core { background: linear-gradient(145deg, #10B981 0%, #059669 55%, #EC4899 100%); }
+  .card-understanding.gric-confidence .badge-core { background: linear-gradient(145deg, #10B981 0%, #059669 55%, #EAB308 100%); }
+
+  .card-application.gric-growth .badge-core { background: linear-gradient(145deg, #F59E0B 0%, #D97706 55%, #14B8A6 100%); }
+  .card-application.gric-relevance .badge-core { background: linear-gradient(145deg, #F59E0B 0%, #D97706 55%, #F97316 100%); }
+  .card-application.gric-interest .badge-core { background: linear-gradient(145deg, #F59E0B 0%, #D97706 55%, #EC4899 100%); }
+  .card-application.gric-confidence .badge-core { background: linear-gradient(145deg, #F59E0B 0%, #D97706 55%, #EAB308 100%); }
+
+  .card-reasoning.gric-growth .badge-core { background: linear-gradient(145deg, #8B5CF6 0%, #7C3AED 55%, #14B8A6 100%); }
+  .card-reasoning.gric-relevance .badge-core { background: linear-gradient(145deg, #8B5CF6 0%, #7C3AED 55%, #F97316 100%); }
+  .card-reasoning.gric-interest .badge-core { background: linear-gradient(145deg, #8B5CF6 0%, #7C3AED 55%, #EC4899 100%); }
+  .card-reasoning.gric-confidence .badge-core { background: linear-gradient(145deg, #8B5CF6 0%, #7C3AED 55%, #EAB308 100%); }
+
+  .badge-core { box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+    body { padding: 32px 12px; }
+    .page-header h1 { font-size: 24px; }
+    .grid { grid-template-columns: 1fr; gap: 20px; }
+    .card { min-height: 340px; }
+    .card-badge-area { flex: 0 0 150px; }
+    .badge { width: 100px; height: 100px; }
+    .badge-ring-outer { width: 100px; height: 100px; }
+    .badge-ring-mid { width: 84px; height: 84px; }
+    .badge-core { width: 68px; height: 68px; }
+    .badge-icon { font-size: 22px; }
+    .card-name { font-size: 18px; }
+  }
+
+  @media (min-width: 1200px) {
+    .grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>MathFit Archetype Gallery</h1>
+  <div class="sub">32 identities &middot; FUAR &times; GRIC &middot; Middle + High School</div>
+</div>
+
+<!-- ============================================================
+     MIDDLE SCHOOL — 16 ARCHETYPES
+     ============================================================ -->
+<div class="section">
+  <div class="section-header">
+    <h2>Middle School</h2>
+    <div class="line"></div>
+    <span class="count">16 ARCHETYPES &middot; GRADES 6&ndash;8</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- M01: The Rapid Strategist — Fluency x Growth -->
+    <div class="card card-fluency gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Rapid Strategist</div>
+          <div class="card-tagline">&ldquo;Fast today, faster tomorrow.&rdquo;</div>
+          <div class="card-desc">You process math quickly AND you're always leveling up. You don't just rely on what you already know — you actively push yourself to learn new methods and better strategies.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M01 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M02: The Precision Realist — Fluency x Relevance -->
+    <div class="card card-fluency gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Precision Realist</div>
+          <div class="card-tagline">&ldquo;You see exactly where math meets the real world.&rdquo;</div>
+          <div class="card-desc">You're fast with numbers and you know exactly WHERE to use them. Budgets, statistics, sports analytics — you see the math in everything practical.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M02 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M03: The Speed Enthusiast — Fluency x Interest -->
+    <div class="card card-fluency gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Speed Enthusiast</div>
+          <div class="card-tagline">&ldquo;You don't just do math fast, you LOVE doing it fast.&rdquo;</div>
+          <div class="card-desc">You're fast AND you love it. Math isn't homework to you — it's the most exciting game in the room. You get a rush from mental math, speed challenges, and tricky problems.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M03 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M04: The Sure Shot — Fluency x Confidence -->
+    <div class="card card-fluency gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Sure Shot</div>
+          <div class="card-tagline">&ldquo;When you see a problem, you KNOW you can solve it.&rdquo;</div>
+          <div class="card-desc">You're fast and you TRUST yourself. When a math problem appears, you don't hesitate — you dive in because you know your skills work.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M04 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M05: The Depth Builder — Understanding x Growth -->
+    <div class="card card-understanding gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Depth Builder</div>
+          <div class="card-tagline">&ldquo;You construct understanding layer by layer.&rdquo;</div>
+          <div class="card-desc">You don't just learn math — you BUILD understanding from the ground up. Every time you grasp something, you ask "can I go deeper?"</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M05 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M06: The Sense Maker — Understanding x Relevance -->
+    <div class="card card-understanding gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Sense Maker</div>
+          <div class="card-tagline">&ldquo;You turn confusing math into something everyone understands.&rdquo;</div>
+          <div class="card-desc">You understand math deeply AND you can explain WHY it matters. When someone asks "why do we learn this?" you actually have an answer.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M06 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M07: The Curious Mind — Understanding x Interest -->
+    <div class="card card-understanding gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Curious Mind</div>
+          <div class="card-tagline">&ldquo;You can't stop asking 'why?' and you love every answer.&rdquo;</div>
+          <div class="card-desc">You don't study math because you have to — you study it because you genuinely want to KNOW things. Every concept is a door to more questions.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M07 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M08: The Steady Anchor — Understanding x Confidence -->
+    <div class="card card-understanding gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Steady Anchor</div>
+          <div class="card-tagline">&ldquo;Your understanding runs deep, and so does your confidence.&rdquo;</div>
+          <div class="card-desc">Your confidence in math comes from the right place — genuine understanding. You don't just know procedures; you understand why they work.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M08 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M09: The Growth Hacker — Application x Growth -->
+    <div class="card card-application gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Growth Hacker</div>
+          <div class="card-tagline">&ldquo;You apply math to hard problems and grow stronger every time.&rdquo;</div>
+          <div class="card-desc">You apply math to real problems, and when those problems push back, you don't break — you GROW. You treat every challenge as training.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M09 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M10: The Real-World Solver — Application x Relevance -->
+    <div class="card card-application gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Real-World Solver</div>
+          <div class="card-tagline">&ldquo;You see the math behind everything that matters.&rdquo;</div>
+          <div class="card-desc">You see math as a design tool. Every real-world system is a math problem waiting for a better solution. You don't just solve problems — you design solutions.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M10 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M11: The Creative Solver — Application x Interest -->
+    <div class="card card-application gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Creative Solver</div>
+          <div class="card-tagline">&ldquo;You find paths to solutions nobody else sees.&rdquo;</div>
+          <div class="card-desc">You apply math creatively. Where others see one path to a solution, you see five. You're drawn to elegant approaches and surprising connections.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M11 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M12: The Team Captain — Application x Confidence -->
+    <div class="card card-application gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Team Captain</div>
+          <div class="card-tagline">&ldquo;You lead the way and take others with you.&rdquo;</div>
+          <div class="card-desc">You don't just apply math — you lead the application. In group projects and challenges, you're the one who organizes the approach and drives toward results.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M12 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M13: The Level-Up Logician — Reasoning x Growth -->
+    <div class="card card-reasoning gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Level-Up Logician</div>
+          <div class="card-tagline">&ldquo;Your reasoning gets sharper with every challenge.&rdquo;</div>
+          <div class="card-desc">You think logically, and your logic is ALWAYS improving. You actively seek harder problems and more complex patterns. Every test makes it stronger.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M13 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M14: The Pattern Connector — Reasoning x Relevance -->
+    <div class="card card-reasoning gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Pattern Connector</div>
+          <div class="card-tagline">&ldquo;You see connections that link everything together.&rdquo;</div>
+          <div class="card-desc">You reason with precision, and you apply that reasoning EVERYWHERE. Science, sports, games, coding — you see the logical structures that connect them all.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M14 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M15: The Mystery Hunter — Reasoning x Interest -->
+    <div class="card card-reasoning gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Mystery Hunter</div>
+          <div class="card-tagline">&ldquo;Every problem is a mystery, and you love solving them.&rdquo;</div>
+          <div class="card-desc">You're drawn to the deepest puzzles in math — and you love it. You don't need real-world applications to find math interesting; the challenge itself is the reward.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M15 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M16: The Proof Master — Reasoning x Confidence -->
+    <div class="card card-reasoning gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">The Proof Master</div>
+          <div class="card-tagline">&ldquo;Your logic is airtight and you can prove it.&rdquo;</div>
+          <div class="card-desc">You reason clearly, rigorously, and confidently. When you present an answer, it's built on solid logic and you can defend every step.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">M16 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     HIGH SCHOOL — 16 ARCHETYPES
+     ============================================================ -->
+<div class="section">
+  <div class="section-header">
+    <h2>High School</h2>
+    <div class="line"></div>
+    <span class="count">16 ARCHETYPES &middot; GRADES 9&ndash;12</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- H01: Adaptive Analyst — Fluency x Growth -->
+    <div class="card card-fluency gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like an</div>
+          <div class="card-name">Adaptive Analyst</div>
+          <div class="card-tagline">&ldquo;Computational strength that keeps evolving.&rdquo;</div>
+          <div class="card-desc">You have strong computational skills, and you're not standing still. You actively adapt your methods, learn new approaches, and push your quantitative thinking to the next level.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H01 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H02: Applied Quant — Fluency x Relevance -->
+    <div class="card card-fluency gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like an</div>
+          <div class="card-name">Applied Quant</div>
+          <div class="card-tagline">&ldquo;You turn numbers into real-world decisions.&rdquo;</div>
+          <div class="card-desc">You have strong computational skills and you know exactly where they matter. Statistics in AP research. Financial modeling in econ class. Data analysis in science.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H02 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H03: Quant Explorer — Fluency x Interest -->
+    <div class="card card-fluency gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Quant Explorer</div>
+          <div class="card-tagline">&ldquo;You explore mathematics because you genuinely love it.&rdquo;</div>
+          <div class="card-desc">You're fast with math AND you love it. You don't see math as a requirement — you see it as an intellectual playground. You seek out problems, competitions, and challenges.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H03 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H04: Confident Executor — Fluency x Confidence -->
+    <div class="card card-fluency gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#9889;</span>
+                <span class="badge-label">F &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Confident Executor</div>
+          <div class="card-tagline">&ldquo;You deliver under pressure, every time.&rdquo;</div>
+          <div class="card-desc">When the timer starts — SAT, AP exam, timed test — you don't panic. You EXECUTE. Your computational skills are strong and your confidence is real, earned through consistent practice.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-fluency">Fluency</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H04 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H05: Conceptual Strategist — Understanding x Growth -->
+    <div class="card card-understanding gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Conceptual Strategist</div>
+          <div class="card-tagline">&ldquo;Deep understanding that keeps getting deeper.&rdquo;</div>
+          <div class="card-desc">You understand math at a level most students never reach — and you're still going deeper. You approach every concept as something that can be understood more fully.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H05 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H06: Analytical Translator — Understanding x Relevance -->
+    <div class="card card-understanding gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like an</div>
+          <div class="card-name">Analytical Translator</div>
+          <div class="card-tagline">&ldquo;You convert complex ideas into language everyone understands.&rdquo;</div>
+          <div class="card-desc">You understand math deeply and you can explain WHY it matters. In group projects, you're the one who makes the complex thing clear.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H06 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H07: Theoretical Mind — Understanding x Interest -->
+    <div class="card card-understanding gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Theoretical Mind</div>
+          <div class="card-tagline">&ldquo;You pursue deep understanding because knowing IS the reward.&rdquo;</div>
+          <div class="card-desc">You're driven by intellectual curiosity at its purest. You want to understand math not because it's useful but because understanding itself is the reward.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H07 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H08: Foundational Thinker — Understanding x Confidence -->
+    <div class="card card-understanding gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128300;</span>
+                <span class="badge-label">U &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Foundational Thinker</div>
+          <div class="card-tagline">&ldquo;Your understanding runs deep, and so does your confidence.&rdquo;</div>
+          <div class="card-desc">Your confidence in math comes from genuine understanding. You don't just know procedures; you understand why they work. When advanced courses throw curveballs, your foundations hold.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-understanding">Understanding</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H08 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H09: Resilient Innovator — Application x Growth -->
+    <div class="card card-application gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Resilient Innovator</div>
+          <div class="card-tagline">&ldquo;You apply math to hard problems and grow stronger every time.&rdquo;</div>
+          <div class="card-desc">You apply math to real problems, and when those problems push back, you don't break — you GROW. Failed approach? New data. Unexpected result? New insight.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H09 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H10: Systems Architect — Application x Relevance -->
+    <div class="card card-application gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Systems Architect</div>
+          <div class="card-tagline">&ldquo;You design the mathematical frameworks that make real systems work.&rdquo;</div>
+          <div class="card-desc">You see math as a design tool. Every real-world system — supply chains, algorithms, urban planning — is a mathematical problem waiting for a better design.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H10 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H11: Creative Mathematician — Application x Interest -->
+    <div class="card card-application gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Creative Mathematician</div>
+          <div class="card-tagline">&ldquo;You find beauty in applied solutions.&rdquo;</div>
+          <div class="card-desc">You apply math creatively. Where others see one path to a solution, you see five. You're drawn to elegant approaches, surprising connections, and unconventional methods.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H11 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H12: Strategic Leader — Application x Confidence -->
+    <div class="card card-application gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#129513;</span>
+                <span class="badge-label">A &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Strategic Leader</div>
+          <div class="card-tagline">&ldquo;You apply your skills with confidence and take others with you.&rdquo;</div>
+          <div class="card-desc">You don't just apply math — you lead the application. In group projects, competitions, and real-world challenges, you're the one who organizes the approach and drives results.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-application">Application</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H12 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H13: Evolving Logician — Reasoning x Growth -->
+    <div class="card card-reasoning gric-growth">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; G</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like an</div>
+          <div class="card-name">Evolving Logician</div>
+          <div class="card-tagline">&ldquo;Your reasoning gets sharper with every challenge.&rdquo;</div>
+          <div class="card-desc">You think logically, and your logic is ALWAYS improving. You don't rest on past reasoning — you actively seek harder problems, more complex proofs, and more rigorous challenges.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Growth Mindset</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H13 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H14: Cross-Domain Analyst — Reasoning x Relevance -->
+    <div class="card card-reasoning gric-relevance">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; R</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Cross-Domain Analyst</div>
+          <div class="card-tagline">&ldquo;Your reasoning cuts across disciplines and connects everything.&rdquo;</div>
+          <div class="card-desc">You reason with mathematical precision, and you apply that reasoning EVERYWHERE. Biology, economics, political science, computer science — you see the structures that connect them.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Relevance</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H14 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H15: Abstract Thinker — Reasoning x Interest -->
+    <div class="card card-reasoning gric-interest">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; I</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like an</div>
+          <div class="card-name">Abstract Thinker</div>
+          <div class="card-tagline">&ldquo;You see mathematical patterns others can't even imagine.&rdquo;</div>
+          <div class="card-desc">You're drawn to the deepest, most abstract layers of mathematical reasoning — and you love it. Proofs, conjectures, theoretical structures. The logic itself is the reward.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Interest</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H15 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- H16: Principled Reasoner — Reasoning x Confidence -->
+    <div class="card card-reasoning gric-confidence">
+      <div class="card-badge-area">
+        <div class="badge">
+          <div class="badge-ring-outer">
+            <div class="badge-ring-mid">
+              <div class="badge-core">
+                <span class="badge-icon">&#128302;</span>
+                <span class="badge-label">R &times; C</span>
+              </div>
+            </div>
+          </div>
+          <div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div><div class="badge-dot"></div>
+        </div>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-intro">You think like a</div>
+          <div class="card-name">Principled Reasoner</div>
+          <div class="card-tagline">&ldquo;Your logic is airtight and your confidence is earned.&rdquo;</div>
+          <div class="card-desc">You reason clearly, rigorously, and confidently. When you present an argument, it's built on solid logical foundations and you can defend every step.</div>
+        </div>
+        <div>
+          <div class="card-dims">
+            <span class="dim-pill dim-fuar-reasoning">Reasoning</span>
+            <span class="dim-x">&times;</span>
+            <span class="dim-pill dim-gric">Confidence</span>
+          </div>
+          <div class="card-footer">
+            <div class="logo-area"><div class="logo-mark">M</div><span class="logo-text">MathFit</span></div>
+            <span class="card-number">H16 / 16</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

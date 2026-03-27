@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Type Π — The Purist | College Ready Night</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white: #FFFFFF;
+      --black: #0A0A0A;
+      --yellow: #FFBA07;
+      --yellow-glow: rgba(255,186,7,0.35);
+      --pi: #2563EB;
+      --pi-deep: #1E3A5F;
+      --pi-glow: rgba(37,99,235,0.25);
+      --purple: #7C3AED;
+      --emerald: #059669;
+      --orange: #EA580C;
+      --font: 'Inter', -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--black); color: #F3F4F6; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ── Animations ── */
+    @keyframes scaleIn { from { opacity:0; transform: scale(0.5) rotate(-8deg); } to { opacity:1; transform: scale(1) rotate(0); } }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(28px); } to { opacity:1; transform: translateY(0); } }
+    @keyframes gradient-shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    @keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px var(--pi-glow)} 50%{box-shadow:0 0 50px var(--pi-glow)} }
+    @keyframes sparkle { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
+    @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+    @keyframes bar-fill { from { width: 0; } }
+    @keyframes reveal-line { from { width: 0; } to { width: 100%; } }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Logo Bar ── */
+    .logo-bar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px;
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .logo-bar img { height: 24px; }
+    .logo-text { font-size: 18px; font-weight: 800; color: white; letter-spacing: 0.03em; }
+    .logo-bar-right { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+
+    .page { max-width: 1140px; margin: 0 auto; padding: 28px 24px 80px; }
+
+    /* ══════════════════════════════════════════
+       SECTION 1: THE BIG REVEAL
+       ══════════════════════════════════════════ */
+    .hero-card {
+      background: linear-gradient(135deg, #0F172A 0%, var(--pi-deep) 40%, var(--pi) 100%);
+      background-size: 200% 200%;
+      animation: gradient-shift 10s ease infinite;
+      border-radius: 24px;
+      padding: 60px 56px;
+      display: flex; align-items: center; gap: 52px;
+      margin-bottom: 28px;
+      position: relative; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 8px 80px rgba(37,99,235,0.15), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 85%, rgba(255,186,7,0.12) 1px, transparent 1px),
+        radial-gradient(circle at 85% 15%, rgba(124,58,237,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 50px 50px, 70px 70px, 35px 35px;
+      pointer-events: none;
+    }
+    .hero-card::after {
+      content: 'Π'; position: absolute; right: -15px; bottom: -55px;
+      font-size: 340px; font-weight: 900; color: rgba(255,255,255,0.025); line-height: 1; pointer-events: none;
+    }
+
+    .letter-wrap {
+      flex-shrink: 0; position: relative;
+      animation: scaleIn 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+    }
+    .letter {
+      font-size: 150px; font-weight: 900; line-height: 1; color: white;
+      text-shadow: 0 0 50px var(--pi-glow), 0 0 100px rgba(37,99,235,0.1);
+      position: relative; z-index: 2;
+    }
+    .letter-ring { position: absolute; inset: -24px; border: 2px solid rgba(255,186,7,0.25); border-radius: 50%; animation: glow-pulse 3s ease-in-out infinite; }
+    .sparkle { position: absolute; width: 5px; height: 5px; background: var(--yellow); border-radius: 50%; box-shadow: 0 0 8px var(--yellow-glow); }
+    .sparkle:nth-child(2) { top: -10px; left: 35%; animation: sparkle 2.2s ease infinite 0s; }
+    .sparkle:nth-child(3) { top: 25%; right: -12px; animation: sparkle 2.2s ease infinite 0.6s; }
+    .sparkle:nth-child(4) { bottom: -8px; left: 55%; animation: sparkle 2.2s ease infinite 1.2s; }
+    .sparkle:nth-child(5) { top: 45%; left: -12px; animation: sparkle 2.2s ease infinite 1.8s; }
+
+    .hero-info { animation: fadeUp 0.6s ease 0.5s both; position: relative; z-index: 2; }
+    .hero-label { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+    .hero-greek-name {
+      font-size: 22px; font-weight: 700; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.6); margin-bottom: 2px;
+    }
+    .hero-subtitle {
+      font-size: 44px; font-weight: 900; line-height: 1.1; margin-bottom: 12px;
+      background: linear-gradient(90deg, #fff 0%, #93C5FD 50%, #fff 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 5s linear infinite;
+    }
+    .hero-divider { width: 48px; height: 3px; background: var(--yellow); border-radius: 2px; margin-bottom: 14px; animation: reveal-line 0.8s ease 1s both; }
+    .hero-identity { font-size: 20px; font-weight: 400; opacity: 0.75; line-height: 1.5; font-style: italic; max-width: 480px; }
+    .hero-meta { margin-top: 20px; font-size: 13px; opacity: 0.35; display: flex; align-items: center; gap: 8px; }
+    .hero-meta strong { color: var(--yellow); opacity: 1; font-weight: 600; }
+
+    /* ══════════════════════════════════════════
+       SECTION 2: PORTRAIT + THIS IS YOU
+       ══════════════════════════════════════════ */
+    .profile-row {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.035);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 28px;
+      backdrop-filter: blur(8px);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+      transform: translateY(-2px);
+    }
+    .card-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--yellow); margin-bottom: 20px;
+    }
+
+    /* FUAR Bars */
+    .fuar-bar-group { margin-bottom: 16px; }
+    .fuar-bar-group:last-child { margin-bottom: 0; }
+    .fuar-bar-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .fuar-bar-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+    .fuar-bar-score { font-size: 18px; font-weight: 800; }
+    .fuar-bar-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
+    .fuar-bar-fill { height: 100%; border-radius: 4px; animation: bar-fill 1s ease-out 0.8s both; }
+    .fuar-bar-fill.fluency { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+    .fuar-bar-fill.understanding { background: linear-gradient(90deg, var(--yellow), #FCD34D); box-shadow: 0 0 12px var(--yellow-glow); }
+    .fuar-bar-fill.application { background: linear-gradient(90deg, #10B981, #34D399); }
+    .fuar-bar-fill.reasoning { background: linear-gradient(90deg, #8B5CF6, #A78BFA); }
+    .fuar-strongest {
+      margin-top: 20px; font-size: 12px; font-weight: 700;
+      color: var(--black); background: var(--yellow);
+      padding: 10px 14px; border-radius: 10px; text-align: center;
+      box-shadow: 0 4px 20px var(--yellow-glow);
+    }
+
+    /* This Is You */
+    .tiy-grid {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .tiy-item {
+      display: flex; gap: 14px;
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.75);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .tiy-item:hover {
+      border-color: rgba(5,150,105,0.3);
+      background: rgba(5,150,105,0.05);
+    }
+    .tiy-check {
+      flex-shrink: 0; width: 26px; height: 26px;
+      background: linear-gradient(135deg, var(--emerald), #34D399);
+      color: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; margin-top: 1px;
+      box-shadow: 0 3px 12px rgba(5,150,105,0.35);
+    }
+
+    /* ══════════════════════════════════════════
+       SECTION 3: FOUR ACTION BLOCKS
+       ══════════════════════════════════════════ */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .card-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; color: white; }
+    .block-text { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.6); }
+
+    /* Superpower */
+    .block-super {
+      background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+      border: 1px solid rgba(124,58,237,0.3);
+      position: relative; overflow: hidden;
+      box-shadow: 0 8px 48px rgba(124,58,237,0.2);
+    }
+    .block-super::after { content: '⚡'; position: absolute; right: 8px; bottom: 2px; font-size: 60px; opacity: 0.1; }
+    .block-super .card-label { color: rgba(255,255,255,0.45); }
+    .block-super .card-title {
+      background: linear-gradient(90deg, #E9D5FF, #FDE68A);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .block-super .block-text { color: rgba(255,255,255,0.8); }
+
+    /* Watch Out */
+    .block-watch { background: rgba(234,88,12,0.06); border-color: rgba(234,88,12,0.15); }
+    .block-watch .card-label { color: #FB923C; }
+    .block-watch .card-title { color: #FB923C; }
+
+    /* Study */
+    .block-study ul { list-style: none; padding: 0; }
+    .block-study li {
+      font-size: 13px; line-height: 1.55; padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6);
+    }
+    .block-study li:last-child { border-bottom: none; }
+    .block-study li strong { color: white; }
+
+    /* Unlock */
+    .block-unlock { background: linear-gradient(135deg, rgba(255,186,7,0.1), rgba(255,186,7,0.03)); border-color: rgba(255,186,7,0.15); }
+    .block-unlock .card-label { color: var(--yellow); }
+    .block-unlock .card-title { color: var(--yellow); text-shadow: 0 0 24px var(--yellow-glow); }
+
+    /* ══════════════════════════════════════════
+       SECTION 4: MINDS + SIGNATURE
+       ══════════════════════════════════════════ */
+    .footer-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .mind-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .mind-item:last-child { border-bottom: none; }
+    .mind-avatar {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--pi), var(--purple));
+      color: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; flex-shrink: 0;
+      box-shadow: 0 4px 16px var(--pi-glow);
+    }
+    .mind-name { font-size: 14px; font-weight: 700; color: white; }
+    .mind-desc { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.4; }
+
+    .sig-card {
+      background: linear-gradient(135deg, #0F172A, var(--pi-deep));
+      border-color: rgba(255,255,255,0.08);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .sig-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(37,99,235,0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .sig-mark { font-size: 52px; color: var(--yellow); opacity: 0.4; line-height: 1; margin-bottom: -8px; }
+    .sig-text { font-size: 22px; font-weight: 700; line-height: 1.45; margin-bottom: 28px; max-width: 340px; position: relative; z-index: 2; }
+    .sig-event { font-size: 11px; opacity: 0.35; position: relative; z-index: 2; }
+    .sig-logo {
+      display: block; margin: 0 auto 8px;
+      font-size: 20px; font-weight: 800; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── All Archetypes Section ── */
+    .all-types-section { margin-top: 24px; }
+    .all-types-toggle {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 18px 28px;
+      color: rgba(255,255,255,0.6);
+      font-family: var(--font);
+      font-size: 14px; font-weight: 600;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.3s;
+    }
+    .all-types-toggle:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+      color: white;
+    }
+    .all-types-toggle .toggle-arrow {
+      transition: transform 0.3s;
+      font-size: 18px;
+    }
+    .all-types-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+    .all-types-grid {
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .all-types-grid.show { display: grid; }
+
+    .type-mini {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+      cursor: default;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .type-mini:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .type-mini.current {
+      border-color: var(--yellow);
+      box-shadow: 0 0 24px var(--yellow-glow);
+      background: rgba(255,186,7,0.06);
+    }
+    .type-mini.current::after {
+      content: 'YOU'; position: absolute; top: 10px; right: 10px;
+      font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+      background: var(--yellow); color: var(--black);
+      padding: 2px 8px; border-radius: 4px;
+    }
+    .type-mini-symbol {
+      font-size: 42px; font-weight: 900; line-height: 1; margin-bottom: 6px;
+    }
+    .type-mini-name {
+      font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.45);
+      margin-bottom: 4px;
+    }
+    .type-mini-subtitle {
+      font-size: 14px; font-weight: 700; color: white;
+      margin-bottom: 8px;
+    }
+    .type-mini-line {
+      font-size: 11px; font-style: italic;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.4;
+    }
+
+    /* Type colors */
+    .type-mini[data-type="sigma"] .type-mini-symbol { color: #3B82F6; }
+    .type-mini[data-type="delta"] .type-mini-symbol { color: #EF4444; }
+    .type-mini[data-type="pi"] .type-mini-symbol { color: #2563EB; text-shadow: 0 0 20px var(--pi-glow); }
+    .type-mini[data-type="theta"] .type-mini-symbol { color: #8B5CF6; }
+    .type-mini[data-type="phi"] .type-mini-symbol { color: #F59E0B; }
+    .type-mini[data-type="lambda"] .type-mini-symbol { color: #6366F1; }
+    .type-mini[data-type="alpha"] .type-mini-symbol { color: #10B981; }
+    .type-mini[data-type="gamma"] .type-mini-symbol { color: #EC4899; }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .hero-card { flex-direction: column; text-align: center; padding: 44px 28px; gap: 24px; }
+      .letter { font-size: 100px; }
+      .hero-subtitle { font-size: 34px; }
+      .hero-identity { max-width: 100%; }
+      .hero-meta { justify-content: center; }
+      .profile-row { grid-template-columns: 1fr; }
+      .action-grid { grid-template-columns: 1fr 1fr; }
+      .footer-row { grid-template-columns: 1fr; }
+      .all-types-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .action-grid { grid-template-columns: 1fr; }
+      .all-types-grid { grid-template-columns: 1fr 1fr; }
+      .page { padding: 16px 16px 48px; }
+      .hero-card { padding: 32px 20px; }
+      .letter { font-size: 72px; }
+      .hero-subtitle { font-size: 28px; }
+      .card { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Logo Bar -->
+<div class="logo-bar">
+  <span class="logo-text">cuemath</span>
+  <span class="logo-bar-right">College Ready Night</span>
+</div>
+
+<div class="page">
+
+  <!-- ═══════════════════════════════════
+       SECTION 1: YOUR MATH ARCHETYPE
+       ═══════════════════════════════════ -->
+  <div class="hero-card">
+    <div class="letter-wrap">
+      <div class="letter">Π</div>
+      <div class="letter-ring"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+    <div class="hero-info">
+      <div class="hero-label">Your Math Archetype</div>
+      <div class="hero-greek-name">Pi</div>
+      <div class="hero-subtitle">The Purist</div>
+      <div class="hero-divider"></div>
+      <div class="hero-identity">You don't memorize — you understand.</div>
+      <div class="hero-meta">Result for <strong>Maya Chen</strong> · SAT Math · Grade 11</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 2: PORTRAIT + THIS IS YOU
+       ═══════════════════════════════════ -->
+  <div class="profile-row">
+
+    <!-- Left: FUAR Portrait as bars -->
+    <div class="card reveal">
+      <div class="card-label">Your Math Portrait</div>
+
+      <div class="fuar-bar-group">
+        <div class="fuar-bar-header">
+          <span class="fuar-bar-label">Fluency</span>
+          <span class="fuar-bar-score" style="color:#60A5FA;">62</span>
+        </div>
+        <div class="fuar-bar-track">
+          <div class="fuar-bar-fill fluency" style="width:62%"></div>
+        </div>
+      </div>
+
+      <div class="fuar-bar-group">
+        <div class="fuar-bar-header">
+          <span class="fuar-bar-label">Understanding</span>
+          <span class="fuar-bar-score" style="color:var(--yellow);">91</span>
+        </div>
+        <div class="fuar-bar-track">
+          <div class="fuar-bar-fill understanding" style="width:91%"></div>
+        </div>
+      </div>
+
+      <div class="fuar-bar-group">
+        <div class="fuar-bar-header">
+          <span class="fuar-bar-label">Application</span>
+          <span class="fuar-bar-score" style="color:#34D399;">74</span>
+        </div>
+        <div class="fuar-bar-track">
+          <div class="fuar-bar-fill application" style="width:74%"></div>
+        </div>
+      </div>
+
+      <div class="fuar-bar-group">
+        <div class="fuar-bar-header">
+          <span class="fuar-bar-label">Reasoning</span>
+          <span class="fuar-bar-score" style="color:#A78BFA;">78</span>
+        </div>
+        <div class="fuar-bar-track">
+          <div class="fuar-bar-fill reasoning" style="width:78%"></div>
+        </div>
+      </div>
+
+      <div class="fuar-strongest">⭐ Strongest: Understanding</div>
+    </div>
+
+    <!-- Right: This Is You -->
+    <div class="card reveal">
+      <div class="card-label">This Is You</div>
+      <div class="tiy-grid">
+        <div class="tiy-item">
+          <div class="tiy-check">✓</div>
+          <div>You've re-derived a formula on a test because memorizing it felt wrong. You needed to <em>see</em> where it came from — and you got it right.</div>
+        </div>
+        <div class="tiy-item">
+          <div class="tiy-check">✓</div>
+          <div>You've asked a question in class that made your teacher pause and say "that's actually a really good question" — and you weren't trying to be impressive. You just genuinely needed to know.</div>
+        </div>
+        <div class="tiy-item">
+          <div class="tiy-check">✓</div>
+          <div>You've gone down a rabbit hole reading about a math concept online and lost track of time — not for a grade, just because you were curious.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 3: FOUR ACTION BLOCKS
+       ═══════════════════════════════════ -->
+  <div class="action-grid">
+
+    <div class="card block-super reveal">
+      <div class="card-label">Your Superpower</div>
+      <div class="card-title">Transfer</div>
+      <div class="block-text">
+        Because you understand the WHY behind math, you can apply concepts to problems you've never seen before. While memorizers freeze on unfamiliar questions, you reason your way through. This advantage gets bigger every year as math gets more conceptual.
+      </div>
+    </div>
+
+    <div class="card block-watch reveal">
+      <div class="card-label">Watch Out For</div>
+      <div class="card-title">Speed</div>
+      <div class="block-text">
+        You take longer than you should on problems you could do faster, because you're thinking more deeply than necessary. On timed tests, your depth can work against you — you understand every problem but might not finish all of them.
+      </div>
+    </div>
+
+    <div class="card block-study reveal">
+      <div class="card-label">How You Study Best</div>
+      <ul>
+        <li><strong>Teach it to someone.</strong> If you can explain it, you own it.</li>
+        <li><strong>3Blue1Brown > textbooks.</strong> Conceptual resources over procedural ones.</li>
+        <li><strong>Build webs, not lists.</strong> Connect new concepts to what you already know.</li>
+        <li><strong>Whiteboard or blank paper.</strong> You need space to map your thinking.</li>
+      </ul>
+    </div>
+
+    <div class="card block-unlock reveal">
+      <div class="card-label">Your Next Unlock</div>
+      <div class="card-title">Speed + Depth</div>
+      <div class="block-text">
+        You already know more than you think — learn to deploy that knowledge at speed. Students who dominate AP exams and the SAT have your depth AND the ability to execute fast. Trust your understanding enough to move quickly.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 4: MINDS + SIGNATURE
+       ═══════════════════════════════════ -->
+  <div class="footer-row">
+
+    <div class="card reveal">
+      <div class="card-label">Math Minds Like You</div>
+      <div class="mind-item">
+        <div class="mind-avatar">RF</div>
+        <div>
+          <div class="mind-name">Richard Feynman</div>
+          <div class="mind-desc">Nobel physicist — "I don't understand what I can't build."</div>
+        </div>
+      </div>
+      <div class="mind-item">
+        <div class="mind-avatar">EN</div>
+        <div>
+          <div class="mind-name">Emmy Noether</div>
+          <div class="mind-desc">Saw the deep structure beneath algebra and physics that nobody else could see.</div>
+        </div>
+      </div>
+      <div class="mind-item">
+        <div class="mind-avatar">GS</div>
+        <div>
+          <div class="mind-name">Grant Sanderson</div>
+          <div class="mind-desc">3Blue1Brown — making math deeply understandable, not just correct.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card sig-card reveal">
+      <span class="sig-mark">"</span>
+      <div class="sig-text">I don't need the shortcut — I need to know why the shortcut works.</div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════
+       SECTION 5: ALL ARCHETYPES
+       ═══════════════════════════════════ -->
+  <div class="all-types-section reveal">
+    <button class="all-types-toggle" id="typesToggle" onclick="toggleTypes()">
+      <span>Explore All 8 Math Archetypes</span>
+      <span class="toggle-arrow">▼</span>
+    </button>
+
+    <div class="all-types-grid" id="typesGrid">
+
+      <div class="type-mini" data-type="sigma">
+        <div class="type-mini-symbol">Σ</div>
+        <div class="type-mini-name">Sigma</div>
+        <div class="type-mini-subtitle">The Precision</div>
+        <div class="type-mini-line">"If I showed my work, I know it's right."</div>
+      </div>
+
+      <div class="type-mini" data-type="delta">
+        <div class="type-mini-symbol">Δ</div>
+        <div class="type-mini-name">Delta</div>
+        <div class="type-mini-subtitle">The Relentless</div>
+        <div class="type-mini-line">"I wasn't born with it. I earned it."</div>
+      </div>
+
+      <div class="type-mini current" data-type="pi">
+        <div class="type-mini-symbol">Π</div>
+        <div class="type-mini-name">Pi</div>
+        <div class="type-mini-subtitle">The Purist</div>
+        <div class="type-mini-line">"I don't need the shortcut — I need to know why it works."</div>
+      </div>
+
+      <div class="type-mini" data-type="theta">
+        <div class="type-mini-symbol">Θ</div>
+        <div class="type-mini-name">Theta</div>
+        <div class="type-mini-subtitle">The Quiet Genius</div>
+        <div class="type-mini-line">"I saw it differently — and I was right."</div>
+      </div>
+
+      <div class="type-mini" data-type="phi">
+        <div class="type-mini-symbol">Φ</div>
+        <div class="type-mini-name">Phi</div>
+        <div class="type-mini-subtitle">The Natural</div>
+        <div class="type-mini-line">"Math isn't in the textbook — it's in everything else."</div>
+      </div>
+
+      <div class="type-mini" data-type="lambda">
+        <div class="type-mini-symbol">Λ</div>
+        <div class="type-mini-name">Lambda</div>
+        <div class="type-mini-subtitle">The Dormant Force</div>
+        <div class="type-mini-line">"Show me why it matters and I'll show you what I can do."</div>
+      </div>
+
+      <div class="type-mini" data-type="alpha">
+        <div class="type-mini-symbol">Α</div>
+        <div class="type-mini-name">Alpha</div>
+        <div class="type-mini-subtitle">The First Principle</div>
+        <div class="type-mini-line">"There's always another way — and I'll find it."</div>
+      </div>
+
+      <div class="type-mini" data-type="gamma">
+        <div class="type-mini-symbol">Γ</div>
+        <div class="type-mini-name">Gamma</div>
+        <div class="type-mini-subtitle">The Maverick</div>
+        <div class="type-mini-line">"The best version of me is unbeatable."</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Scroll reveal -->
+<script>
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+function toggleTypes() {
+  const grid = document.getElementById('typesGrid');
+  const btn = document.getElementById('typesToggle');
+  grid.classList.toggle('show');
+  btn.classList.toggle('open');
+  btn.querySelector('span:first-child').textContent =
+    grid.classList.contains('show') ? 'All 8 Math Archetypes' : 'Explore All 8 Math Archetypes';
+}
+</script>
+
+</body>
+</html>

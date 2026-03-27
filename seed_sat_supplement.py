@@ -7,9 +7,10 @@ passport_advanced, additional_topics).
 """
 
 import sqlite3
+import os
 from collections import defaultdict
 
-DB_PATH = "college_ready.db"
+DB_PATH = os.environ.get('DATABASE_PATH', 'college_ready.db')
 
 # Each tuple: (track, sat_domain, fuar_dimension, difficulty,
 #              question_text, question_type,

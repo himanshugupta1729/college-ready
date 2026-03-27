@@ -21,7 +21,7 @@ import os
 import sqlite3
 from collections import defaultdict
 
-DB_PATH = "college_ready.db"
+DB_PATH = os.environ.get('DATABASE_PATH', 'college_ready.db')
 
 # ---------------------------------------------------------------------------
 # Question bank

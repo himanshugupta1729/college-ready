@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archetype Card — 5 Design Directions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0b0f;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    min-height: 100vh;
+    padding: 60px 32px 100px;
+    color: #fff;
+  }
+
+  .page-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+  }
+
+  .page-header h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .page-header .sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .page-header p {
+    margin-top: 16px;
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .showcase {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1920px;
+    margin: 0 auto;
+    align-items: flex-start;
+  }
+
+  .card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+
+  .card-label strong {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 4px;
+  }
+
+  /* =============================================
+     1. TRADING CARD — Pokemon/TCG Inspired
+     ============================================= */
+
+  .card-trading {
+    width: 340px;
+    height: 520px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1a1f3a, #0f1225);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    cursor: pointer;
+  }
+
+  .card-trading::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #3B82F6, #14B8A6, #3B82F6, #14B8A6);
+    background-size: 300% 300%;
+    animation: holoShift 4s ease infinite;
+    z-index: -1;
+  }
+
+  .card-trading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(125deg,
+      transparent 0%,
+      rgba(59,130,246,0.08) 25%,
+      rgba(20,184,166,0.12) 50%,
+      rgba(59,130,246,0.06) 75%,
+      transparent 100%
+    );
+    background-size: 200% 200%;
+    animation: holoSheen 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  @keyframes holoShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes holoSheen {
+    0%, 100% { background-position: -50% -50%; }
+    50% { background-position: 150% 150%; }
+  }
+
+  .card-trading:hover::after {
+    background: linear-gradient(125deg,
+      transparent 0%,
+      rgba(59,130,246,0.2) 30%,
+      rgba(20,184,166,0.25) 50%,
+      rgba(255,255,255,0.15) 55%,
+      transparent 100%
+    );
+  }
+
+  .tcg-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 8px;
+  }
+
+  .tcg-type-badge {
+    font-family: 'Poppins', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #14B8A6;
+    background: rgba(20,184,166,0.12);
+    border: 1px solid rgba(20,184,166,0.25);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  .tcg-rarity {
+    display: flex;
+    gap: 3px;
+  }
+
+  .tcg-rarity .star {
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(135deg, #EAB308, #F59E0B);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+
+  .tcg-rarity .star.empty {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .tcg-art-frame {
+    margin: 8px 14px;
+    height: 180px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3B82F6 0%, #14B8A6 50%, #0EA5E9 100%);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.08);
+  }
+
+  .tcg-art-frame .lightning {
+    position: absolute;
+    font-size: 100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    filter: blur(1px);
+  }
+
+  .tcg-art-frame .figure {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 130px;
+  }
+
+  .tcg-figure-head {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8d5b7, #c4a882);
+    margin: 0 auto 4px;
+    position: relative;
+  }
+
+  .tcg-figure-body {
+    width: 60px;
+    height: 50px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #1e3a5f, #0f2440);
+    border-radius: 30px 30px 0 0;
+    position: relative;
+  }
+
+  .tcg-figure-body::after {
+    content: '⚡';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+  }
+
+  .tcg-name {
+    text-align: center;
+    padding: 10px 16px 2px;
+  }
+
+  .tcg-name h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tcg-name .tagline {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .tcg-stats {
+    margin: 12px 14px 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .tcg-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+  }
+
+  .tcg-stat-row + .tcg-stat-row {
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .tcg-stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tcg-stat-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tcg-stat-bar .bar {
+    width: 80px;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .tcg-stat-bar .bar .fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #3B82F6, #14B8A6);
+  }
+
+  .tcg-stat-bar .val {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #14B8A6;
+    min-width: 24px;
+    text-align: right;
+  }
+
+  .tcg-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    margin-top: auto;
+  }
+
+  .tcg-types {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tcg-type-pill {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+
+  .tcg-type-pill.fluency {
+    background: rgba(59,130,246,0.15);
+    color: #60A5FA;
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+
+  .tcg-type-pill.growth {
+    background: rgba(20,184,166,0.15);
+    color: #2DD4BF;
+    border: 1px solid rgba(20,184,166,0.3);
+  }
+
+  .tcg-edition {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+  }
+
+
+  /* =============================================
+     2. 16PERSONALITIES — Clean Illustrated
+     ============================================= */
+
+  .card-16p {
+    width: 340px;
+    height: 520px;
+    border-radius: 20px;
+    background: #ffffff;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.15), 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .p16-header {
+    height: 200px;
+    background: linear-gradient(135deg, #E0F2FE, #CCFBF1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .p16-header::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .p16-figure {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Geometric person — CSS only */
+  .p16-person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .p16-person .head {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+    position: relative;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+  }
+
+  .p16-person .head::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 3px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 2px;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .p16-person .body-shape {
+    width: 80px;
+    height: 70px;
+    margin-top: -6px;
+    background: linear-gradient(180deg, #3B82F6, #14B8A6);
+    border-radius: 40px 40px 20px 20px;
+    position: relative;
+  }
+
+  .p16-person .body-shape::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+  }
+
+  .p16-person .arm-left,
+  .p16-person .arm-right {
+    position: absolute;
+    width: 14px;
+    height: 50px;
+    background: linear-gradient(180deg, #3B82F6, #14B8A6);
+    border-radius: 7px;
+    top: 8px;
+  }
+
+  .p16-person .arm-left {
+    left: -10px;
+    transform: rotate(15deg);
+  }
+
+  .p16-person .arm-right {
+    right: -10px;
+    transform: rotate(-15deg);
+  }
+
+  .p16-content {
+    padding: 24px;
+  }
+
+  .p16-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.5px;
+    margin-bottom: 2px;
+  }
+
+  .p16-tagline {
+    font-size: 13px;
+    color: #64748b;
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .p16-desc {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #475569;
+    margin-bottom: 20px;
+  }
+
+  .p16-traits {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .p16-trait {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .p16-trait-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+    width: 80px;
+    text-align: right;
+  }
+
+  .p16-trait-bar {
+    flex: 1;
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .p16-trait-bar .fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+
+  .p16-trait-bar .fill.blue { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+  .p16-trait-bar .fill.teal { background: linear-gradient(90deg, #14B8A6, #2DD4BF); }
+  .p16-trait-bar .fill.purple { background: linear-gradient(90deg, #8B5CF6, #A78BFA); }
+
+  .p16-trait-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    width: 32px;
+  }
+
+  .p16-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 0;
+  }
+
+  .p16-footer-segment {
+    flex: 1;
+    height: 5px;
+  }
+
+  .p16-footer-segment:first-child { background: #3B82F6; }
+  .p16-footer-segment:last-child { background: #14B8A6; }
+
+
+  /* =============================================
+     3. WRAPPED — Spotify Wrapped Inspired
+     ============================================= */
+
+  .card-wrapped {
+    width: 340px;
+    height: 520px;
+    border-radius: 20px;
+    background: linear-gradient(155deg, #0D3B66 0%, #14B8A6 45%, #3B82F6 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 32px 28px;
+  }
+
+  .card-wrapped::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(59,130,246,0.3);
+    filter: blur(80px);
+    top: -60px;
+    right: -80px;
+  }
+
+  .card-wrapped::after {
+    content: '';
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: rgba(20,184,166,0.25);
+    filter: blur(60px);
+    bottom: -40px;
+    left: -60px;
+  }
+
+  .wrapped-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .wrapped-top-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+  }
+
+  .wrapped-big-type {
+    font-family: 'Poppins', sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .wrapped-big-type .accent {
+    display: block;
+    background: linear-gradient(90deg, #fff, rgba(255,255,255,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 48px;
+  }
+
+  .wrapped-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+    margin-bottom: 0;
+  }
+
+  .wrapped-data {
+    position: relative;
+    z-index: 2;
+  }
+
+  .wrapped-stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .wrapped-stat {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    padding: 16px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .wrapped-stat .number {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .wrapped-stat .label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .wrapped-share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .wrapped-share:hover {
+    background: rgba(255,255,255,0.25);
+  }
+
+  .wrapped-brand {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wrapped-brand .logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+
+  .wrapped-brand .year {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+  }
+
+
+  /* =============================================
+     4. HOUSE CREST — Hogwarts Inspired
+     ============================================= */
+
+  .card-crest {
+    width: 340px;
+    height: 520px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #1a1510 0%, #0f0d0a 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid rgba(184,146,86,0.25);
+  }
+
+  .card-crest::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(184,146,86,0.03) 18px, rgba(184,146,86,0.03) 19px),
+      repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(184,146,86,0.03) 18px, rgba(184,146,86,0.03) 19px);
+    pointer-events: none;
+  }
+
+  .card-crest::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(184,146,86,0.12);
+    border-radius: 12px;
+    pointer-events: none;
+  }
+
+  .crest-top-banner {
+    font-family: 'Playfair Display', serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(184,146,86,0.5);
+    margin-top: 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .crest-shield {
+    width: 160px;
+    height: 180px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .shield-shape {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .shield-shape svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .crest-motto-ribbon {
+    position: relative;
+    z-index: 2;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ribbon-wing {
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(184,146,86,0.4));
+  }
+
+  .ribbon-wing:last-child {
+    background: linear-gradient(90deg, rgba(184,146,86,0.4), transparent);
+  }
+
+  .crest-motto {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-style: italic;
+    color: rgba(184,146,86,0.7);
+    letter-spacing: 1px;
+  }
+
+  .crest-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #e8d5a8;
+    text-align: center;
+    margin-top: 16px;
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .crest-desc {
+    font-size: 12px;
+    line-height: 1.65;
+    color: rgba(232,213,168,0.45);
+    text-align: center;
+    padding: 8px 28px 0;
+    position: relative;
+    z-index: 2;
+    max-height: 60px;
+    overflow: hidden;
+  }
+
+  .crest-virtues {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .crest-virtue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .crest-virtue-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: 1.5px solid rgba(184,146,86,0.25);
+    background: rgba(184,146,86,0.06);
+  }
+
+  .crest-virtue-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(184,146,86,0.5);
+  }
+
+  .crest-bottom {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    z-index: 2;
+  }
+
+  .crest-bottom-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(184,146,86,0.3);
+  }
+
+  .crest-bottom-dot.active {
+    background: rgba(184,146,86,0.6);
+    width: 16px;
+    border-radius: 2px;
+  }
+
+
+  /* =============================================
+     5. PERFORMANCE PROFILE — Whoop/Strava
+     ============================================= */
+
+  .card-perf {
+    width: 340px;
+    height: 520px;
+    border-radius: 16px;
+    background: #111318;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .perf-header {
+    padding: 18px 20px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .perf-header-left .perf-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .perf-header-left .perf-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.3px;
+    margin-top: 2px;
+  }
+
+  .perf-score-ring {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid #14B8A6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .perf-score-ring::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.06);
+  }
+
+  .perf-score-ring .score {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #14B8A6;
+  }
+
+  .perf-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(255,255,255,0.04);
+    margin: 0;
+  }
+
+  .perf-metric {
+    padding: 14px 16px;
+    background: #111318;
+  }
+
+  .perf-metric .val {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .perf-metric .val .unit {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    margin-left: 2px;
+  }
+
+  .perf-metric .met-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .perf-radar {
+    flex: 1;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .perf-radar-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .perf-bar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .perf-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .perf-bar-item .bar-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    width: 85px;
+    text-align: right;
+  }
+
+  .perf-bar-item .bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .perf-bar-item .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  .perf-bar-item .bar-fill.green { background: #14B8A6; }
+  .perf-bar-item .bar-fill.blue { background: #3B82F6; }
+  .perf-bar-item .bar-fill.amber { background: #F59E0B; }
+  .perf-bar-item .bar-fill.purple { background: #8B5CF6; }
+
+  .perf-bar-item .bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    width: 28px;
+  }
+
+  .perf-footer {
+    padding: 12px 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .perf-tags {
+    display: flex;
+    gap: 6px;
+  }
+
+  .perf-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .perf-tag.fluency {
+    background: rgba(59,130,246,0.12);
+    color: #60A5FA;
+  }
+
+  .perf-tag.growth {
+    background: rgba(20,184,166,0.12);
+    color: #2DD4BF;
+  }
+
+  .perf-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .perf-status .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #14B8A6;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .perf-status .status-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Archetype Card — Design Directions</h1>
+  <div class="sub">5 alternatives &middot; "The Rapid Strategist"</div>
+  <p>Each card renders the same archetype in a radically different visual language. Pick the direction that resonates most.</p>
+</div>
+
+<div class="showcase">
+
+  <!-- ========== 1. TRADING CARD ========== -->
+  <div class="card-wrapper">
+    <div class="card-label"><strong>Trading Card</strong>Pokemon / TCG</div>
+    <div class="card-trading">
+      <div class="tcg-top">
+        <div class="tcg-type-badge">Fluency + Growth</div>
+        <div class="tcg-rarity">
+          <div class="star"></div>
+          <div class="star"></div>
+          <div class="star"></div>
+          <div class="star"></div>
+          <div class="star empty"></div>
+        </div>
+      </div>
+
+      <div class="tcg-art-frame">
+        <div class="lightning">⚡</div>
+        <div class="figure">
+          <div class="p16-person" style="transform: scale(0.9);">
+            <div class="head" style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#e8d5b7,#c4a882);margin:0 auto 4px;"></div>
+            <div style="width:66px;height:55px;margin:0 auto;background:linear-gradient(180deg,#1e40af,#0f2640);border-radius:33px 33px 0 0;position:relative;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:24px;margin-top:-2px;">⚡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcg-name">
+        <h3>The Rapid Strategist</h3>
+        <div class="tagline">Fast today, faster tomorrow.</div>
+      </div>
+
+      <div class="tcg-stats">
+        <div class="tcg-stat-row">
+          <span class="tcg-stat-label">Speed</span>
+          <div class="tcg-stat-bar">
+            <div class="bar"><div class="fill" style="width: 92%;"></div></div>
+            <span class="val">92</span>
+          </div>
+        </div>
+        <div class="tcg-stat-row">
+          <span class="tcg-stat-label">Growth</span>
+          <div class="tcg-stat-bar">
+            <div class="bar"><div class="fill" style="width: 88%;"></div></div>
+            <span class="val">88</span>
+          </div>
+        </div>
+        <div class="tcg-stat-row">
+          <span class="tcg-stat-label">Strategy</span>
+          <div class="tcg-stat-bar">
+            <div class="bar"><div class="fill" style="width: 85%;"></div></div>
+            <span class="val">85</span>
+          </div>
+        </div>
+        <div class="tcg-stat-row">
+          <span class="tcg-stat-label">Adapt</span>
+          <div class="tcg-stat-bar">
+            <div class="bar"><div class="fill" style="width: 80%;"></div></div>
+            <span class="val">80</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tcg-bottom">
+        <div class="tcg-types">
+          <span class="tcg-type-pill fluency">Fluency</span>
+          <span class="tcg-type-pill growth">Growth</span>
+        </div>
+        <span class="tcg-edition">MFC-2026 &middot; #001</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 2. 16PERSONALITIES ========== -->
+  <div class="card-wrapper">
+    <div class="card-label"><strong>16Personalities</strong>Illustrated Character</div>
+    <div class="card-16p">
+      <div class="p16-header">
+        <div class="p16-figure">
+          <div class="p16-person">
+            <div class="head"></div>
+            <div class="body-shape">
+              <div class="arm-left"></div>
+              <div class="arm-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p16-content">
+        <div class="p16-name">The Rapid Strategist</div>
+        <div class="p16-tagline">"Fast today, faster tomorrow."</div>
+        <div class="p16-desc">You process math quickly AND you're always leveling up. Your speed isn't a ceiling — it's a floor.</div>
+        <div class="p16-traits">
+          <div class="p16-trait">
+            <span class="p16-trait-label">Fluency</span>
+            <div class="p16-trait-bar"><div class="fill blue" style="width: 92%;"></div></div>
+            <span class="p16-trait-pct">92%</span>
+          </div>
+          <div class="p16-trait">
+            <span class="p16-trait-label">Growth</span>
+            <div class="p16-trait-bar"><div class="fill teal" style="width: 88%;"></div></div>
+            <span class="p16-trait-pct">88%</span>
+          </div>
+          <div class="p16-trait">
+            <span class="p16-trait-label">Reasoning</span>
+            <div class="p16-trait-bar"><div class="fill purple" style="width: 72%;"></div></div>
+            <span class="p16-trait-pct">72%</span>
+          </div>
+        </div>
+      </div>
+      <div class="p16-footer">
+        <div class="p16-footer-segment"></div>
+        <div class="p16-footer-segment"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 3. WRAPPED ========== -->
+  <div class="card-wrapper">
+    <div class="card-label"><strong>Wrapped</strong>Spotify Wrapped</div>
+    <div class="card-wrapped">
+      <div class="wrapped-content">
+        <div class="wrapped-top-label">Your Math Type</div>
+        <div class="wrapped-big-type">
+          The<br>Rapid
+          <span class="accent">Strategist</span>
+        </div>
+        <div class="wrapped-tagline">Fast today, faster tomorrow.</div>
+      </div>
+
+      <div class="wrapped-data">
+        <div class="wrapped-stat-grid">
+          <div class="wrapped-stat">
+            <div class="number">92<span style="font-size:14px;opacity:0.5;">%</span></div>
+            <div class="label">Fluency</div>
+          </div>
+          <div class="wrapped-stat">
+            <div class="number">88<span style="font-size:14px;opacity:0.5;">%</span></div>
+            <div class="label">Growth</div>
+          </div>
+          <div class="wrapped-stat">
+            <div class="number">Top</div>
+            <div class="label">Speed Tier</div>
+          </div>
+          <div class="wrapped-stat">
+            <div class="number">4/16</div>
+            <div class="label">Rarity</div>
+          </div>
+        </div>
+        <div class="wrapped-share">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          Share My Results
+        </div>
+      </div>
+
+      <div class="wrapped-brand">
+        <span class="logo">MathFit</span>
+        <span class="year">2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 4. HOUSE CREST ========== -->
+  <div class="card-wrapper">
+    <div class="card-label"><strong>House Crest</strong>Hogwarts / Heraldic</div>
+    <div class="card-crest">
+      <div class="crest-top-banner">Math Fit Check</div>
+
+      <div class="crest-shield">
+        <div class="shield-shape">
+          <svg viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Shield outline -->
+            <path d="M80 4 L152 30 L152 100 Q152 155 80 176 Q8 155 8 100 L8 30 Z"
+                  fill="url(#shieldGrad)" stroke="rgba(184,146,86,0.4)" stroke-width="2"/>
+            <!-- Inner border -->
+            <path d="M80 14 L142 36 L142 98 Q142 147 80 166 Q18 147 18 98 L18 36 Z"
+                  fill="none" stroke="rgba(184,146,86,0.15)" stroke-width="1"/>
+            <!-- Dividing line -->
+            <line x1="80" y1="30" x2="80" y2="160" stroke="rgba(184,146,86,0.12)" stroke-width="1"/>
+            <!-- Left half icon - lightning bolt -->
+            <text x="48" y="90" text-anchor="middle" font-size="36" fill="rgba(59,130,246,0.6)">⚡</text>
+            <!-- Right half icon - growth arrow -->
+            <text x="112" y="90" text-anchor="middle" font-size="30" fill="rgba(20,184,166,0.6)">↗</text>
+            <!-- Center crest emblem -->
+            <circle cx="80" cy="120" r="18" fill="rgba(184,146,86,0.08)" stroke="rgba(184,146,86,0.25)" stroke-width="1.5"/>
+            <text x="80" y="126" text-anchor="middle" font-size="16" fill="rgba(184,146,86,0.6)">RS</text>
+            <defs>
+              <linearGradient id="shieldGrad" x1="80" y1="4" x2="80" y2="176">
+                <stop offset="0%" stop-color="rgba(30,25,18,1)"/>
+                <stop offset="100%" stop-color="rgba(18,15,10,1)"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <div class="crest-motto-ribbon">
+        <div class="ribbon-wing"></div>
+        <div class="crest-motto">"Fast today, faster tomorrow"</div>
+        <div class="ribbon-wing"></div>
+      </div>
+
+      <div class="crest-name">The Rapid Strategist</div>
+
+      <div class="crest-desc">Speed is your floor, not your ceiling. You push beyond what you know.</div>
+
+      <div class="crest-virtues">
+        <div class="crest-virtue">
+          <div class="crest-virtue-icon">⚡</div>
+          <span class="crest-virtue-name">Fluency</span>
+        </div>
+        <div class="crest-virtue">
+          <div class="crest-virtue-icon">↗</div>
+          <span class="crest-virtue-name">Growth</span>
+        </div>
+        <div class="crest-virtue">
+          <div class="crest-virtue-icon">🎯</div>
+          <span class="crest-virtue-name">Strategy</span>
+        </div>
+      </div>
+
+      <div class="crest-bottom">
+        <div class="crest-bottom-dot"></div>
+        <div class="crest-bottom-dot active"></div>
+        <div class="crest-bottom-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 5. PERFORMANCE PROFILE ========== -->
+  <div class="card-wrapper">
+    <div class="card-label"><strong>Performance Profile</strong>Whoop / Strava</div>
+    <div class="card-perf">
+      <div class="perf-header">
+        <div class="perf-header-left">
+          <div class="perf-label">Math Profile</div>
+          <div class="perf-name">The Rapid Strategist</div>
+        </div>
+        <div class="perf-score-ring">
+          <span class="score">92</span>
+        </div>
+      </div>
+
+      <div class="perf-metrics">
+        <div class="perf-metric">
+          <div class="val">92<span class="unit">%</span></div>
+          <div class="met-label">Fluency</div>
+        </div>
+        <div class="perf-metric">
+          <div class="val">88<span class="unit">%</span></div>
+          <div class="met-label">Growth</div>
+        </div>
+        <div class="perf-metric">
+          <div class="val">F+G</div>
+          <div class="met-label">FUAR + GRIC</div>
+        </div>
+        <div class="perf-metric">
+          <div class="val">Top <span class="unit">25%</span></div>
+          <div class="met-label">Percentile</div>
+        </div>
+      </div>
+
+      <div class="perf-radar">
+        <div class="perf-radar-title">Skill Breakdown</div>
+        <div class="perf-bar-group">
+          <div class="perf-bar-item">
+            <span class="bar-label">Fluency</span>
+            <div class="bar-track"><div class="bar-fill blue" style="width: 92%;"></div></div>
+            <span class="bar-val">92</span>
+          </div>
+          <div class="perf-bar-item">
+            <span class="bar-label">Growth</span>
+            <div class="bar-track"><div class="bar-fill green" style="width: 88%;"></div></div>
+            <span class="bar-val">88</span>
+          </div>
+          <div class="perf-bar-item">
+            <span class="bar-label">Understanding</span>
+            <div class="bar-track"><div class="bar-fill purple" style="width: 72%;"></div></div>
+            <span class="bar-val">72</span>
+          </div>
+          <div class="perf-bar-item">
+            <span class="bar-label">Application</span>
+            <div class="bar-track"><div class="bar-fill amber" style="width: 68%;"></div></div>
+            <span class="bar-val">68</span>
+          </div>
+          <div class="perf-bar-item">
+            <span class="bar-label">Reasoning</span>
+            <div class="bar-track"><div class="bar-fill purple" style="width: 65%;"></div></div>
+            <span class="bar-val">65</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="perf-footer">
+        <div class="perf-tags">
+          <span class="perf-tag fluency">Fluency</span>
+          <span class="perf-tag growth">Growth</span>
+        </div>
+        <div class="perf-status">
+          <div class="dot"></div>
+          <span class="status-text">Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

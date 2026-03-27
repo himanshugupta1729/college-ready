@@ -8,9 +8,10 @@ Difficulty: 1–5 (leans 1–3)
 """
 
 import sqlite3
+import os
 from collections import defaultdict
 
-DB_PATH = "college_ready.db"
+DB_PATH = os.environ.get('DATABASE_PATH', 'college_ready.db')
 
 # ---------------------------------------------------------------------------
 # Question bank
