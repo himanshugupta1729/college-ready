@@ -222,15 +222,17 @@ body { background: #F9FAFB !important; color: #191919; }
           {{ score.detail }}
         {% else %}
           {{ score.detail }}
-          {% if score.predicted_grade is defined and score.predicted_grade %}
-            <div style="margin-top:8px; font-size:14px; font-weight:700; color:#B45309;">
-              Predicted Course Grade: {{ score.predicted_grade }}
-            </div>
-          {% endif %}
         {% endif %}
       </div>
     </div>
-    {% if score.score_type != 'sat' or true %}
+    {% if score.score_type not in ('sat', 'ap') and score.predicted_grade is defined and score.predicted_grade %}
+    {# Grade/Course tracks: prominent Predicted Course Grade block #}
+    <div class="pr-score-block" style="background: #F0FDF4; border-color: #BBF7D0;">
+      <div class="pr-score-eyebrow">Predicted Course Grade</div>
+      <div class="pr-score-value" style="font-size: 48px; color: #16A34A;">{{ score.predicted_grade }}</div>
+      <div class="pr-score-detail">Based on diagnostic performance</div>
+    </div>
+    {% elif score.score_type != 'sat' or true %}
     <div class="pr-score-block readiness">
       <div class="pr-score-eyebrow">
         {% if score.score_type == 'sat' %}SAT Readiness{% elif score.score_type == 'ap' %}AP Readiness{% else %}Grade-Level Readiness{% endif %}

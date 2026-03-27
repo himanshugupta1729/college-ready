@@ -1524,17 +1524,34 @@ def estimate_score(track, fuar_scores, responses):
     }
     adv, prof, appr = course_thresholds.get(track, (80, 60, 40))
 
-    if proficiency >= adv: level, desc = 'Advanced', 'Performing above grade level'
-    elif proficiency >= prof: level, desc = 'Proficient', 'Performing at grade level'
-    elif proficiency >= appr: level, desc = 'Approaching', 'Approaching grade level'
-    else: level, desc = 'Developing', 'Below grade level — foundations need strengthening'
-
     track_names = {
         'algebra_1': 'Algebra 1', 'algebra_2': 'Algebra 2',
         'geometry': 'Geometry', 'precalculus': 'Precalculus',
         'statistics': 'Statistics',
     }
     name = track_names.get(track, track.replace('_', ' ').title())
+
+    # Next course in sequence for context
+    next_course = {
+        'algebra_1': 'Geometry', 'geometry': 'Algebra 2',
+        'algebra_2': 'Precalculus or AP Statistics',
+        'precalculus': 'AP Calculus', 'statistics': 'AP Statistics',
+    }
+    next_c = next_course.get(track, 'the next math course')
+
+    if proficiency >= adv:
+        level = 'Advanced'
+        desc = f'Strong {name} mastery — well prepared for {next_c}'
+    elif proficiency >= prof:
+        level = 'Proficient'
+        desc = f'Solid {name} performance — on track for {next_c}'
+    elif proficiency >= appr:
+        level = 'Approaching'
+        desc = f'Building {name} skills — some areas need strengthening before {next_c}'
+    else:
+        level = 'Developing'
+        desc = f'Foundational {name} gaps to address — targeted practice will help'
+
     predicted_grade = 'A' if proficiency >= 80 else 'B' if proficiency >= 60 else 'C' if proficiency >= 40 else 'D'
     return {
         'score_type': 'course',
