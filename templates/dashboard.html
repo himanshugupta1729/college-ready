@@ -821,9 +821,9 @@
         {# ── Today's practice CTA ── #}
         <div class="practice-cta-card">
             <div class="cta-meta">Today's Workout</div>
-            <div class="cta-headline">{% if plan %}{{ plan.session_duration | default(10) }} minutes. {{ plan.questions_per_session | default(8) }} questions.{% else %}10 minutes. 8 questions.{% endif %}<br>Focus: {{ weakest[0] }}.</div>
+            <div class="cta-headline">{% if plan %}{{ plan.minutes_per_session | default(22) }} minutes. {{ plan.questions_per_session | default(11) }} questions.{% else %}22 minutes. 11 questions.{% endif %}<br>Focus: {{ weakest[0] }}.</div>
             <div class="cta-sub">Your {{ weakest[0] }} score is {{ weakest[1] }} — {% if student.score_type == 'sat' %}the fastest path to a higher SAT.{% elif student.score_type == 'ap' %}the key to AP exam success.{% else %}where focused practice will make the biggest difference.{% endif %}</div>
-            <a href="/practice" class="btn btn-primary btn-large" style="align-self: flex-start;">
+            <a href="/practice/today" class="btn btn-primary btn-large" style="align-self: flex-start;">
                 Start Today's Workout
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
