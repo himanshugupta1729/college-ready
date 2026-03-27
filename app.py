@@ -3946,8 +3946,58 @@ def submit_step_feedback():
 
 # ---------- Init ----------
 
-def seed_middle_school():
-    """Seed middle school question banks (grades 6, 7, 7-accel, 8)."""
+def seed_all():
+    """Seed all question banks — SAT, AP, HS courses, middle school. Idempotent."""
+    conn = sqlite3.connect(DB_PATH)
+    existing = conn.execute("SELECT COUNT(*) FROM questions").fetchone()[0]
+    conn.close()
+
+    if existing >= 1000:
+        print(f"[startup] Question bank already has {existing} questions")
+        return
+
+    print(f"[startup] Seeding all tracks (currently {existing} questions)...")
+
+    # SAT base
+    seed_questions()
+
+    # SAT supplement
+    try:
+        from seed_sat_supplement import seed as seed_sat_sup
+        seed_sat_sup()
+    except Exception as e:
+        print(f"[seed] SAT supplement: {e}")
+
+    # AP tracks
+    for mod_name, label in [
+        ('seed_ap_stats', 'AP Stats'),
+        ('seed_ap_calc_ab', 'AP Calc AB'),
+        ('seed_ap_calc_bc', 'AP Calc BC'),
+        ('seed_ap_precalc', 'AP Precalc'),
+    ]:
+        try:
+            mod = __import__(mod_name)
+            mod.seed()
+            print(f"[seed] {label} done")
+        except Exception as e:
+            print(f"[seed] {label}: {e}")
+
+    # HS course tracks
+    for mod_name, label in [
+        ('seed_algebra1', 'Algebra 1'),
+        ('seed_algebra2', 'Algebra 2'),
+        ('seed_geometry', 'Geometry'),
+        ('seed_precalculus', 'Precalculus'),
+        ('seed_statistics', 'Statistics'),
+    ]:
+        try:
+            mod = __import__(mod_name)
+            mod.seed()
+            print(f"[seed] {label} done")
+        except Exception as e:
+            print(f"[seed] {label}: {e}")
+
+    # Middle school
     from seed_grade6 import seed as seed_g6
     from seed_grade7 import seed as seed_g7
     from seed_grade7_accel import seed as seed_g7a
@@ -3957,12 +4007,15 @@ def seed_middle_school():
     seed_g7a()
     seed_g8()
 
+    conn = sqlite3.connect(DB_PATH)
+    total = conn.execute("SELECT COUNT(*) FROM questions").fetchone()[0]
+    conn.close()
+    print(f"[startup] Seeding complete — {total} total questions")
+
 
 with app.app_context():
     init_db()
-    result = seed_questions()
-    print(f"[startup] {result}")
-    seed_middle_school()
+    seed_all()
     # Ensure demo event exists
     conn = get_db()
     conn.execute("""
