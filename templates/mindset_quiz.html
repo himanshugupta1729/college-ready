@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+
+{% block title %}Your Math Mindset — College Ready{% endblock %}
+
+{% block content %}
+<style>
+  .mindset-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  /* ── Intro screen ── */
+  .mindset-intro {
+    text-align: center;
+    padding: 60px 24px;
+    animation: fadeIn 0.6s ease-out;
+  }
+  .mindset-intro h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #191919;
+    margin-bottom: 12px;
+  }
+  .mindset-intro p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+  .btn-start {
+    background: var(--accent, #FFBA07);
+    color: #191919;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-start:hover {
+    background: #E0A406;
+    transform: translateY(-1px);
+  }
+
+  /* ── Progress ── */
+  .step-progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+  }
+  .step-dot {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #E5E7EB;
+    transition: background 0.4s;
+  }
+  .step-dot.active {
+    background: var(--accent, #FFBA07);
+  }
+  .step-dot.done {
+    background: #10B981;
+  }
+
+  /* ── Section card ── */
+  .section-screen {
+    display: none;
+    animation: slideIn 0.4s ease-out;
+  }
+  .section-screen.active {
+    display: block;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #F3F4F6;
+  }
+  .section-icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #191919;
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: #9CA3AF;
+    font-weight: 500;
+  }
+
+  /* ── Question ── */
+  .question-block {
+    margin-bottom: 24px;
+  }
+  .question-block:last-of-type {
+    margin-bottom: 32px;
+  }
+  .q-text {
+    font-size: 17px;
+    font-weight: 500;
+    color: #191919;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .q-number {
+    color: #9CA3AF;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  /* ── Scale options (horizontal pills) ── */
+  .scale-row {
+    display: flex;
+    gap: 8px;
+  }
+  .scale-pill {
+    flex: 1;
+  }
+  .scale-pill input { display: none; }
+  .scale-pill label {
+    display: block;
+    text-align: center;
+    padding: 10px 6px;
+    border: 2px solid #E5E7EB;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6B7280;
+    transition: all 0.15s;
+    line-height: 1.3;
+  }
+  .scale-pill label:hover {
+    border-color: var(--accent, #FFBA07);
+    background: #FFFBEB;
+  }
+  .scale-pill input:checked + label {
+    border-color: var(--accent, #FFBA07);
+    background: var(--accent, #FFBA07);
+    color: #191919;
+    font-weight: 700;
+  }
+
+  /* ── Navigation ── */
+  .section-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #F3F4F6;
+  }
+  .btn-back {
+    background: none;
+    border: 1px solid #E5E7EB;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: #9CA3AF; color: #191919; }
+  .btn-forward {
+    background: var(--accent, #FFBA07);
+    color: #191919;
+    border: none;
+    padding: 10px 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-forward:hover { background: #E0A406; }
+  .btn-forward:disabled {
+    background: #E5E7EB;
+    color: #9CA3AF;
+    cursor: not-allowed;
+  }
+  .section-count {
+    font-size: 13px;
+    color: #9CA3AF;
+  }
+</style>
+
+<div class="mindset-container">
+  <form method="POST" action="{{ url_for('mindset_quiz') }}" id="mindsetForm">
+
+    <!-- Step progress bar -->
+    <div class="step-progress" id="stepProgress">
+      {% for s in sections %}
+      <div class="step-dot" data-step="{{ loop.index0 }}"></div>
+      {% endfor %}
+    </div>
+
+    <!-- INTRO SCREEN -->
+    <div class="section-screen active" id="screen-intro">
+      <div class="mindset-intro">
+        <h1>One more thing, {{ student_name }}.</h1>
+        <p>You just finished the math part. Now let's understand how you <em>think about</em> math — your mindset matters just as much as your skills.</p>
+        <p style="font-size: 14px; color: #9CA3AF;">12 quick questions. No right or wrong answers. ~2 minutes.</p>
+        <button type="button" class="btn-start" onclick="showSection(0)">Let's Go →</button>
+      </div>
+    </div>
+
+    <!-- SECTION SCREENS -->
+    {% for section in sections %}
+    <div class="section-screen" id="screen-{{ loop.index0 }}">
+      <div class="section-header">
+        <span class="section-icon">{{ section.icon }}</span>
+        <div>
+          <div class="section-title">{{ section.title }}</div>
+          <div class="section-subtitle">Section {{ loop.index }} of 4</div>
+        </div>
+      </div>
+
+      {% for q in questions %}
+      {% if q.section == section.key %}
+      <div class="question-block">
+        <div class="q-number">{{ q.order }}</div>
+        <div class="q-text">"{{ q.text }}"</div>
+        <div class="scale-row">
+          {% for value, label in scale_labels %}
+          <div class="scale-pill">
+            <input type="radio" name="q_{{ q.id }}" id="q_{{ q.id }}_{{ value }}"
+                   value="{{ value }}" onchange="checkSection({{ loop.index0 }})">
+            <label for="q_{{ q.id }}_{{ value }}">{{ label }}</label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+
+      <div class="section-nav">
+        {% if loop.index0 == 0 %}
+        <button type="button" class="btn-back" onclick="showIntro()">← Back</button>
+        {% else %}
+        <button type="button" class="btn-back" onclick="showSection({{ loop.index0 - 1 }})">← Back</button>
+        {% endif %}
+
+        <span class="section-count">{{ loop.index }} / 4</span>
+
+        {% if loop.last %}
+        <button type="submit" class="btn-forward" id="btnSubmit" disabled>
+          Discover My Archetype →
+        </button>
+        {% else %}
+        <button type="button" class="btn-forward" id="btnNext{{ loop.index0 }}" disabled
+                onclick="showSection({{ loop.index0 + 1 }})">
+          Next →
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+
+  </form>
+
+  {% if is_demo %}
+  <div id="mindset-feedback" style="display:none; text-align:center; padding: 24px 0 8px; max-width: 500px; margin: 0 auto;">
+      <div style="font-size: 14px; color: #888; margin-bottom: 12px;">How was the mindset quiz?</div>
+      <div id="fb-stars-mindset" style="display:flex; gap:8px; justify-content:center; margin-bottom: 12px;">
+          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',1,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
+          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',2,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
+          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',3,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
+          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',4,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
+          <button type="button" onclick="rateFeedbackMindset('mindset_quiz',5,this)" style="font-size:28px; background:none; border:none; cursor:pointer; opacity:0.4;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=this.classList.contains('selected')?1:0.4">&#11088;</button>
+      </div>
+      <textarea id="fb-text-mindset" placeholder="Any thoughts? (optional)" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; background:#fafafa; color:#333; font-size:13px; resize:none;" rows="2"></textarea>
+      <div id="fb-done-mindset" style="display:none; color:#16A34A; font-size:13px; margin-top:8px;">Thanks for the feedback!</div>
+  </div>
+  <script>
+  function rateFeedbackMindset(step, rating, btn) {
+      document.querySelectorAll('#fb-stars-mindset button').forEach(function(b, i) {
+          b.classList.toggle('selected', i < rating);
+          b.style.opacity = i < rating ? '1' : '0.4';
+      });
+      var text = document.getElementById('fb-text-mindset').value;
+      fetch('/api/feedback', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({step: step, rating: rating, text: text})
+      }).then(function() {
+          document.getElementById('fb-done-mindset').style.display = 'block';
+      });
+  }
+  // Show feedback widget when user reaches last section
+  var origShowSection = window.showSection;
+  window.showSection = function(idx) {
+      origShowSection(idx);
+      var totalSections = {{ sections|length }};
+      var fb = document.getElementById('mindset-feedback');
+      if (fb) fb.style.display = (idx === totalSections - 1) ? 'block' : 'none';
+  };
+  </script>
+  {% endif %}
+</div>
+
+<script>
+(function() {
+  const totalSections = {{ sections|length }};
+  let currentSection = -1; // -1 = intro
+
+  window.showIntro = function() {
+    document.querySelectorAll('.section-screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-intro').classList.add('active');
+    currentSection = -1;
+    updateProgress();
+  };
+
+  window.showSection = function(idx) {
+    document.querySelectorAll('.section-screen').forEach(s => s.classList.remove('active'));
+    const screen = document.getElementById('screen-' + idx);
+    screen.classList.add('active');
+    currentSection = idx;
+    updateProgress();
+    checkSection();
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  function updateProgress() {
+    document.querySelectorAll('.step-dot').forEach((dot, i) => {
+      dot.classList.remove('active', 'done');
+      if (i < currentSection) dot.classList.add('done');
+      else if (i === currentSection) dot.classList.add('active');
+    });
+  }
+
+  window.checkSection = function() {
+    // Check each section's questions
+    for (let s = 0; s < totalSections; s++) {
+      const screen = document.getElementById('screen-' + s);
+      const radios = screen.querySelectorAll('input[type="radio"]');
+      const names = new Set();
+      radios.forEach(r => names.add(r.name));
+      const answered = new Set();
+      radios.forEach(r => { if (r.checked) answered.add(r.name); });
+
+      const allAnswered = names.size === answered.size;
+
+      // Enable/disable the next/submit button for this section
+      if (s < totalSections - 1) {
+        const btn = document.getElementById('btnNext' + s);
+        if (btn) btn.disabled = !allAnswered;
+      } else {
+        const btn = document.getElementById('btnSubmit');
+        if (btn) {
+          // Submit only enabled when ALL 12 questions answered
+          const allRadios = document.querySelectorAll('#mindsetForm input[type="radio"]');
+          const allNames = new Set();
+          allRadios.forEach(r => allNames.add(r.name));
+          const allChecked = new Set();
+          allRadios.forEach(r => { if (r.checked) allChecked.add(r.name); });
+          btn.disabled = allNames.size !== allChecked.size;
+        }
+      }
+    }
+  };
+})();
+</script>
+{% endblock %}

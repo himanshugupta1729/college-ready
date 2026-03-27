@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Ready — Design Showcase</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f5; color: #111; }
+  .header { background: #111; color: #fff; padding: 32px; text-align: center; }
+  .header h1 { font-size: 28px; font-weight: 800; }
+  .header p { color: #888; margin-top: 8px; font-size: 14px; }
+  .nav-bar { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 12px 32px; position: sticky; top: 0; z-index: 100; display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-btn { padding: 6px 14px; border: 1px solid #ddd; border-radius: 20px; font-size: 12px; cursor: pointer; background: #fff; color: #555; text-decoration: none; }
+  .nav-btn:hover, .nav-btn.active { background: #111; color: #fff; border-color: #111; }
+  .section { max-width: 1200px; margin: 40px auto; padding: 0 24px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .section-num { background: #111; color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+  .section-title { font-size: 20px; font-weight: 700; }
+  .section-desc { font-size: 13px; color: #666; margin-bottom: 16px; }
+  .frame-row { display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+  .frame-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; flex: 1; min-width: 340px; }
+  .frame-card.full { flex: 1 0 100%; }
+  .frame-label { padding: 10px 16px; font-size: 13px; font-weight: 600; color: #374151; background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+  .frame-label a { font-size: 11px; color: #3b82f6; text-decoration: none; }
+  .frame-label a:hover { text-decoration: underline; }
+  .frame-label .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+  .badge-student { background: #dbeafe; color: #1d4ed8; }
+  .badge-admin { background: #fef3c7; color: #92400e; }
+  .badge-parent { background: #d1fae5; color: #065f46; }
+  .badge-new { background: #fee2e2; color: #991b1b; }
+  iframe { width: 100%; height: 700px; border: none; }
+  .note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #92400e; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Cuemath Evaluation Platform — Design Showcase</h1>
+  <p>All screens rendered live from localhost:5050 &nbsp;|&nbsp; Scroll through to review designs</p>
+</div>
+
+<div class="nav-bar">
+  <a href="#landing" class="nav-btn">Landing</a>
+  <a href="#register-ms" class="nav-btn">Registration (MS)</a>
+  <a href="#register-hs" class="nav-btn">Registration (HS)</a>
+  <a href="#login" class="nav-btn">Student Login</a>
+  <a href="#test-intro" class="nav-btn">Test Intro</a>
+  <a href="#mindset" class="nav-btn">Mindset Quiz</a>
+  <a href="#archetype" class="nav-btn">Archetype Reveal</a>
+  <a href="#dashboard" class="nav-btn">Dashboard</a>
+  <a href="#report-student" class="nav-btn">Report (Student)</a>
+  <a href="#report-parent" class="nav-btn">Report (Parent)</a>
+  <a href="#admin" class="nav-btn">Admin Panel</a>
+  <a href="#flyer" class="nav-btn">Event Flyer</a>
+  <a href="#event-students" class="nav-btn">Event Students</a>
+</div>
+
+<!-- 1. LANDING -->
+<div class="section" id="landing">
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Landing Page</div></div>
+  <div class="section-desc">Event-day student login. Dark theme, minimal.</div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Landing — Student Entry <span class="badge badge-student">Student-facing</span></div>
+      <iframe src="http://localhost:5050/" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 2. REGISTRATION -->
+<div class="section" id="register-ms">
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Registration — Middle School</div></div>
+  <div class="section-desc">Parent registers child for Family Math Night. Grade selection shows grade-appropriate tracks. <span class="badge badge-new">NEW</span></div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Registration (Grades 6-12 event) <span class="badge badge-parent">Parent-facing</span> <a href="http://localhost:5050/register/SHOWCASE-2026" target="_blank">Open in new tab</a></div>
+      <iframe src="http://localhost:5050/register/SHOWCASE-2026" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 3. STUDENT LOGIN -->
+<div class="section" id="login">
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Student Login</div></div>
+  <div class="section-desc">Event-day login with email + event code.</div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Student Login <span class="badge badge-student">Student-facing</span></div>
+      <iframe src="http://localhost:5050/login" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 4. TEST INTRO -->
+<div class="section" id="test-intro">
+  <div class="section-header"><div class="section-num">4</div><div class="section-title">Test Introduction</div></div>
+  <div class="section-desc">Shown before the adaptive test begins. Explains format, timing, FUAR dimensions.</div>
+  <div class="note">This screen requires an active student session. The iframe may redirect to login. <a href="http://localhost:5050/test/intro" target="_blank">Try logging in first →</a></div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Test Intro <span class="badge badge-student">Student-facing</span></div>
+      <iframe src="http://localhost:5050/test/intro" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 5. MINDSET QUIZ -->
+<div class="section" id="mindset">
+  <div class="section-header"><div class="section-num">5</div><div class="section-title">GRIC Mindset Quiz</div></div>
+  <div class="section-desc">12 questions about math mindset — Growth, Relevance, Interest, Confidence. Shown after the math test.</div>
+  <div class="note">Requires active session with completed test.</div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Mindset Quiz (GRIC) <span class="badge badge-student">Student-facing</span></div>
+      <iframe src="http://localhost:5050/test/mindset" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 6. ARCHETYPE REVEAL -->
+<div class="section" id="archetype">
+  <div class="section-header"><div class="section-num">6</div><div class="section-title">Archetype Reveal</div></div>
+  <div class="section-desc">The "big moment" — student's math archetype revealed. 32 possible archetypes (16 middle school, 16 high school).</div>
+  <div class="note">Requires active session with completed test + mindset quiz.</div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Archetype Reveal <span class="badge badge-student">Student-facing</span></div>
+      <iframe src="http://localhost:5050/reveal" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 7. STUDENT DASHBOARD -->
+<div class="section" id="dashboard">
+  <div class="section-header"><div class="section-num">7</div><div class="section-title">Student Dashboard</div></div>
+  <div class="section-desc">Post-test dashboard with FUAR profile, archetype, daily practice access.</div>
+  <div class="note">Requires active session.</div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Dashboard <span class="badge badge-student">Student-facing</span></div>
+      <iframe src="http://localhost:5050/dashboard" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 8. REPORTS -->
+<div class="section" id="report-student">
+  <div class="section-header"><div class="section-num">8</div><div class="section-title">Student Report</div></div>
+  <div class="section-desc">Detailed FUAR+GRIC report with archetype, scores, topic heatmap, and recommendations. Shareable via URL. <span class="badge badge-new">NEW</span></div>
+  <div class="frame-row">
+    <div class="frame-card">
+      <div class="frame-label">High School Student (SAT track) <span class="badge badge-student">Student-facing</span> <a href="http://localhost:5050/report/9990" target="_blank">Open →</a></div>
+      <iframe src="http://localhost:5050/report/9990" loading="lazy"></iframe>
+    </div>
+    <div class="frame-card">
+      <div class="frame-label">Middle School Student (Grade 7) <span class="badge badge-student">Student-facing</span> <a href="http://localhost:5050/report/9991" target="_blank">Open →</a></div>
+      <iframe src="http://localhost:5050/report/9991" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="report-parent">
+  <div class="section-header"><div class="section-num">9</div><div class="section-title">Parent Report</div></div>
+  <div class="section-desc">Parent-friendly version with simpler language, same data. <span class="badge badge-new">NEW</span></div>
+  <div class="frame-row">
+    <div class="frame-card">
+      <div class="frame-label">High School Parent Report <span class="badge badge-parent">Parent-facing</span> <a href="http://localhost:5050/report/9990/parent" target="_blank">Open →</a></div>
+      <iframe src="http://localhost:5050/report/9990/parent" loading="lazy"></iframe>
+    </div>
+    <div class="frame-card">
+      <div class="frame-label">Middle School Parent Report <span class="badge badge-parent">Parent-facing</span> <a href="http://localhost:5050/report/9991/parent" target="_blank">Open →</a></div>
+      <iframe src="http://localhost:5050/report/9991/parent" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 10. ADMIN -->
+<div class="section" id="admin">
+  <div class="section-header"><div class="section-num">10</div><div class="section-title">Admin Panel</div></div>
+  <div class="section-desc">Create events, manage students, toggle tests, export data. Login: admin / collegeready2026</div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Admin Dashboard <span class="badge badge-admin">Admin</span> <a href="http://localhost:5050/admin" target="_blank">Open (login required) →</a></div>
+      <iframe src="http://localhost:5050/admin" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 11. EVENT FLYER -->
+<div class="section" id="flyer">
+  <div class="section-header"><div class="section-num">11</div><div class="section-title">Event Flyer with QR</div></div>
+  <div class="section-desc">Printable one-page flyer with QR code for registration. Auto-generated per event. <span class="badge badge-new">NEW</span></div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Printable Event Flyer <span class="badge badge-admin">Admin</span> <a href="http://localhost:5050/admin/event/SHOWCASE-2026/flyer" target="_blank">Open →</a></div>
+      <iframe src="http://localhost:5050/admin/event/SHOWCASE-2026/flyer" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- 12. EVENT STUDENTS -->
+<div class="section" id="event-students">
+  <div class="section-header"><div class="section-num">12</div><div class="section-title">Event Students View</div></div>
+  <div class="section-desc">Admin view of registered students with FUAR scores, archetypes, report links. <span class="badge badge-new">NEW</span></div>
+  <div class="frame-row">
+    <div class="frame-card full">
+      <div class="frame-label">Students List <span class="badge badge-admin">Admin</span> <a href="http://localhost:5050/admin/event/SHOWCASE-2026/students" target="_blank">Open →</a></div>
+      <iframe src="http://localhost:5050/admin/event/SHOWCASE-2026/students" loading="lazy"></iframe>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; padding: 40px; color: #999; font-size: 13px;">
+  End of showcase &nbsp;|&nbsp; 12 screens &nbsp;|&nbsp; 19 templates &nbsp;|&nbsp; 32 archetypes &nbsp;|&nbsp; 14 tracks &nbsp;|&nbsp; 936 questions
+</div>
+
+</body>
+</html>

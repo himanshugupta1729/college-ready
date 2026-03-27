@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ archetype.greek_name }} {{ archetype.name }}</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    height: 100%;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+}
+
+.frame {
+    width: 405px;
+    height: 720px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+.inner {
+    width: 1080px;
+    height: 1920px;
+    transform: scale(0.375);
+    transform-origin: top left;
+    position: relative;
+    /* THE CARD — bold saturated background */
+    background: {{ archetype.color }};
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+/* ═══ GIANT WATERMARK SYMBOL ═══ */
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    font-size: 900px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.1);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ═══ CONTENT LAYER ═══ */
+.content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 72px 80px;
+}
+
+/* Top row */
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: auto;
+}
+.label {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+}
+.name-chip {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 100px;
+}
+
+/* Center — the hero block */
+.hero {
+    text-align: left;
+    margin-bottom: auto;
+    padding-top: 80px;
+}
+.greek {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 16px;
+}
+.title {
+    font-size: 110px;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 28px;
+}
+.tagline {
+    font-size: 34px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.45;
+    max-width: 800px;
+}
+
+/* Mathematician feature */
+.mind {
+    background: rgba(0,0,0,0.15);
+    border-radius: 20px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.mind-icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; font-weight: 800; color: white;
+    flex-shrink: 0;
+}
+.mind-text { }
+.mind-pre {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 4px;
+}
+.mind-name {
+    font-size: 30px;
+    font-weight: 800;
+    color: white;
+}
+
+/* Quote */
+.quote {
+    margin-bottom: 32px;
+}
+.quote-text {
+    font-size: 30px;
+    font-style: italic;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.45;
+}
+.quote-by {
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    margin-top: 8px;
+}
+
+/* Bottom */
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.cta {
+    font-size: 24px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+}
+.cta strong {
+    color: white;
+}
+.mark {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* ═══ HINT ═══ */
+.hint {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.5);
+    padding: 10px 28px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 100;
+    border: 1px solid rgba(255,255,255,0.1);
+    white-space: nowrap;
+}
+
+@media (max-height: 750px) {
+    .frame { width: 338px; height: 600px; }
+    .inner { transform: scale(0.313); }
+}
+</style>
+</head>
+<body>
+
+<div class="frame">
+<div class="inner">
+    <div class="watermark">{{ archetype.symbol }}</div>
+
+    <div class="content">
+        <div class="top">
+            <div class="label">My Math Archetype</div>
+            {% if student_name %}
+            <div class="name-chip">{{ student_name }}</div>
+            {% endif %}
+        </div>
+
+        <div class="hero">
+            <div class="greek">{{ archetype.greek_name }}</div>
+            <div class="title">{{ archetype.name }}</div>
+            <div class="tagline">{{ archetype.tagline }}</div>
+        </div>
+
+        {% if archetype.minds %}
+        <div class="mind">
+            <div class="mind-icon">{{ archetype.minds[0][0][0] }}</div>
+            <div class="mind-text">
+                <div class="mind-pre">Thinks like</div>
+                <div class="mind-name">{{ archetype.minds[0][0] }}</div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="quote">
+            <div class="quote-text">"{{ archetype.signature }}"</div>
+            <div class="quote-by">— {% if student_name %}{{ student_name }}{% else %}every {{ archetype.greek_name }}{% endif %}</div>
+        </div>
+
+        <div class="bottom">
+            <div class="cta">What's yours? <strong>→ collegeready.cuemath.com</strong></div>
+            <div class="mark">College Ready</div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="hint">Screenshot to save · Share on Stories</div>
+
+</body>
+</html>

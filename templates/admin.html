@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Math Night by Cuemath</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #F5F5F5; color: #191919; min-height: 100vh; }
+  body::before { content: ''; display: block; width: 100%; height: 4px; background: #FFBA07; position: fixed; top: 0; left: 0; z-index: 9999; }
+
+  .nav { background: #FFFFFF; border-bottom: 1px solid #E0E0E0; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+  .nav-brand { display: flex; align-items: baseline; gap: 8px; }
+  .nav-brand .brand { font-size: 18px; font-weight: 800; color: #191919; }
+  .nav-brand .brand span { color: #FFBA07; }
+  .nav-brand .sub { font-size: 12px; color: #999999; font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666666; }
+  .nav-right a { color: #666666; text-decoration: none; }
+  .nav-right a:hover { color: #191919; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; margin-top: 32px; }
+  .section-header:first-child { margin-top: 0; }
+  .section-title { font-size: 18px; font-weight: 700; color: #191919; }
+  .section-count { font-size: 13px; color: #999999; background: #F5F5F5; padding: 4px 12px; border-radius: 20px; border: 1px solid #E0E0E0; }
+
+  .stats { display: flex; gap: 16px; margin-bottom: 32px; }
+  .stat-card { flex: 1; background: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 4px; padding: 20px; }
+  .stat-num { font-size: 32px; font-weight: 800; color: #191919; }
+  .stat-label { font-size: 12px; color: #999999; margin-top: 4px; font-weight: 500; }
+
+  .event-grid { display: flex; flex-direction: column; gap: 12px; }
+  .event-card { background: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 4px; padding: 20px 24px; transition: border-color 0.2s; }
+  .event-card:hover { border-color: #FFBA07; }
+  .event-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .event-info { flex: 1; }
+  .event-name { font-size: 16px; font-weight: 700; color: #191919; margin-bottom: 2px; }
+  .event-meta { font-size: 13px; color: #666666; display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+  .event-meta span { display: inline-flex; align-items: center; gap: 4px; }
+  .event-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #F5F5F5; }
+  .event-stats-row { display: flex; gap: 24px; }
+  .event-stat { text-align: center; }
+  .event-stat-num { font-size: 18px; font-weight: 700; color: #191919; }
+  .event-stat-label { font-size: 10px; color: #999999; text-transform: uppercase; letter-spacing: 0.5px; }
+  .event-actions { display: flex; gap: 8px; }
+
+  .btn { padding: 8px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; }
+  .btn-primary { background: #FFBA07; color: #191919; }
+  .btn-primary:hover { background: #E0A406; }
+  .btn-success { background: #10B981; color: #FFFFFF; }
+  .btn-success:hover { background: #059669; }
+  .btn-danger { background: #DC2626; color: #FFFFFF; }
+  .btn-danger:hover { background: #B91C1C; }
+  .btn-outline { background: #FFFFFF; color: #191919; border: 1px solid #E0E0E0; }
+  .btn-outline:hover { background: #F5F5F5; border-color: #CCCCCC; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; min-height: 32px; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-live { background: #DCFCE7; color: #166534; }
+  .badge-upcoming { background: #FFFBEB; color: #92400E; }
+  .badge-done { background: #F5F5F5; color: #666666; }
+  .badge-hs { background: #EFF6FF; color: #1D4ED8; }
+  .badge-ms { background: #F0FDF4; color: #166534; }
+  .badge-both { background: #FDF4FF; color: #7C3AED; }
+
+  .create-form { background: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 4px; padding: 24px; margin-bottom: 24px; display: none; }
+  .create-form.show { display: block; }
+  .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .form-row .form-group { flex: 1; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #191919; margin-bottom: 4px; }
+  .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #E0E0E0; border-radius: 4px; font-size: 14px; color: #191919; background: #FFFFFF; }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: #FFBA07; box-shadow: 0 0 0 3px rgba(255,186,7,0.2); }
+  .form-hint { font-size: 11px; color: #999999; margin-top: 4px; }
+
+  .reg-url-box { display: flex; align-items: center; gap: 8px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 4px; padding: 8px 12px; margin-top: 8px; }
+  .reg-url-box code { font-size: 12px; color: #92400E; font-family: 'Inter', monospace; flex: 1; word-break: break-all; }
+  .reg-url-box .copy-btn { padding: 4px 10px; background: #FFBA07; color: #191919; border: none; border-radius: 3px; font-size: 11px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .reg-url-box .copy-btn:hover { background: #E0A406; }
+
+  .flash { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+  .flash-success { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+  .flash-danger { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
+
+  .empty { text-align: center; padding: 48px 24px; color: #999999; }
+  .empty h3 { font-size: 16px; color: #666666; margin-bottom: 8px; }
+
+  .qr-inline { width: 80px; height: 80px; border: 1px solid #E0E0E0; border-radius: 4px; background: #fff; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-brand">
+    <img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath" style="height: 22px;">
+    <div class="sub">Math Night</div>
+  </div>
+  <div class="nav-right">
+    {% if role == 'pta_admin' %}
+      <span>{{ session.get('admin_name', 'PTA Admin') }} (PTA)</span>
+    {% else %}
+      <span>{{ session.get('admin_name', 'Admin') }}</span>
+    {% endif %}
+    <a href="{{ url_for('admin_login') }}">Logout</a>
+  </div>
+</div>
+
+<div class="container">
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <!-- Global Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num">{{ event_stats|length }}</div>
+      <div class="stat-label">Total Events</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ event_stats|sum(attribute='registered') }}</div>
+      <div class="stat-label">Total Registered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ event_stats|sum(attribute='completed') }}</div>
+      <div class="stat-label">Tests Completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ event_stats|selectattr('event.test_enabled')|list|length }}</div>
+      <div class="stat-label">Live Now</div>
+    </div>
+  </div>
+
+  <!-- Create Event — Cuemath Admin Only -->
+  {% if role == 'cuemath_admin' %}
+  <div style="margin-bottom: 8px;">
+    <button class="btn btn-primary" onclick="document.getElementById('createForm').classList.toggle('show')">+ Create Event</button>
+  </div>
+  <div class="create-form" id="createForm">
+    <form method="POST" action="{{ url_for('create_event') }}">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Type *</label>
+          <select name="event_type" id="eventType" onchange="updateEventName()">
+            <option value="high_school">College Ready Night (Grades 9-12)</option>
+            <option value="middle_school">Foundation Math Night (Grades 6-8)</option>
+          </select>
+          <div class="form-hint" id="gradeHint">Students in grades 9-12 can register</div>
+          <!-- Hidden field for auto-generated event name -->
+          <input type="hidden" name="event_name" id="eventNameHidden" value="College Ready Night">
+        </div>
+        <div class="form-group">
+          <label>School Name *</label>
+          <input type="text" name="school_name" id="schoolInput" list="schoolList" placeholder="Start typing school name..." required autocomplete="off">
+          <datalist id="schoolList">
+            {% if onboarded_schools %}
+              {% for school in onboarded_schools %}
+              <option value="{{ school }}">
+              {% endfor %}
+            {% endif %}
+          </datalist>
+          <div class="form-hint">Schools from CRM will appear as suggestions</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Date *</label>
+          <input type="date" name="event_date" required>
+        </div>
+        <div class="form-group">
+          <label>City *</label>
+          <input type="text" name="location" id="cityInput" list="cityList" placeholder="Start typing city..." required autocomplete="off">
+          <datalist id="cityList">
+            <option value="Sacramento, CA">
+            <option value="San Jose, CA">
+            <option value="Los Angeles, CA">
+            <option value="Houston, TX">
+            <option value="Dallas, TX">
+            <option value="New York, NY">
+            <option value="Chicago, IL">
+            <option value="Seattle, WA">
+            <option value="Atlanta, GA">
+            <option value="Denver, CO">
+          </datalist>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Create Event</button>
+    </form>
+  </div>
+  <script>
+    function updateEventName() {
+      const type = document.getElementById('eventType').value;
+      const hint = document.getElementById('gradeHint');
+      const nameField = document.getElementById('eventNameHidden');
+      if (type === 'high_school') {
+        hint.textContent = 'Students in grades 9-12 can register';
+        nameField.value = 'College Ready Night';
+      } else {
+        hint.textContent = 'Students in grades 6-8 can register';
+        nameField.value = 'Foundation Math Night';
+      }
+    }
+  </script>
+  {% endif %}
+
+  <!-- LIVE NOW -->
+  {% set live_events = event_stats|selectattr('event.test_enabled')|list %}
+  {% if live_events %}
+  <div class="section-header">
+    <div class="section-title">Live Now</div>
+    <div class="section-count">{{ live_events|length }} active</div>
+  </div>
+  <div class="event-grid">
+    {% for es in live_events %}
+    <div class="event-card" style="border-left: 4px solid #10B981;">
+      <div class="event-top">
+        <div class="event-info">
+          <div class="event-name">
+            {{ es.event.event_name }}
+            <span class="badge badge-live">LIVE</span>
+            {% if es.event.event_type == 'high_school' %}<span class="badge badge-hs">9-12</span>
+            {% elif es.event.event_type == 'middle_school' %}<span class="badge badge-ms">6-8</span>
+            {% else %}<span class="badge badge-both">6-12</span>{% endif %}
+          </div>
+          <div class="event-meta">
+            <span>{{ es.event.school_name }}</span>
+            <span>{{ es.event.event_date }}</span>
+            {% if es.event.location %}<span>{{ es.event.location }}</span>{% endif %}
+          </div>
+        </div>
+        <div class="event-actions">
+          {% if role == 'cuemath_admin' %}
+          <a href="{{ url_for('event_students', event_code=es.event.event_code) }}" class="btn btn-outline btn-sm">View Students</a>
+          <form method="POST" action="{{ url_for('toggle_test', event_code=es.event.event_code) }}" style="display:inline;">
+            <button type="submit" class="btn btn-danger btn-sm">Stop Test</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      <div class="event-bottom">
+        <div class="event-stats-row">
+          <div class="event-stat"><div class="event-stat-num">{{ es.registered }}</div><div class="event-stat-label">Registered</div></div>
+          <div class="event-stat"><div class="event-stat-num" style="color: #3B82F6;">{{ es.started }}</div><div class="event-stat-label">Started</div></div>
+          <div class="event-stat"><div class="event-stat-num" style="color: #10B981;">{{ es.completed }}</div><div class="event-stat-label">Completed</div></div>
+          {% if es.registered > 0 %}
+          <div class="event-stat"><div class="event-stat-num">{{ (es.completed / es.registered * 100)|round|int }}%</div><div class="event-stat-label">Completion</div></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- UPCOMING -->
+  {% set upcoming = event_stats|rejectattr('event.test_enabled')|list %}
+  {% set upcoming_events = [] %}
+  {% for es in upcoming %}
+    {% if es.completed == 0 %}
+      {% if upcoming_events.append(es) %}{% endif %}
+    {% endif %}
+  {% endfor %}
+  {% if upcoming_events %}
+  <div class="section-header">
+    <div class="section-title">Upcoming Events</div>
+    <div class="section-count">{{ upcoming_events|length }}</div>
+  </div>
+  <div class="event-grid">
+    {% for es in upcoming_events %}
+    <div class="event-card">
+      <div class="event-top">
+        <div class="event-info">
+          <div class="event-name">
+            {{ es.event.event_name }}
+            <span class="badge badge-upcoming">Upcoming</span>
+            {% if es.event.event_type == 'high_school' %}<span class="badge badge-hs">9-12</span>
+            {% elif es.event.event_type == 'middle_school' %}<span class="badge badge-ms">6-8</span>
+            {% else %}<span class="badge badge-both">6-12</span>{% endif %}
+          </div>
+          <div class="event-meta">
+            <span>{{ es.event.school_name }}</span>
+            <span>{{ es.event.event_date or 'Date TBD' }}</span>
+            {% if es.event.location %}<span>{{ es.event.location }}</span>{% endif %}
+          </div>
+          <div class="reg-url-box">
+            <code id="regUrl-{{ es.event.event_code }}">{{ request.host_url }}register/{{ es.event.event_code }}</code>
+            <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('regUrl-{{ es.event.event_code }}').textContent); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy URL', 2000);">Copy URL</button>
+          </div>
+        </div>
+      </div>
+      <div class="event-bottom">
+        <div class="event-stats-row">
+          <div class="event-stat"><div class="event-stat-num">{{ es.registered }}</div><div class="event-stat-label">Registered</div></div>
+        </div>
+        <div class="event-actions">
+          {% if role == 'cuemath_admin' %}
+          <a href="{{ url_for('event_students', event_code=es.event.event_code) }}" class="btn btn-outline btn-sm">Students</a>
+          <a href="{{ url_for('event_qr', event_code=es.event.event_code) }}" class="btn btn-outline btn-sm">QR Code</a>
+          <form method="POST" action="{{ url_for('toggle_test', event_code=es.event.event_code) }}" style="display:inline;">
+            <button type="submit" class="btn btn-success btn-sm">Enable Test</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- COMPLETED -->
+  {% set completed_events = [] %}
+  {% for es in event_stats %}
+    {% if es.completed > 0 and not es.event.test_enabled %}
+      {% if completed_events.append(es) %}{% endif %}
+    {% endif %}
+  {% endfor %}
+  {% if completed_events %}
+  <div class="section-header">
+    <div class="section-title">Completed Events</div>
+    <div class="section-count">{{ completed_events|length }}</div>
+  </div>
+  <div class="event-grid">
+    {% for es in completed_events %}
+    <div class="event-card">
+      <div class="event-top">
+        <div class="event-info">
+          <div class="event-name">
+            {{ es.event.event_name }}
+            <span class="badge badge-done">Done</span>
+            {% if es.event.event_type == 'high_school' %}<span class="badge badge-hs">9-12</span>
+            {% elif es.event.event_type == 'middle_school' %}<span class="badge badge-ms">6-8</span>
+            {% else %}<span class="badge badge-both">6-12</span>{% endif %}
+          </div>
+          <div class="event-meta">
+            <span>{{ es.event.school_name }}</span>
+            <span>{{ es.event.event_date }}</span>
+            {% if es.event.location %}<span>{{ es.event.location }}</span>{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="event-bottom">
+        <div class="event-stats-row">
+          <div class="event-stat"><div class="event-stat-num">{{ es.registered }}</div><div class="event-stat-label">Registered</div></div>
+          <div class="event-stat"><div class="event-stat-num" style="color: #10B981;">{{ es.completed }}</div><div class="event-stat-label">Completed</div></div>
+          <div class="event-stat">
+            <div class="event-stat-num">{% if es.registered > 0 %}{{ (es.completed / es.registered * 100)|round|int }}%{% else %}0%{% endif %}</div>
+            <div class="event-stat-label">Completion</div>
+          </div>
+        </div>
+        <div class="event-actions">
+          {% if role == 'cuemath_admin' %}
+          <a href="{{ url_for('event_students', event_code=es.event.event_code) }}" class="btn btn-outline btn-sm">Details</a>
+          <a href="{{ url_for('export_event', event_code=es.event.event_code) }}" class="btn btn-outline btn-sm">Export CSV</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- PTA Admin: Aggregate Only View -->
+  {% if role == 'pta_admin' %}
+  <div class="section-header">
+    <div class="section-title">Your Event</div>
+  </div>
+  {% for es in event_stats %}
+  <div class="event-card">
+    <div class="event-top">
+      <div class="event-info">
+        <div class="event-name">{{ es.event.event_name }}</div>
+        <div class="event-meta">
+          <span>{{ es.event.school_name }}</span>
+          <span>{{ es.event.event_date }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="event-bottom">
+      <div class="event-stats-row">
+        <div class="event-stat"><div class="event-stat-num">{{ es.registered }}</div><div class="event-stat-label">Registered</div></div>
+        <div class="event-stat"><div class="event-stat-num" style="color: #10B981;">{{ es.completed }}</div><div class="event-stat-label">Completed</div></div>
+        {% if es.registered > 0 %}
+        <div class="event-stat">
+          <div class="event-stat-num">{{ (es.completed / es.registered * 100)|round|int }}%</div>
+          <div class="event-stat-label">Completion Rate</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <!-- Empty state -->
+  {% if not event_stats %}
+  <div class="empty">
+    <h3>No events yet</h3>
+    <p>Create your first Math Night event to get started.</p>
+  </div>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

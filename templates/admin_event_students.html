@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}{{ event.event_name }} — Students{% endblock %}
+{% block extra_css %}
+  .container { max-width: 1100px; margin: 32px auto; padding: 0 20px; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 24px; font-weight: 800; color: var(--text); }
+  .back-link { color: var(--text-secondary); text-decoration: none; font-size: 14px; }
+  .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .header-actions a, .header-actions button {
+    padding: 8px 16px; border-radius: 4px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 6px; min-height: 36px;
+  }
+  .btn-export { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+  .btn-export:hover { background: var(--surface-3); }
+  .btn-qr { background: var(--accent); color: #191919; }
+  .btn-qr:hover { background: #E0A406; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 800; color: var(--text); }
+  .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* FUAR averages */
+  .fuar-avg { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .fuar-avg-item {
+    flex: 1; min-width: 120px; padding: 12px 16px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 4px; text-align: center;
+  }
+  .fuar-avg-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .fuar-avg-score { font-size: 22px; font-weight: 800; margin-top: 4px; }
+  .fuar-avg-bar { height: 4px; background: var(--surface-3); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+  .fuar-avg-fill { height: 100%; border-radius: 2px; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 800px; }
+  th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; padding: 12px 8px; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 8px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; color: var(--text); }
+  tr:hover td { background: var(--surface-2); }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-pending { background: #FFFBEB; color: #92400E; }
+  .badge-started { background: #EFF6FF; color: #1D4ED8; }
+  .badge-done { background: #F0FDF4; color: #166534; }
+
+  /* FUAR mini bars in table */
+  .fuar-mini { display: flex; gap: 3px; align-items: center; }
+  .fuar-mini-bar { width: 24px; height: 14px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: white; }
+  .fuar-mini-label { font-size: 9px; color: var(--text-secondary); width: 10px; text-align: center; }
+
+  .score-cell { font-size: 12px; font-weight: 600; color: var(--text); }
+  .report-link { color: #FFBA07; text-decoration: none; font-size: 12px; font-weight: 600; }
+  .report-link:hover { text-decoration: underline; color: #E0A406; }
+
+  @media (max-width: 768px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .fuar-avg { flex-direction: column; }
+  }
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>{{ event.event_name }}</h1>
+      <div style="color: var(--text-secondary); font-size: 14px;">{{ event.school_name }} &middot; {{ event.event_date or 'Date TBD' }}</div>
+    </div>
+    <div>
+      <a href="{{ url_for('admin_dashboard') }}" class="back-link">&larr; Back to Events</a>
+    </div>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="header-actions" style="margin-bottom: 20px;">
+    <a href="{{ url_for('export_event', event_code=event.event_code) }}" class="btn-export">Download CSV</a>
+    <a href="{{ url_for('event_flyer', event_code=event.event_code) }}" class="btn-qr">QR Flyer</a>
+    <a href="{{ url_for('event_qr', event_code=event.event_code) }}" class="btn-export" target="_blank">QR Image</a>
+  </div>
+
+  <!-- Stats -->
+  {% set total = students|length %}
+  {% set started = students|selectattr('test_started_at')|list|length %}
+  {% set completed = students|selectattr('archetype')|list|length %}
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">{{ total }}</div>
+      <div class="stat-label">Registered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ started }}</div>
+      <div class="stat-label">Started</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{{ completed }}</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">{% if total > 0 %}{{ (completed / total * 100)|round|int }}%{% else %}0%{% endif %}</div>
+      <div class="stat-label">Completion Rate</div>
+    </div>
+  </div>
+
+  <!-- Average FUAR Scores (only if we have completed students) -->
+  {% if avg_fuar is defined and completed > 0 %}
+  <div style="margin-bottom: 8px;">
+    <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">Average FUAR Scores ({{ completed }} students)</span>
+  </div>
+  <div class="fuar-avg">
+    {% for dim_key, dim in fuar_dims.items() %}
+    <div class="fuar-avg-item">
+      <div class="fuar-avg-label" style="color: {{ dim.color }};">{{ dim.name }}</div>
+      <div class="fuar-avg-score" style="color: {{ dim.color }};">{{ avg_fuar[dim_key] }}</div>
+      <div class="fuar-avg-bar">
+        <div class="fuar-avg-fill" style="width: {{ avg_fuar[dim_key] }}%; background: {{ dim.color }};"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Student Table -->
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Grade</th>
+        <th>Track</th>
+        <th>Status</th>
+        <th>Archetype</th>
+        <th>FUAR</th>
+        <th>Score</th>
+        <th>Report</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td>
+          <div style="font-weight: 600;">{{ s.student_name }}</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">{{ s.student_email or s.parent_email }}</div>
+        </td>
+        <td>{{ s.grade }}</td>
+        <td style="font-size: 12px;">{{ s.track|replace('_',' ')|title }}</td>
+        <td>
+          {% if s.archetype %}<span class="badge badge-done">Completed</span>
+          {% elif s.test_started_at %}<span class="badge badge-started">In Progress</span>
+          {% else %}<span class="badge badge-pending">Registered</span>{% endif %}
+        </td>
+        <td style="font-size: 12px; font-weight: 600;">
+          {% if s.archetype %}
+            {{ archetypes.get(s.archetype, {}).get('name', '') }}
+          {% else %}—{% endif %}
+        </td>
+        <td>
+          {% if s.fuar_fluency is not none %}
+          <div class="fuar-mini">
+            <span class="fuar-mini-label">F</span>
+            <div class="fuar-mini-bar" style="background: {% if s.fuar_fluency >= 60 %}#10B981{% elif s.fuar_fluency >= 40 %}#F59E0B{% else %}#DC2626{% endif %};">{{ s.fuar_fluency|round|int }}</div>
+            <span class="fuar-mini-label">U</span>
+            <div class="fuar-mini-bar" style="background: {% if s.fuar_understanding >= 60 %}#10B981{% elif s.fuar_understanding >= 40 %}#F59E0B{% else %}#DC2626{% endif %};">{{ s.fuar_understanding|round|int }}</div>
+            <span class="fuar-mini-label">A</span>
+            <div class="fuar-mini-bar" style="background: {% if s.fuar_application >= 60 %}#10B981{% elif s.fuar_application >= 40 %}#F59E0B{% else %}#DC2626{% endif %};">{{ s.fuar_application|round|int }}</div>
+            <span class="fuar-mini-label">R</span>
+            <div class="fuar-mini-bar" style="background: {% if s.fuar_reasoning >= 60 %}#10B981{% elif s.fuar_reasoning >= 40 %}#F59E0B{% else %}#DC2626{% endif %};">{{ s.fuar_reasoning|round|int }}</div>
+          </div>
+          {% else %}—{% endif %}
+        </td>
+        <td class="score-cell">
+          {% if s.score_label %}{{ s.score_label }}{% else %}—{% endif %}
+        </td>
+        <td>
+          {% if s.archetype %}
+          <a href="{{ url_for('student_report', student_id=s.id) }}" class="report-link" target="_blank">View</a>
+          &middot;
+          <a href="{{ url_for('student_report_parent', student_id=s.id) }}" class="report-link" target="_blank">Parent</a>
+          {% else %}—{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  {% if not students %}
+  <div style="text-align: center; padding: 48px 24px; color: var(--text-secondary);">
+    <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">No students registered yet</p>
+    <p style="font-size: 14px;">Share the registration link to get started.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

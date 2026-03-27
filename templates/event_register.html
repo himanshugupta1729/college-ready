@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+{% block title %}Register — {{ event.event_name }}{% endblock %}
+
+{% block content %}
+<style>
+  .reg-container { max-width: 580px; margin: 40px auto; padding: 0 20px; }
+  .reg-header { text-align: center; margin-bottom: 32px; }
+  .reg-header h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; color: #191919; }
+  .reg-header .school { font-size: 16px; color: #666666; }
+  .reg-header .date { font-size: 14px; color: #999999; margin-top: 4px; }
+  .reg-card { background: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 4px; padding: 32px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; color: #191919; margin-bottom: 6px; }
+  .form-group input, .form-group select {
+    width: 100%; padding: 12px 16px; border: 1px solid #E0E0E0;
+    border-radius: 4px; font-size: 15px; color: #191919; background: #FFFFFF;
+  }
+  .form-group input:focus, .form-group select:focus { outline: none; border-color: #FFBA07; box-shadow: 0 0 0 3px rgba(255,186,7,0.15); }
+  .form-row { display: flex; gap: 16px; }
+  .form-row .form-group { flex: 1; }
+  .reg-btn {
+    width: 100%; padding: 16px; background: #FFBA07; color: #191919;
+    border: none; border-radius: 4px; font-size: 16px; font-weight: 700; cursor: pointer; min-height: 44px; margin-top: 8px;
+  }
+  .reg-btn:hover { background: #E0A406; }
+  .success-card {
+    text-align: center; padding: 40px 24px;
+    background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 4px;
+  }
+  .success-card h2 { color: #166534; margin-bottom: 12px; }
+  .success-card p { color: #15803D; font-size: 15px; line-height: 1.6; }
+  .success-card .event-code {
+    display: inline-block; margin-top: 16px; padding: 12px 24px;
+    background: #191919; color: #FFFFFF; border-radius: 4px;
+    font-size: 18px; font-weight: 700; letter-spacing: 1px;
+  }
+  .section-label { font-size: 12px; color: #999999; text-transform: uppercase; letter-spacing: 1px; margin-top: 28px; margin-bottom: 10px; font-weight: 600; }
+  .flash { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+  .flash-danger { background: #FEF2F2; color: #991B1B; }
+  .flash-info { background: #FFFBEB; color: #92400E; }
+
+  /* Evaluation category tiles */
+  .eval-tiles { display: flex; gap: 12px; margin-bottom: 16px; }
+  .eval-tile {
+    flex: 1; padding: 16px; border: 2px solid #E0E0E0; border-radius: 4px;
+    cursor: pointer; text-align: center; transition: all 0.2s;
+  }
+  .eval-tile:hover { border-color: #FFBA07; background: #FFFBEB; }
+  .eval-tile.selected { border-color: #FFBA07; background: #FFFBEB; }
+  .eval-tile-icon { font-size: 24px; margin-bottom: 8px; }
+  .eval-tile-name { font-size: 14px; font-weight: 700; color: #191919; margin-bottom: 4px; }
+  .eval-tile-desc { font-size: 12px; color: #666666; line-height: 1.4; }
+
+  /* Track options within a category */
+  .track-options { margin-top: 12px; }
+  .track-option {
+    padding: 12px 16px; border: 1px solid #E0E0E0; border-radius: 4px;
+    margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+  }
+  .track-option:hover { border-color: #FFBA07; background: #FFFBEB; }
+  .track-option.selected { border-color: #FFBA07; background: #FFFBEB; }
+  .track-option input[type="radio"] { accent-color: #FFBA07; width: 16px; height: 16px; }
+  .track-option-text { flex: 1; }
+  .track-option-name { font-size: 14px; font-weight: 600; color: #191919; }
+  .track-option-meta { font-size: 12px; color: #999999; margin-top: 2px; }
+
+  #eval-section { display: none; }
+  #track-section { display: none; }
+
+  .eval-note { font-size: 12px; color: #666666; background: #F5F5F5; padding: 10px 14px; border-radius: 4px; margin-top: 8px; line-height: 1.5; }
+</style>
+
+<div class="reg-container">
+  <div class="reg-header">
+    {% if event_type == 'middle_school' %}
+    <h1>Foundation Math Night</h1>
+    {% else %}
+    <h1>College Ready Night</h1>
+    {% endif %}
+    <div class="school">{{ event.school_name }}</div>
+    {% if event.event_date %}<div class="date">{{ event.event_date }}</div>{% endif %}
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  {% if registered %}
+  <div class="success-card">
+    <h2>You're registered{{ ', ' + student_name if student_name else '' }}!</h2>
+    <p>On the event day, log in with your email at the event portal. You'll need this event code:</p>
+    <div class="event-code">{{ event.event_code }}</div>
+    <p style="margin-top: 16px; font-size: 13px; color: #666666;">Save this code — you'll need it on event day.</p>
+  </div>
+  {% else %}
+  <div class="reg-card">
+    <form method="POST" id="regForm">
+
+      <div class="section-label">Student</div>
+      <div class="form-group">
+        <label>Student Name *</label>
+        <input type="text" name="student_name" placeholder="Full name" required>
+      </div>
+      <div class="form-group">
+        <label>Student Email{% if event_type != 'middle_school' %} *{% endif %}</label>
+        <input type="email" name="student_email" placeholder="student@email.com" {% if event_type != 'middle_school' %}required{% endif %}>
+      </div>
+
+      <div class="section-label">Parent / Guardian</div>
+      <div class="form-group">
+        <label>Parent Name *</label>
+        <input type="text" name="parent_name" placeholder="Parent/guardian name" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Parent Email *</label>
+          <input type="email" name="parent_email" placeholder="parent@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Phone (optional)</label>
+          <input type="tel" name="parent_phone" placeholder="(555) 123-4567">
+        </div>
+      </div>
+
+      <div class="section-label">Grade & Evaluation</div>
+      <div class="form-group">
+        <label>Grade *</label>
+        <select name="grade" id="grade-select" required onchange="onGradeChange()">
+          <option value="">Select grade</option>
+          {% for g in range(grade_min, grade_max + 1) %}
+          <option value="{{ g }}">{{ g }}th Grade</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Evaluation category tiles (high school only) -->
+      <div id="eval-section">
+        <div class="form-group">
+          <label>Choose Your Evaluation</label>
+          <div class="eval-tiles">
+            <div class="eval-tile" id="tile-course" onclick="selectCategory('course')">
+              <div class="eval-tile-icon">📚</div>
+              <div class="eval-tile-name">My Math Course</div>
+              <div class="eval-tile-desc">How am I doing in my current class?</div>
+            </div>
+            <div class="eval-tile" id="tile-sat" onclick="selectCategory('sat')">
+              <div class="eval-tile-icon">🎯</div>
+              <div class="eval-tile-name">SAT Math</div>
+              <div class="eval-tile-desc">Where would I score on the SAT?</div>
+            </div>
+            <div class="eval-tile" id="tile-ap" onclick="selectCategory('ap')">
+              <div class="eval-tile-icon">🚀</div>
+              <div class="eval-tile-name">AP Readiness</div>
+              <div class="eval-tile-desc">Am I ready for AP math?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Track selection within category -->
+      <div id="track-section">
+        <div class="form-group">
+          <label id="track-label">What math course are you taking this year?</label>
+          <div class="track-options" id="track-options"></div>
+          <div class="eval-note" id="eval-note">Your evaluation will be tailored to this selection. You'll receive a personalized diagnostic report with your strengths and areas to improve.</div>
+        </div>
+      </div>
+
+      <!-- Hidden track field -->
+      <input type="hidden" name="track" id="track-hidden" value="">
+
+      <button type="submit" class="reg-btn">
+        {% if event_type == 'middle_school' %}Register for Foundation Math Night
+        {% else %}Register for College Ready Night{% endif %}
+      </button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+const eventType = '{{ event_type }}';
+const gradeMin = {{ grade_min }};
+const gradeMax = {{ grade_max }};
+
+// Track definitions
+// All course tracks available for all high school grades
+const courseTracks = {
+  9:  [{ key: 'algebra_1', name: 'Algebra 1', q: 25, t: 60 }, { key: 'geometry', name: 'Geometry', q: 25, t: 60 }, { key: 'algebra_2', name: 'Algebra 2', q: 28, t: 60 }, { key: 'precalculus', name: 'Precalculus', q: 28, t: 60 }, { key: 'statistics', name: 'Statistics', q: 22, t: 60 }],
+  10: [{ key: 'algebra_1', name: 'Algebra 1', q: 25, t: 60 }, { key: 'geometry', name: 'Geometry', q: 25, t: 60 }, { key: 'algebra_2', name: 'Algebra 2', q: 28, t: 60 }, { key: 'precalculus', name: 'Precalculus', q: 28, t: 60 }, { key: 'statistics', name: 'Statistics', q: 22, t: 60 }],
+  11: [{ key: 'algebra_1', name: 'Algebra 1', q: 25, t: 60 }, { key: 'geometry', name: 'Geometry', q: 25, t: 60 }, { key: 'algebra_2', name: 'Algebra 2', q: 28, t: 60 }, { key: 'precalculus', name: 'Precalculus', q: 28, t: 60 }, { key: 'statistics', name: 'Statistics', q: 22, t: 60 }],
+  12: [{ key: 'algebra_1', name: 'Algebra 1', q: 25, t: 60 }, { key: 'geometry', name: 'Geometry', q: 25, t: 60 }, { key: 'algebra_2', name: 'Algebra 2', q: 28, t: 60 }, { key: 'precalculus', name: 'Precalculus', q: 28, t: 60 }, { key: 'statistics', name: 'Statistics', q: 22, t: 60 }],
+};
+
+// All AP tracks available for all high school grades
+const apTracks = {
+  9:  [{ key: 'ap_precalc', name: 'AP Precalculus', q: 24, t: 70 }, { key: 'ap_calc_ab', name: 'AP Calculus AB', q: 28, t: 70 }, { key: 'ap_calc_bc', name: 'AP Calculus BC', q: 30, t: 70 }, { key: 'ap_stats', name: 'AP Statistics', q: 28, t: 70 }],
+  10: [{ key: 'ap_precalc', name: 'AP Precalculus', q: 24, t: 70 }, { key: 'ap_calc_ab', name: 'AP Calculus AB', q: 28, t: 70 }, { key: 'ap_calc_bc', name: 'AP Calculus BC', q: 30, t: 70 }, { key: 'ap_stats', name: 'AP Statistics', q: 28, t: 70 }],
+  11: [{ key: 'ap_precalc', name: 'AP Precalculus', q: 24, t: 70 }, { key: 'ap_calc_ab', name: 'AP Calculus AB', q: 28, t: 70 }, { key: 'ap_calc_bc', name: 'AP Calculus BC', q: 30, t: 70 }, { key: 'ap_stats', name: 'AP Statistics', q: 28, t: 70 }],
+  12: [{ key: 'ap_precalc', name: 'AP Precalculus', q: 24, t: 70 }, { key: 'ap_calc_ab', name: 'AP Calculus AB', q: 28, t: 70 }, { key: 'ap_calc_bc', name: 'AP Calculus BC', q: 30, t: 70 }, { key: 'ap_stats', name: 'AP Statistics', q: 28, t: 70 }],
+};
+
+const middleTracks = {
+  6: [{ key: 'grade_6', name: 'Grade 6 Math', q: 24, t: 45 }],
+  7: [{ key: 'grade_7', name: 'Grade 7 Math (Regular)', q: 24, t: 45 }, { key: 'grade_7_accelerated', name: 'Grade 7 Accelerated (Pre-Algebra)', q: 24, t: 45 }],
+  8: [{ key: 'grade_8', name: 'Grade 8 Math (Regular)', q: 24, t: 45 }, { key: 'algebra_1', name: 'Algebra 1 (Accelerated)', q: 25, t: 60 }],
+};
+
+let selectedCategory = null;
+let selectedGrade = null;
+
+function onGradeChange() {
+  selectedGrade = parseInt(document.getElementById('grade-select').value);
+  selectedCategory = null;
+  document.getElementById('track-section').style.display = 'none';
+  document.getElementById('track-hidden').value = '';
+
+  // Reset tile selections
+  document.querySelectorAll('.eval-tile').forEach(t => t.classList.remove('selected'));
+
+  if (!selectedGrade) {
+    document.getElementById('eval-section').style.display = 'none';
+    return;
+  }
+
+  // Middle school: skip tiles, go straight to track selection
+  if (selectedGrade >= 6 && selectedGrade <= 8) {
+    document.getElementById('eval-section').style.display = 'none';
+    const tracks = middleTracks[selectedGrade] || [];
+    if (tracks.length === 1) {
+      // Only one track — auto-select
+      document.getElementById('track-hidden').value = tracks[0].key;
+      document.getElementById('track-section').style.display = 'none';
+    } else {
+      document.getElementById('track-label').textContent = 'What math are you taking this year?';
+      showTracks(tracks);
+    }
+    return;
+  }
+
+  // High school: show all three category tiles for all grades 9-12
+  document.getElementById('eval-section').style.display = 'block';
+}
+
+function selectCategory(cat) {
+  selectedCategory = cat;
+
+  // Update tile visuals
+  document.querySelectorAll('.eval-tile').forEach(t => t.classList.remove('selected'));
+  document.getElementById('tile-' + cat).classList.add('selected');
+
+  if (cat === 'sat') {
+    // SAT — auto-select, no sub-options
+    document.getElementById('track-hidden').value = 'sat';
+    document.getElementById('track-section').style.display = 'block';
+    document.getElementById('track-label').textContent = 'SAT Math Diagnostic';
+    document.getElementById('track-options').innerHTML = `
+      <div class="track-option selected">
+        <input type="radio" name="track_display" checked>
+        <div class="track-option-text">
+          <div class="track-option-name">SAT Math</div>
+          <div class="track-option-meta">44 questions · 70 min · Estimated score 200-800</div>
+        </div>
+      </div>`;
+    document.getElementById('eval-note').textContent = 'You\'ll receive an estimated SAT Math score range, FUAR profile, and a personalized study plan.';
+    return;
+  }
+
+  if (cat === 'course') {
+    const tracks = courseTracks[selectedGrade] || [];
+    document.getElementById('track-label').textContent = 'What math course are you taking this year?';
+    document.getElementById('eval-note').textContent = 'Your evaluation will show how you\'re performing in this course — your strengths, areas to improve, and a personalized practice plan.';
+    showTracks(tracks);
+    return;
+  }
+
+  if (cat === 'ap') {
+    const tracks = apTracks[selectedGrade] || [];
+    document.getElementById('track-label').textContent = 'Which AP course do you want to check readiness for?';
+    document.getElementById('eval-note').textContent = 'You\'ll receive an AP readiness score, predicted AP exam score (1-5), and specific areas to strengthen before the course.';
+    showTracks(tracks);
+    return;
+  }
+}
+
+function showTracks(tracks) {
+  const container = document.getElementById('track-options');
+  container.innerHTML = '';
+
+  tracks.forEach((track, i) => {
+    const div = document.createElement('div');
+    div.className = 'track-option' + (i === 0 ? ' selected' : '');
+    div.innerHTML = `
+      <input type="radio" name="track_display" value="${track.key}" ${i === 0 ? 'checked' : ''} onchange="selectTrack('${track.key}', this)">
+      <div class="track-option-text">
+        <div class="track-option-name">${track.name}</div>
+        <div class="track-option-meta">${track.q} questions · ${track.t} min</div>
+      </div>`;
+    div.onclick = function() {
+      const radio = div.querySelector('input');
+      radio.checked = true;
+      selectTrack(track.key, radio);
+    };
+    container.appendChild(div);
+  });
+
+  // Auto-select first
+  if (tracks.length > 0) {
+    document.getElementById('track-hidden').value = tracks[0].key;
+  }
+
+  document.getElementById('track-section').style.display = 'block';
+}
+
+function selectTrack(key, radio) {
+  document.getElementById('track-hidden').value = key;
+  // Update visual
+  document.querySelectorAll('.track-option').forEach(t => t.classList.remove('selected'));
+  radio.closest('.track-option').classList.add('selected');
+}
+
+// Form validation
+document.getElementById('regForm').addEventListener('submit', function(e) {
+  const track = document.getElementById('track-hidden').value;
+  if (!track) {
+    e.preventDefault();
+    alert('Please select your evaluation type.');
+  }
+});
+</script>
+{% endblock %}

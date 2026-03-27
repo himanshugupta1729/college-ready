@@ -1,0 +1,561 @@
+{% extends "base.html" %}
+{% set show_nav = false %}
+
+{% block title %}Question {{ current }} of {{ total }} — College Ready{% endblock %}
+
+{% block extra_css %}
+/* Full-screen test mode */
+body {
+    overflow: hidden;
+}
+
+/* Override accent bar for test — keep it but don't let it interfere */
+body::before {
+    position: fixed;
+    z-index: 9999;
+}
+
+.test-shell {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 4px;
+}
+
+/* ── Top bar ─────────────────────────────────────────────── */
+.test-topbar {
+    flex-shrink: 0;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.q-counter {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.q-counter strong {
+    color: var(--text);
+    font-weight: 700;
+}
+
+.progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--surface-3);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 400px;
+}
+
+.progress-track .fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+}
+
+.topbar-right {
+    flex-shrink: 0;
+}
+
+/* Timer */
+.timer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+
+.timer svg {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+}
+
+.timer.danger {
+    color: var(--red);
+    border-color: rgba(220, 38, 38, 0.4);
+    background: #FEF2F2;
+    animation: pulse-border 1.2s ease-in-out infinite;
+}
+
+.timer.danger svg {
+    color: var(--red);
+}
+
+@keyframes pulse-border {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+    50%       { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12); }
+}
+
+/* ── Question body ───────────────────────────────────────── */
+.test-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 24px;
+    background: var(--bg);
+}
+
+.question-card {
+    width: 100%;
+    max-width: 680px;
+}
+
+.question-number {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-hover);
+    margin-bottom: 14px;
+}
+
+.question-text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 32px;
+    letter-spacing: -0.1px;
+}
+
+/* Answer options */
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 36px;
+}
+
+.option-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.option-card:hover {
+    border-color: #CCCCCC;
+    background: var(--surface-2);
+}
+
+.option-card.selected {
+    border-color: var(--accent);
+    background: rgba(255, 186, 7, 0.08);
+}
+
+.option-card.selected .option-letter {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #191919;
+}
+
+.option-letter {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.option-text {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text);
+    flex: 1;
+}
+
+/* ── Question Navigator ──────────────────────────────────── */
+.q-navigator {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.q-nav-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+}
+
+.q-nav-dot:hover { border-color: var(--accent); background: #FFFBEB; }
+.q-nav-dot.current { background: var(--accent); color: #191919; border-color: var(--accent); font-weight: 700; }
+.q-nav-dot.answered { background: #10B981; color: #fff; border-color: #10B981; }
+.q-nav-dot.answered:hover { background: #059669; }
+
+.q-nav-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 8px;
+    font-weight: 600;
+}
+
+/* ── Bottom action bar ───────────────────────────────────── */
+.test-footer {
+    flex-shrink: 0;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-skip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 44px;
+}
+
+.btn-skip:hover { border-color: #ccc; background: var(--surface-2); color: var(--text); }
+
+.btn-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    background: var(--accent);
+    color: #191919;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    min-height: 44px;
+}
+
+.btn-next:hover:not(:disabled) {
+    background: var(--accent-hover);
+    box-shadow: 0 4px 12px var(--accent-glow);
+    transform: translateY(-1px);
+}
+
+.btn-next:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.keyboard-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.keyboard-hint kbd {
+    display: inline-block;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-secondary);
+    margin: 0 1px;
+}
+{% endblock %}
+
+{% block content %}
+<div class="test-shell">
+
+    <!-- Top bar -->
+    <div class="test-topbar">
+        <div class="topbar-left">
+            <span class="q-counter">
+                Question <strong>{{ current }}</strong> of {{ total }}
+            </span>
+            <div class="progress-track">
+                <div class="fill" style="width: {{ ((current - 1) / total * 100)|round(1) }}%"></div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="timer" id="timer">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span id="timer-display">--:--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question area -->
+    <div class="test-body">
+        <div class="question-card">
+            <div class="question-number">Question {{ current }}</div>
+            <div class="question-text">{{ question.question_text }}</div>
+
+            <form id="answer-form" action="/test/answer" method="POST">
+                <input type="hidden" name="question_id" value="{{ question.id }}">
+                <input type="hidden" name="answer" id="answer-input" value="">
+                <input type="hidden" name="time_spent" id="time-spent-input" value="0">
+
+                <div class="options-list" id="options-list">
+                    {% set options = [
+                        ('A', question.option_a),
+                        ('B', question.option_b),
+                        ('C', question.option_c),
+                        ('D', question.option_d)
+                    ] %}
+                    {% for letter, text in options %}
+                    <div class="option-card" data-value="{{ letter }}" role="button" tabindex="0" aria-label="Option {{ letter }}: {{ text }}">
+                        <div class="option-letter">{{ letter }}</div>
+                        <div class="option-text">{{ text }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="test-footer">
+        <div class="footer-left">
+            {% if nav_items %}
+            <div class="q-navigator">
+                {% for item in nav_items %}
+                <a href="/test/question?q={{ item.index }}" class="q-nav-dot {{ item.status }}" title="Question {{ item.number }}">{{ item.number }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer-right">
+            <form action="/test/skip" method="POST" style="display:inline;">
+                <button type="submit" class="btn-skip">Skip &rarr;</button>
+            </form>
+            <button class="btn-next" id="btn-next" disabled>
+                {% if current < total %}
+                    Submit &amp; Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                {% else %}
+                    Finish Test
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                {% endif %}
+            </button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    'use strict';
+
+    /* ── Config ──────────────────────────────────────────── */
+    const TIME_REMAINING_SECONDS = {{ time_remaining }};
+    const DANGER_THRESHOLD = 300; // 5 minutes
+
+    /* ── State ───────────────────────────────────────────── */
+    let selectedAnswer = null;
+    let questionStartTime = Date.now();
+    let totalSecondsLeft = TIME_REMAINING_SECONDS;
+    let timerInterval = null;
+    let submitted = false;
+
+    /* ── DOM refs ────────────────────────────────────────── */
+    const timerEl      = document.getElementById('timer');
+    const timerDisplay = document.getElementById('timer-display');
+    const answerInput  = document.getElementById('answer-input');
+    const timeSpentInput = document.getElementById('time-spent-input');
+    const btnNext      = document.getElementById('btn-next');
+    const form         = document.getElementById('answer-form');
+    const optionCards  = document.querySelectorAll('.option-card');
+
+    /* ── Timer ───────────────────────────────────────────── */
+    function formatTime(secs) {
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    function tickTimer() {
+        totalSecondsLeft = Math.max(0, totalSecondsLeft - 1);
+        timerDisplay.textContent = formatTime(totalSecondsLeft);
+
+        if (totalSecondsLeft <= DANGER_THRESHOLD) {
+            timerEl.classList.add('danger');
+        }
+
+        if (totalSecondsLeft === 0) {
+            clearInterval(timerInterval);
+            if (!submitted) {
+                submitted = true;
+                timeSpentInput.value = Math.round((Date.now() - questionStartTime) / 1000);
+                // Submit current answer if one is selected, otherwise go straight to complete
+                if (selectedAnswer) {
+                    answerInput.value = selectedAnswer;
+                    form.submit();
+                } else {
+                    window.location.href = '/test/complete';
+                }
+            }
+        }
+    }
+
+    // Initialise display immediately (no blank flash)
+    timerDisplay.textContent = formatTime(totalSecondsLeft);
+    if (totalSecondsLeft <= DANGER_THRESHOLD) timerEl.classList.add('danger');
+    timerInterval = setInterval(tickTimer, 1000);
+
+    /* ── Answer selection ────────────────────────────────── */
+    function selectAnswer(value) {
+        if (submitted) return;
+
+        selectedAnswer = value;
+        answerInput.value = value;
+
+        optionCards.forEach(card => {
+            card.classList.toggle('selected', card.dataset.value === value);
+        });
+
+        btnNext.disabled = false;
+    }
+
+    optionCards.forEach(card => {
+        card.addEventListener('click', () => selectAnswer(card.dataset.value));
+        // Accessibility: keyboard activation on focusable cards
+        card.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectAnswer(card.dataset.value);
+            }
+        });
+    });
+
+    /* ── Keyboard shortcuts ──────────────────────────────── */
+    document.addEventListener('keydown', e => {
+        if (submitted) return;
+        // Don't fire inside text inputs (future-proof)
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        const key = e.key.toUpperCase();
+
+        if (['A', 'B', 'C', 'D'].includes(key)) {
+            e.preventDefault();
+            selectAnswer(key);
+            return;
+        }
+
+        if (e.key === 'Enter' && selectedAnswer) {
+            e.preventDefault();
+            submitAnswer();
+        }
+    });
+
+    /* ── Submit ──────────────────────────────────────────── */
+    function submitAnswer() {
+        if (submitted || !selectedAnswer) return;
+        submitted = true;
+        clearInterval(timerInterval);
+
+        const elapsed = Math.round((Date.now() - questionStartTime) / 1000);
+        timeSpentInput.value = elapsed;
+
+        btnNext.disabled = true;
+        btnNext.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+        form.submit();
+    }
+
+    btnNext.addEventListener('click', submitAnswer);
+
+    /* ── Prevent accidental navigation ──────────────────── */
+    window.addEventListener('beforeunload', e => {
+        if (!submitted && selectedAnswer) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    // Prevent back button mid-test
+    history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', () => {
+        history.pushState(null, '', window.location.href);
+    });
+
+}());
+</script>
+{% endblock %}

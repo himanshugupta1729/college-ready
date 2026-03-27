@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're registered for College Ready Night!</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f4f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f4f4f7;">
+    <tr>
+      <td align="center" style="padding: 40px 16px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #FF6B35, #E84393); padding: 32px 40px; text-align: center;">
+              <img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath" width="140" style="margin-bottom: 16px;">
+              <h1 style="color:#ffffff; font-size:24px; margin:0; font-weight:700; letter-spacing:-0.3px;">
+                You're In! 🎯
+              </h1>
+              <p style="color:rgba(255,255,255,0.9); font-size:15px; margin:8px 0 0;">
+                Your spot for College Ready Night is confirmed
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 36px 40px;">
+              <p style="color:#2d3436; font-size:16px; line-height:1.6; margin:0 0 20px;">
+                Hi {{ student_name }},
+              </p>
+              <p style="color:#2d3436; font-size:16px; line-height:1.6; margin:0 0 24px;">
+                You're registered for <strong>{{ event_name }}</strong> at <strong>{{ school_name }}</strong>. Here's everything you need to know.
+              </p>
+
+              <!-- Event Code Box -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="background-color:#FFF3ED; border: 2px solid #FF6B35; border-radius:10px; padding:24px; text-align:center;">
+                    <p style="color:#636e72; font-size:13px; margin:0 0 8px; text-transform:uppercase; letter-spacing:1px; font-weight:600;">
+                      Your Event Code
+                    </p>
+                    <p style="color:#FF6B35; font-size:36px; font-weight:800; margin:0; letter-spacing:4px; font-family: 'Courier New', monospace;">
+                      {{ event_code }}
+                    </p>
+                    <p style="color:#636e72; font-size:12px; margin:8px 0 0;">
+                      You'll need this to log in on event day
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Event Details -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:28px;">
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid #f0f0f0;">
+                    <span style="color:#636e72; font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">Date</span><br>
+                    <span style="color:#2d3436; font-size:16px; font-weight:600;">{{ event_date }}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid #f0f0f0;">
+                    <span style="color:#636e72; font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">Track</span><br>
+                    <span style="color:#2d3436; font-size:16px; font-weight:600;">{{ track_name }}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-bottom:1px solid #f0f0f0;">
+                    <span style="color:#636e72; font-size:13px; text-transform:uppercase; letter-spacing:0.5px;">School</span><br>
+                    <span style="color:#2d3436; font-size:16px; font-weight:600;">{{ school_name }}</span>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- What to Expect -->
+              <h2 style="color:#2d3436; font-size:18px; margin:28px 0 16px; font-weight:700;">
+                What to Expect
+              </h2>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="padding:8px 0; color:#2d3436; font-size:15px; line-height:1.5;">
+                    <span style="color:#FF6B35; font-weight:700; margin-right:8px;">1.</span>
+                    <strong>Adaptive Math Assessment</strong> — Two modules that adjust to your level, just like the digital SAT
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0; color:#2d3436; font-size:15px; line-height:1.5;">
+                    <span style="color:#FF6B35; font-weight:700; margin-right:8px;">2.</span>
+                    <strong>Instant FUAR Profile</strong> — See your strengths across Fluency, Understanding, Application, and Reasoning
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0; color:#2d3436; font-size:15px; line-height:1.5;">
+                    <span style="color:#FF6B35; font-weight:700; margin-right:8px;">3.</span>
+                    <strong>Detailed Report</strong> — Your parents receive a personalized math readiness report within 48 hours
+                  </td>
+                </tr>
+              </table>
+
+              <!-- How to Log In -->
+              <h2 style="color:#2d3436; font-size:18px; margin:28px 0 16px; font-weight:700;">
+                How to Log In on Event Day
+              </h2>
+              <ol style="color:#2d3436; font-size:15px; line-height:1.8; padding-left:20px; margin:0;">
+                <li>Go to the event URL your school shared (or ask your teacher)</li>
+                <li>Enter your <strong>event code: {{ event_code }}</strong></li>
+                <li>Confirm your name and start the assessment</li>
+              </ol>
+
+              <p style="color:#636e72; font-size:14px; line-height:1.6; margin:28px 0 0; padding:16px; background:#f8f9fa; border-radius:8px;">
+                <strong>Tip:</strong> Bring a pencil and scratch paper. No calculators needed for the first module. You'll have about {{ time_minutes }} minutes total.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#f8f9fa; padding: 24px 40px; text-align:center; border-top:1px solid #eee;">
+              <p style="color:#636e72; font-size:13px; margin:0 0 8px;">
+                Questions? Reply to this email or ask your teacher.
+              </p>
+              <p style="color:#b2bec3; font-size:12px; margin:0;">
+                Powered by <a href="https://www.cuemath.com" style="color:#FF6B35; text-decoration:none;">Cuemath</a> &mdash; Math Diagnostic
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

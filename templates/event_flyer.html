@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ event.event_name }} — Event Flyer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #f9fafb; }
+
+  .flyer {
+    width: 8.5in; height: 11in; margin: 0 auto; background: white;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 1in; text-align: center; position: relative; overflow: hidden;
+  }
+
+  /* Decorative top bar */
+  .flyer::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+    background: linear-gradient(90deg, #6C5CE7, #FFBA07, #059669, #3B82F6);
+  }
+
+  .brand { font-size: 16px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 24px; }
+  .brand span { color: #FFBA07; }
+
+  .event-type {
+    font-size: 14px; font-weight: 600; color: #6C5CE7; text-transform: uppercase;
+    letter-spacing: 2px; margin-bottom: 12px;
+    padding: 6px 20px; border: 2px solid #6C5CE7; border-radius: 20px; display: inline-block;
+  }
+
+  .event-name { font-size: 42px; font-weight: 900; color: #111827; line-height: 1.2; margin-bottom: 8px; }
+  .school-name { font-size: 22px; font-weight: 600; color: #6b7280; margin-bottom: 8px; }
+  .event-details { font-size: 16px; color: #9ca3af; margin-bottom: 40px; }
+
+  .qr-section { margin-bottom: 32px; }
+  .qr-code { width: 200px; height: 200px; margin: 0 auto; }
+  .qr-code img { width: 100%; height: 100%; image-rendering: pixelated; }
+
+  .scan-text { font-size: 24px; font-weight: 800; color: #111827; margin-top: 20px; }
+  .scan-sub { font-size: 14px; color: #6b7280; margin-top: 6px; }
+
+  .url-box {
+    background: #f3f4f6; border-radius: 10px; padding: 12px 24px;
+    font-size: 14px; font-weight: 600; color: #374151; margin-top: 16px;
+    word-break: break-all; max-width: 500px;
+  }
+
+  .features {
+    display: flex; gap: 32px; margin-top: 40px; justify-content: center; flex-wrap: wrap;
+  }
+  .feature { text-align: center; max-width: 140px; }
+  .feature-icon { font-size: 28px; margin-bottom: 6px; }
+  .feature-text { font-size: 12px; color: #6b7280; line-height: 1.4; }
+
+  .footer { position: absolute; bottom: 40px; font-size: 11px; color: #d1d5db; }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    .flyer { margin: 0; box-shadow: none; }
+    .flyer::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .event-type, .features, .qr-code { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  /* Screen: add shadow */
+  @media screen {
+    .flyer { box-shadow: 0 4px 24px rgba(0,0,0,0.1); margin: 24px auto; }
+    .no-print { margin: 16px auto; text-align: center; }
+    .no-print button {
+      padding: 10px 24px; background: #111827; color: white; border: none;
+      border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <button onclick="window.print()">Print Flyer</button>
+</div>
+
+<div class="flyer">
+  <div class="brand">cue<span>math</span></div>
+
+  <div class="event-type">
+    {% if event.event_type == 'middle_school' %}Family Math Night
+    {% elif event.event_type == 'both' %}Math Night
+    {% else %}College Ready Night{% endif %}
+  </div>
+
+  <div class="event-name">{{ event.event_name }}</div>
+  <div class="school-name">{{ event.school_name }}</div>
+  <div class="event-details">
+    {% if event.event_date %}{{ event.event_date }}{% endif %}
+    {% if event.location %} &middot; {{ event.location }}{% endif %}
+  </div>
+
+  <div class="qr-section">
+    <div class="qr-code">
+      <img src="{{ qr_img }}" alt="Scan to register">
+    </div>
+    <div class="scan-text">Scan to Register</div>
+    <div class="scan-sub">Take a free math diagnostic and discover your math profile</div>
+  </div>
+
+  <div class="url-box">{{ reg_url }}</div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">&#x1f4ca;</div>
+      <div class="feature-text">Personalized FUAR math profile</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">&#x1f9e0;</div>
+      <div class="feature-text">Discover your math archetype</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">&#x1f3af;</div>
+      <div class="feature-text">Get a custom improvement plan</div>
+    </div>
+  </div>
+
+  <div class="footer">Powered by Cuemath &middot; www.cuemath.com</div>
+</div>
+
+</body>
+</html>

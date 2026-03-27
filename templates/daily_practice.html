@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block title %}Day {{ workout.day_number }} Practice — College Ready{% endblock %}
+
+{% block extra_css %}
+/* ─── Layout ─── */
+.practice-wrapper {
+    padding-bottom: 80px;
+}
+
+/* ─── Sticky header ─── */
+.practice-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.practice-header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.practice-title-group .day-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--dim-color, var(--accent));
+    margin-bottom: 3px;
+}
+
+.practice-title-group .day-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.practice-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.q-counter {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.time-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* ─── Focus blurb ─── */
+.focus-blurb {
+    max-width: 800px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+}
+
+.focus-blurb-inner {
+    background: var(--dim-bg, rgba(108,92,231,0.08));
+    border: 1px solid var(--dim-color, var(--accent));
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.focus-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+.focus-blurb-inner p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.focus-blurb-inner strong {
+    color: var(--dim-color, var(--accent));
+}
+
+/* ─── Questions container ─── */
+.questions-container {
+    max-width: 800px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ─── Question card ─── */
+.question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.question-number-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+}
+
+.q-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+}
+
+.q-dim-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--dim-color, var(--accent));
+}
+
+.question-body {
+    padding: 20px 20px 16px;
+}
+
+.question-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* ─── Answer choices ─── */
+.choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.choice-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--surface-2);
+}
+
+.choice-label:hover {
+    border-color: var(--dim-color, var(--accent));
+    background: var(--dim-bg, rgba(108,92,231,0.05));
+}
+
+.choice-label input[type="radio"] {
+    display: none;
+}
+
+.choice-label.selected {
+    border-color: var(--dim-color, var(--accent));
+    background: var(--dim-bg, rgba(108,92,231,0.1));
+}
+
+.choice-key {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.choice-label.selected .choice-key {
+    background: var(--dim-color, var(--accent));
+    border-color: var(--dim-color, var(--accent));
+    color: white;
+}
+
+.choice-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    padding-top: 1px;
+}
+
+/* ─── Submit area ─── */
+.submit-area {
+    max-width: 800px;
+    margin: 32px auto 0;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.submit-note {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.progress-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.answered-count {
+    color: var(--dim-color, var(--accent));
+    font-weight: 700;
+}
+
+/* ─── Loading skeleton (shown until JS renders questions) ─── */
+.skeleton {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-line {
+    height: 14px;
+    background: var(--surface-3);
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.skeleton-line.short { width: 40%; }
+
+@keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+    .practice-header-inner { flex-wrap: wrap; }
+    .question-text { font-size: 15px; }
+}
+{% endblock %}
+
+{% block content %}
+{% set dim_color_map = {'F': 'var(--blue)', 'U': 'var(--green)', 'A': 'var(--orange)', 'R': 'var(--accent)'} %}
+{% set dim_name_map  = {'F': 'Fluency', 'U': 'Understanding', 'A': 'Application', 'R': 'Reasoning'} %}
+
+<style>
+    :root {
+        --dim-color: {{ focus_dim.color | default('var(--accent)') }};
+        --dim-bg:   {{ focus_dim.color | default('rgba(108,92,231,0.1)') }}1a;
+    }
+</style>
+
+<div class="practice-wrapper">
+
+    {# ── Sticky header ── #}
+    <div class="practice-header">
+        <div class="practice-header-inner">
+            <div class="practice-title-group">
+                <div class="day-label">Day {{ workout.day_number }}</div>
+                <div class="day-title">{{ focus_dim.name | default('Math Practice') }}</div>
+            </div>
+            <div class="practice-meta">
+                <div class="q-counter">8 questions</div>
+                <div class="time-badge">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    ~10 min
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Focus blurb ── #}
+    <div class="focus-blurb">
+        <div class="focus-blurb-inner">
+            <div class="focus-icon">{{ focus_dim.icon | default('🎯') }}</div>
+            <p>
+                <strong>{{ focus_dim.name | default('Practice') }}</strong> —
+                {{ focus_dim.student_desc | default('8 questions designed to sharpen this skill. Take your time — no timer pressure.') }}
+            </p>
+        </div>
+    </div>
+
+    {# ── Questions form ── #}
+    <form method="POST" action="/practice/submit" id="practiceForm">
+        <input type="hidden" name="workout_id" value="{{ workout.id }}">
+
+        <div class="questions-container" id="questionsContainer">
+            {% if questions is defined and questions %}
+                {% for q in questions %}
+                <div class="question-card" data-q-index="{{ loop.index }}">
+                    <div class="question-number-strip">
+                        <span class="q-num">Question {{ loop.index }} of {{ questions | length }}</span>
+                        <span class="q-dim-tag">{{ focus_dim.name | default('Practice') }}</span>
+                    </div>
+                    <div class="question-body">
+                        <div class="question-text">{{ q.question_text }}</div>
+                        <div class="choices" data-q="{{ q.id }}">
+                            {% set letters = ['A', 'B', 'C', 'D'] %}
+                            {% set options = [q.option_a, q.option_b, q.option_c, q.option_d] %}
+                            {% for i in range(4) %}
+                            <label class="choice-label" onclick="selectChoice(this)">
+                                <input type="radio" name="q_{{ q.id }}" value="{{ letters[i] }}">
+                                <span class="choice-key">{{ letters[i] }}</span>
+                                <span class="choice-text">{{ options[i] }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                {# Fallback: questions loaded via JS from embedded JSON #}
+                <div id="jsQuestionsMount"></div>
+            {% endif %}
+        </div>
+
+        {# ── Submit ── #}
+        <div class="submit-area">
+            <div class="progress-summary">
+                <span class="answered-count" id="answeredCount">0</span> of
+                <span id="totalCount">{{ questions | length if questions is defined and questions else question_ids | length }}</span>
+                answered
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" id="submitBtn" style="min-width: 240px;">
+                Submit Workout
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </button>
+            <div class="submit-note">You can change your answers before submitting.</div>
+        </div>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{# Embed question_ids for JS fallback path #}
+{% if question_ids is defined %}
+<script>
+    var QUESTION_IDS = {{ question_ids | tojson }};
+</script>
+{% endif %}
+
+<script>
+    // ── Choice selection UI ──
+    function selectChoice(label) {
+        var choicesGroup = label.closest('.choices');
+        choicesGroup.querySelectorAll('.choice-label').forEach(function (l) {
+            l.classList.remove('selected');
+        });
+        label.classList.add('selected');
+        label.querySelector('input[type="radio"]').checked = true;
+        updateAnsweredCount();
+    }
+
+    function updateAnsweredCount() {
+        var total    = parseInt(document.getElementById('totalCount').textContent, 10);
+        var answered = document.querySelectorAll('.choice-label.selected').length;
+        document.getElementById('answeredCount').textContent = answered;
+
+        var btn = document.getElementById('submitBtn');
+        if (answered === total) {
+            btn.style.opacity = '1';
+        } else {
+            btn.style.opacity = '0.7';
+        }
+    }
+
+    // ── JS fallback: render questions from QUESTION_IDS if the server
+    //    didn't pass full question objects. Fetches /api/questions?ids=...
+    (function () {
+        var mount = document.getElementById('jsQuestionsMount');
+        if (!mount || typeof QUESTION_IDS === 'undefined' || !QUESTION_IDS.length) return;
+
+        var letters = ['A', 'B', 'C', 'D'];
+
+        fetch('/api/questions?ids=' + QUESTION_IDS.join(','))
+            .then(function (r) { return r.json(); })
+            .then(function (questions) {
+                document.getElementById('totalCount').textContent = questions.length;
+
+                questions.forEach(function (q, idx) {
+                    var opts = [q.option_a, q.option_b, q.option_c, q.option_d];
+                    var choicesHtml = opts.map(function (opt, i) {
+                        return '<label class="choice-label" onclick="selectChoice(this)">' +
+                            '<input type="radio" name="q_' + q.id + '" value="' + letters[i] + '">' +
+                            '<span class="choice-key">' + letters[i] + '</span>' +
+                            '<span class="choice-text">' + opt + '</span>' +
+                            '</label>';
+                    }).join('');
+
+                    var card = document.createElement('div');
+                    card.className = 'question-card';
+                    card.innerHTML =
+                        '<div class="question-number-strip">' +
+                            '<span class="q-num">Question ' + (idx + 1) + ' of ' + questions.length + '</span>' +
+                            '<span class="q-dim-tag">Practice</span>' +
+                        '</div>' +
+                        '<div class="question-body">' +
+                            '<div class="question-text">' + q.question_text + '</div>' +
+                            '<div class="choices" data-q="' + q.id + '">' + choicesHtml + '</div>' +
+                        '</div>';
+                    mount.appendChild(card);
+                });
+            })
+            .catch(function () {
+                mount.innerHTML = '<div style="padding: 32px; text-align: center; color: var(--text-secondary);">Could not load questions. Please refresh.</div>';
+            });
+    })();
+
+    // ── Warn before leaving with unsaved answers ──
+    window.addEventListener('beforeunload', function (e) {
+        var answered = document.querySelectorAll('.choice-label.selected').length;
+        if (answered > 0 && !window._submitted) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    document.getElementById('practiceForm').addEventListener('submit', function () {
+        window._submitted = true;
+    });
+</script>
+{% endblock %}

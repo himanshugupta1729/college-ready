@@ -1,0 +1,425 @@
+{% extends "base.html" %}
+
+{% block title %}Week {{ week }} Check-In — College Ready{% endblock %}
+
+{% block extra_css %}
+/* ─── Layout ─── */
+.assessment-wrapper {
+    padding-bottom: 80px;
+}
+
+/* ─── Sticky header ─── */
+.assessment-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.assessment-header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.assessment-title-group .week-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 3px;
+}
+
+.assessment-title-group .week-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.assessment-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.q-counter {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.time-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* ─── Single question display ─── */
+.question-stage {
+    max-width: 800px;
+    margin: 40px auto 0;
+    padding: 0 24px;
+}
+
+.question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.question-number-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+}
+
+.q-num {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+}
+
+.question-body {
+    padding: 24px 20px 20px;
+}
+
+.question-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+/* ─── Answer choices ─── */
+.choices {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.choice-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--surface-2);
+}
+
+.choice-label:hover {
+    border-color: var(--accent);
+    background: rgba(255, 186, 7, 0.05);
+}
+
+.choice-label input[type="radio"] {
+    display: none;
+}
+
+.choice-label.selected {
+    border-color: var(--accent);
+    background: rgba(255, 186, 7, 0.1);
+}
+
+.choice-key {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+
+.choice-label.selected .choice-key {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #191919;
+}
+
+.choice-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    padding-top: 1px;
+}
+
+/* ─── Navigation ─── */
+.nav-area {
+    max-width: 800px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-area .btn { min-width: 120px; }
+
+/* ─── Progress dots ─── */
+.progress-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 24px auto 0;
+    max-width: 800px;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    transition: all 0.2s ease;
+}
+
+.progress-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent-glow);
+}
+
+.progress-dot.answered {
+    background: var(--green);
+}
+
+/* ─── Submit area ─── */
+.submit-area {
+    max-width: 800px;
+    margin: 32px auto 0;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    display: none;
+}
+
+.submit-area.visible { display: flex; }
+
+.progress-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.answered-count {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+    .assessment-header-inner { flex-wrap: wrap; }
+    .question-text { font-size: 15px; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="assessment-wrapper">
+
+    {# ── Sticky header ── #}
+    <div class="assessment-header">
+        <div class="assessment-header-inner">
+            <div class="assessment-title-group">
+                <div class="week-label">Week {{ week }}</div>
+                <div class="week-title">Check-In</div>
+            </div>
+            <div class="assessment-meta">
+                <div class="q-counter" id="qCounter">Question 1 of {{ questions | length }}</div>
+                <div class="time-badge">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    ~10 min
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Question form ── #}
+    <form method="POST" action="/practice/weekly-check/submit" id="assessmentForm">
+        <input type="hidden" name="plan_id" value="{{ plan.id if plan else '' }}">
+        <input type="hidden" name="week" value="{{ week }}">
+        <input type="hidden" name="question_ids" value='{{ question_ids | tojson }}'>
+
+        {# ── All questions rendered, only one visible at a time ── #}
+        {% for q in questions %}
+        <div class="question-stage" data-q-index="{{ loop.index0 }}" {% if not loop.first %}style="display:none;"{% endif %}>
+            <div class="question-card">
+                <div class="question-number-strip">
+                    <span class="q-num">Question {{ loop.index }} of {{ questions | length }}</span>
+                </div>
+                <div class="question-body">
+                    <div class="question-text">{{ q.question_text }}</div>
+                    <div class="choices" data-q="{{ q.id }}">
+                        {% set letters = ['A', 'B', 'C', 'D'] %}
+                        {% set options = [q.option_a, q.option_b, q.option_c, q.option_d] %}
+                        {% for i in range(4) %}
+                        <label class="choice-label" onclick="selectChoice(this)">
+                            <input type="radio" name="q_{{ q.id }}" value="{{ letters[i] }}">
+                            <span class="choice-key">{{ letters[i] }}</span>
+                            <span class="choice-text">{{ options[i] }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {# ── Progress dots ── #}
+        <div class="progress-dots" id="progressDots">
+            {% for q in questions %}
+            <div class="progress-dot {% if loop.first %}active{% endif %}" data-dot="{{ loop.index0 }}"></div>
+            {% endfor %}
+        </div>
+
+        {# ── Navigation ── #}
+        <div class="nav-area">
+            <button type="button" class="btn btn-secondary" id="prevBtn" style="visibility:hidden;" onclick="navigate(-1)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Previous
+            </button>
+            <button type="button" class="btn btn-primary" id="nextBtn" onclick="navigate(1)">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+        </div>
+
+        {# ── Submit (shown on last question when all answered) ── #}
+        <div class="submit-area" id="submitArea">
+            <div class="progress-summary">
+                <span class="answered-count" id="answeredCount">0</span> of {{ questions | length }} answered
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" id="submitBtn" style="min-width: 240px;">
+                Submit Check-In
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </button>
+        </div>
+    </form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var currentIndex = 0;
+    var totalQuestions = {{ questions | length }};
+    var stages = document.querySelectorAll('.question-stage');
+    var dots = document.querySelectorAll('.progress-dot');
+
+    function navigate(dir) {
+        var next = currentIndex + dir;
+        if (next < 0 || next >= totalQuestions) return;
+        stages[currentIndex].style.display = 'none';
+        stages[next].style.display = '';
+        currentIndex = next;
+        updateUI();
+    }
+
+    function selectChoice(label) {
+        var choicesGroup = label.closest('.choices');
+        choicesGroup.querySelectorAll('.choice-label').forEach(function (l) {
+            l.classList.remove('selected');
+        });
+        label.classList.add('selected');
+        label.querySelector('input[type="radio"]').checked = true;
+        updateUI();
+
+        // Auto-advance after short delay if not last question
+        if (currentIndex < totalQuestions - 1) {
+            setTimeout(function() { navigate(1); }, 350);
+        }
+    }
+
+    function updateUI() {
+        // Counter
+        document.getElementById('qCounter').textContent = 'Question ' + (currentIndex + 1) + ' of ' + totalQuestions;
+
+        // Prev/Next buttons
+        document.getElementById('prevBtn').style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+        var nextBtn = document.getElementById('nextBtn');
+        if (currentIndex === totalQuestions - 1) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = '';
+        }
+
+        // Progress dots
+        var answered = document.querySelectorAll('.choice-label.selected').length;
+        document.getElementById('answeredCount').textContent = answered;
+
+        dots.forEach(function(dot, i) {
+            dot.classList.remove('active', 'answered');
+            if (i === currentIndex) dot.classList.add('active');
+            // Check if this question has been answered
+            var stage = stages[i];
+            if (stage.querySelector('.choice-label.selected')) {
+                dot.classList.add('answered');
+            }
+        });
+
+        // Show submit area on last question
+        var submitArea = document.getElementById('submitArea');
+        if (currentIndex === totalQuestions - 1) {
+            submitArea.classList.add('visible');
+        } else {
+            submitArea.classList.remove('visible');
+        }
+
+        // Submit button opacity
+        var submitBtn = document.getElementById('submitBtn');
+        submitBtn.style.opacity = answered === totalQuestions ? '1' : '0.7';
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+    });
+
+    // Warn before leaving
+    window.addEventListener('beforeunload', function (e) {
+        var answered = document.querySelectorAll('.choice-label.selected').length;
+        if (answered > 0 && !window._submitted) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    document.getElementById('assessmentForm').addEventListener('submit', function () {
+        window._submitted = true;
+    });
+
+    updateUI();
+</script>
+{% endblock %}

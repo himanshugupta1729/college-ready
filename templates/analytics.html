@@ -1,0 +1,1399 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics — {{ student.student_name.split()[0] }} — College Ready{% endblock %}
+
+{% block extra_css %}
+/* ─── Page layout ─── */
+.analytics-wrapper {
+    padding: 0 0 80px;
+}
+
+/* ─── Header strip ─── */
+.analytics-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+    margin-bottom: 40px;
+}
+
+.analytics-header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.analytics-identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.analytics-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--archetype-bg, rgba(108,92,231,0.15));
+    border: 2px solid var(--archetype-color, var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.analytics-name {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.analytics-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.archetype-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--archetype-bg, rgba(108,92,231,0.12));
+    border: 1px solid var(--archetype-color, var(--accent));
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--archetype-color, var(--accent));
+}
+
+.track-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.analytics-score-block {
+    text-align: right;
+}
+
+.score-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.score-range {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--archetype-color, var(--accent));
+    line-height: 1;
+}
+
+.score-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* ─── Grid ─── */
+.analytics-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.analytics-grid .card-full { grid-column: 1 / -1; }
+
+/* ─── Section headings ─── */
+.card-heading {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+.card-heading-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.insight-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-top: 20px;
+}
+
+.insight-box strong { color: var(--text); }
+
+/* ─── FUAR bars ─── */
+.fuar-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.fuar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fuar-label-group {
+    width: 120px;
+    flex-shrink: 0;
+}
+
+.fuar-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+}
+
+.fuar-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: block;
+    margin-top: 2px;
+}
+
+.fuar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--surface-3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fuar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fuar-score {
+    width: 38px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.fill-fluency       { background: var(--blue); }
+.fill-understanding { background: var(--green); }
+.fill-application   { background: var(--orange); }
+.fill-reasoning     { background: var(--accent); }
+.score-fluency      { color: var(--blue); }
+.score-understanding{ color: var(--green); }
+.score-application  { color: var(--orange); }
+.score-reasoning    { color: var(--accent); }
+
+/* ─── Knowledge vs Speed ─── */
+.pacing-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.pacing-panel {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.pacing-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.pacing-panel.knowledge::before { background: var(--green); }
+.pacing-panel.speed::before     { background: var(--orange); }
+
+.pacing-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.pacing-val {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.pacing-panel.knowledge .pacing-val { color: var(--green); }
+.pacing-panel.speed .pacing-val     { color: var(--orange); }
+
+.pacing-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.pacing-bar-wrap {
+    height: 6px;
+    background: var(--surface-3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.pacing-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pacing-panel.knowledge .pacing-bar-fill { background: var(--green); }
+.pacing-panel.speed .pacing-bar-fill     { background: var(--orange); }
+
+.gap-callout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.gap-callout.gap-large {
+    background: rgba(255, 59, 92, 0.1);
+    border: 1px solid rgba(255, 59, 92, 0.25);
+    color: var(--red);
+}
+
+.gap-callout.gap-medium {
+    background: rgba(255, 149, 0, 0.1);
+    border: 1px solid rgba(255, 149, 0, 0.25);
+    color: var(--orange);
+}
+
+.gap-callout.gap-small {
+    background: rgba(0, 210, 160, 0.1);
+    border: 1px solid rgba(0, 210, 160, 0.25);
+    color: var(--green);
+}
+
+/* ─── Topic heatmap ─── */
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.heatmap-item {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.heatmap-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+}
+
+.heatmap-item.strong::after    { background: var(--green); }
+.heatmap-item.developing::after { background: var(--orange); }
+.heatmap-item.needs_work::after { background: var(--red); }
+
+.heatmap-domain {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.heatmap-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.heatmap-score {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.heatmap-item.strong    .heatmap-score { color: var(--green); }
+.heatmap-item.developing .heatmap-score { color: var(--orange); }
+.heatmap-item.needs_work .heatmap-score { color: var(--red); }
+
+.heatmap-fraction {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+.heatmap-status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.heatmap-item.strong    .heatmap-status-dot { background: var(--green); }
+.heatmap-item.developing .heatmap-status-dot { background: var(--orange); }
+.heatmap-item.needs_work .heatmap-status-dot { background: var(--red); }
+
+.heatmap-status-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.heatmap-item.strong    .heatmap-status-label { color: var(--green); }
+.heatmap-item.developing .heatmap-status-label { color: var(--orange); }
+.heatmap-item.needs_work .heatmap-status-label { color: var(--red); }
+
+.heatmap-bar-wrap {
+    height: 4px;
+    background: var(--surface-3);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.heatmap-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.heatmap-item.strong    .heatmap-bar-fill { background: var(--green); }
+.heatmap-item.developing .heatmap-bar-fill { background: var(--orange); }
+.heatmap-item.needs_work .heatmap-bar-fill { background: var(--red); }
+
+.heatmap-legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ─── Quadrant ─── */
+.quadrant-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.quadrant-cell {
+    border-radius: 10px;
+    padding: 20px 18px;
+    border: 1px solid transparent;
+    position: relative;
+    min-height: 110px;
+}
+
+.quadrant-cell.mastered {
+    background: rgba(0, 210, 160, 0.07);
+    border-color: rgba(0, 210, 160, 0.2);
+}
+
+.quadrant-cell.fluency_gap {
+    background: rgba(78, 205, 196, 0.07);
+    border-color: rgba(78, 205, 196, 0.2);
+}
+
+.quadrant-cell.careless {
+    background: rgba(255, 149, 0, 0.07);
+    border-color: rgba(255, 149, 0, 0.2);
+}
+
+.quadrant-cell.content_gap {
+    background: rgba(255, 59, 92, 0.07);
+    border-color: rgba(255, 59, 92, 0.2);
+}
+
+.quadrant-pct {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.quadrant-cell.mastered    .quadrant-pct { color: var(--green); }
+.quadrant-cell.fluency_gap .quadrant-pct { color: var(--blue); }
+.quadrant-cell.careless    .quadrant-pct { color: var(--orange); }
+.quadrant-cell.content_gap .quadrant-pct { color: var(--red); }
+
+.quadrant-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+
+.quadrant-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.quadrant-axis-labels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.axis-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 6px;
+    border-bottom: 2px solid var(--border);
+}
+
+.axis-label.speed  { border-color: var(--orange); color: var(--orange); }
+.axis-label.slow   { border-color: var(--blue);   color: var(--blue); }
+
+.quadrant-row-label {
+    position: absolute;
+    left: -28px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.quadrant-wrapper {
+    padding-left: 32px;
+    position: relative;
+}
+
+.row-label-correct {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.row-label-wrong {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.row-label-text {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+}
+
+/* ─── Stamina curve ─── */
+.stamina-bars {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    height: 140px;
+    margin-bottom: 12px;
+    padding: 0 8px;
+}
+
+.stamina-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.stamina-bar-outer {
+    width: 100%;
+    background: var(--surface-3);
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    flex: 1;
+    max-height: 120px;
+    position: relative;
+}
+
+.stamina-bar-fill {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    bottom: 0;
+}
+
+.stamina-bar-group:nth-child(1) .stamina-bar-fill { background: var(--green); }
+.stamina-bar-group:nth-child(2) .stamina-bar-fill { background: var(--orange); opacity: 0.85; }
+.stamina-bar-group:nth-child(3) .stamina-bar-fill { background: var(--red); opacity: 0.75; }
+
+.stamina-bar-pct {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+}
+
+.stamina-bar-group:nth-child(1) .stamina-bar-pct { color: var(--green); }
+.stamina-bar-group:nth-child(2) .stamina-bar-pct { color: var(--orange); }
+.stamina-bar-group:nth-child(3) .stamina-bar-pct { color: var(--red); }
+
+.stamina-bar-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+    font-weight: 500;
+}
+
+.stamina-bar-time {
+    font-size: 10px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.stamina-connector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+.stamina-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.stamina-line {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    position: relative;
+}
+
+.stamina-trend-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--text-secondary);
+}
+
+/* ─── Time profile ─── */
+.time-profile-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.time-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.time-bar-label {
+    width: 130px;
+    flex-shrink: 0;
+}
+
+.time-dim-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.time-dim-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.time-dim-badge.fastest {
+    background: rgba(0, 210, 160, 0.15);
+    color: var(--green);
+}
+
+.time-dim-badge.slowest {
+    background: rgba(255, 59, 92, 0.15);
+    color: var(--red);
+}
+
+.time-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--surface-3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.time-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.time-bar-val {
+    width: 44px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+/* ─── Error patterns ─── */
+.error-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.error-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.error-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    gap: 12px;
+}
+
+.error-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.error-rank {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 59, 92, 0.12);
+    border: 1px solid rgba(255, 59, 92, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red);
+    flex-shrink: 0;
+}
+
+.error-domain {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.error-dim-tag {
+    display: inline-flex;
+    align-items: center;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.error-count-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--red);
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+
+.error-count-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.error-examples {
+    border-top: 1px solid var(--border);
+    padding: 0 16px;
+}
+
+.error-example {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.error-example:last-child { border-bottom: none; }
+
+.error-question-text {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.error-answer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.answer-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.answer-chip.picked {
+    background: rgba(255, 59, 92, 0.12);
+    border: 1px solid rgba(255, 59, 92, 0.25);
+    color: var(--red);
+}
+
+.answer-chip.correct {
+    background: rgba(0, 210, 160, 0.12);
+    border: 1px solid rgba(0, 210, 160, 0.25);
+    color: var(--green);
+}
+
+.answer-chip-label {
+    font-size: 10px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.arrow-sep {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ─── Bottom CTA ─── */
+.analytics-cta-section {
+    max-width: 1100px;
+    margin: 40px auto 0;
+    padding: 0 24px;
+}
+
+.analytics-cta-card {
+    background: linear-gradient(135deg, var(--archetype-bg, rgba(108,92,231,0.12)) 0%, var(--surface) 60%);
+    border: 1px solid var(--archetype-color, var(--accent));
+    border-radius: var(--radius);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.cta-left {}
+
+.cta-heading {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+
+.cta-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.cta-report-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.cta-report-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--archetype-color, var(--accent));
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ─── Empty state ─── */
+.empty-state {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 680px) {
+    .analytics-grid { grid-template-columns: 1fr; }
+    .analytics-grid .card-full { grid-column: 1; }
+    .analytics-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .analytics-score-block { text-align: left; }
+    .pacing-split { grid-template-columns: 1fr 1fr; }
+    .heatmap-grid { grid-template-columns: 1fr; }
+    .quadrant-grid { grid-template-columns: 1fr 1fr; }
+    .analytics-cta-card { flex-direction: column; }
+    .stamina-bars { height: 120px; }
+}
+
+@media (max-width: 420px) {
+    .pacing-split { grid-template-columns: 1fr; }
+    .quadrant-grid { grid-template-columns: 1fr 1fr; }
+    .pacing-val { font-size: 38px; }
+}
+{% endblock %}
+
+{% block content %}
+{% set dim_keys  = ['F', 'U', 'A', 'R'] %}
+{% set dim_names = ['Fluency', 'Understanding', 'Application', 'Reasoning'] %}
+{% set dim_fills = ['fill-fluency', 'fill-understanding', 'fill-application', 'fill-reasoning'] %}
+{% set dim_scores= ['score-fluency', 'score-understanding', 'score-application', 'score-reasoning'] %}
+{% set dim_color_map = {'F': 'var(--blue)', 'U': 'var(--green)', 'A': 'var(--orange)', 'R': 'var(--accent)'} %}
+
+<style>
+    :root {
+        --archetype-color: {{ archetype.color | default('var(--accent)') }};
+        --archetype-bg:    {{ archetype.color | default('rgba(108,92,231,0.15)') }}26;
+        --archetype-glow:  {{ archetype.color | default('rgba(108,92,231,0.3)') }}4d;
+    }
+</style>
+
+<div class="analytics-wrapper">
+
+    {# ── Header ── #}
+    <div class="analytics-header">
+        <div class="analytics-header-inner">
+            <div class="analytics-identity">
+                <div class="analytics-avatar">{{ archetype.icon }}</div>
+                <div>
+                    <div class="analytics-name">{{ student.student_name }}</div>
+                    <div class="analytics-meta">
+                        <span class="archetype-badge">{{ archetype.icon }} {{ archetype.name }}</span>
+                        {% if student.track %}
+                        <span class="track-badge">{{ student.track | replace('_', ' ') | title }}</span>
+                        {% endif %}
+                        {% if student.grade %}
+                        <span class="track-badge">Grade {{ student.grade }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="analytics-score-block">
+                <div class="score-label">Estimated SAT Math</div>
+                <div class="score-range">{{ student.sat_estimated_low }}–{{ student.sat_estimated_high }}</div>
+                <div class="score-sub">Based on {{ analytics.total_questions }} questions answered</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-grid">
+
+        {# ── 1. FUAR Profile ── #}
+        <div class="card">
+            <div class="card-heading">FUAR Profile</div>
+            {% if archetype.tagline %}
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; font-style: italic;">
+                "{{ archetype.tagline }}"
+            </div>
+            {% endif %}
+            <div class="fuar-bars" id="fuarBars">
+                {% for i in range(4) %}
+                {% set key   = dim_keys[i] %}
+                {% set score = fuar[key] %}
+                {% set dim   = fuar_dims[key] if key in fuar_dims else {} %}
+                <div class="fuar-row">
+                    <div class="fuar-label-group">
+                        <span class="fuar-name">{{ dim_names[i] }}</span>
+                        {% if dim and dim.description is defined %}
+                        <span class="fuar-desc">{{ dim.description | truncate(30, True, '…') }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="fuar-track">
+                        <div class="fuar-fill {{ dim_fills[i] }}" data-score="{{ score }}" style="width: 0%"></div>
+                    </div>
+                    <div class="fuar-score {{ dim_scores[i] }}">{{ score }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if archetype.strength or archetype.growth %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                {% if archetype.strength %}
+                <div style="background: rgba(0,210,160,0.07); border: 1px solid rgba(0,210,160,0.2); border-radius: 8px; padding: 12px;">
+                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 4px;">Strength</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">{{ archetype.strength }}</div>
+                </div>
+                {% endif %}
+                {% if archetype.growth %}
+                <div style="background: rgba(255,149,0,0.07); border: 1px solid rgba(255,149,0,0.2); border-radius: 8px; padding: 12px;">
+                    <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--orange); margin-bottom: 4px;">Growth Area</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);">{{ archetype.growth }}</div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        {# ── 2. Knowledge vs Speed ── #}
+        {% if analytics.pacing %}
+        {% set pacing = analytics.pacing %}
+        <div class="card">
+            <div class="card-heading">Knowledge vs Speed</div>
+
+            {% set gap = pacing.gap | float %}
+            {% if gap > 15 %}
+            <div class="gap-callout gap-large">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                {{ gap | round(0) | int }}pt gap between knowledge and speed
+            </div>
+            {% elif gap > 5 %}
+            <div class="gap-callout gap-medium">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                {{ gap | round(0) | int }}pt gap — some room to improve under pressure
+            </div>
+            {% else %}
+            <div class="gap-callout gap-small">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Consistent pacing — knowledge and speed are aligned
+            </div>
+            {% endif %}
+
+            <div class="pacing-split">
+                <div class="pacing-panel knowledge">
+                    <div class="pacing-label">Knowledge</div>
+                    <div class="pacing-val" data-count="{{ pacing.phase1_accuracy }}" style="--final-val: {{ pacing.phase1_accuracy }}">{{ pacing.phase1_accuracy | round(0) | int }}%</div>
+                    <div class="pacing-sub">First 65% of test</div>
+                    <div class="pacing-bar-wrap">
+                        <div class="pacing-bar-fill" data-score="{{ pacing.phase1_accuracy }}" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="pacing-panel speed">
+                    <div class="pacing-label">Under Pressure</div>
+                    <div class="pacing-val">{{ pacing.phase2_accuracy | round(0) | int }}%</div>
+                    <div class="pacing-sub">Final 35% of test</div>
+                    <div class="pacing-bar-wrap">
+                        <div class="pacing-bar-fill" data-score="{{ pacing.phase2_accuracy }}" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-box">{{ pacing.insight }}</div>
+        </div>
+        {% endif %}
+
+        {# ── 3. Topic Heat Map ── #}
+        {% if analytics.topic_heatmap %}
+        <div class="card card-full">
+            <div class="card-heading">Topic Heat Map</div>
+            <div class="heatmap-legend">
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--green);"></div>
+                    Strong (70%+)
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--orange);"></div>
+                    Developing (45–70%)
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot" style="background: var(--red);"></div>
+                    Needs Work (&lt;45%)
+                </div>
+            </div>
+            <div class="heatmap-grid">
+                {% for topic in analytics.topic_heatmap %}
+                <div class="heatmap-item {{ topic.status }}">
+                    <div class="heatmap-domain">{{ topic.domain }}</div>
+                    <div class="heatmap-bottom">
+                        <div>
+                            <div class="heatmap-score">{{ topic.accuracy | round(0) | int }}%</div>
+                            <div style="display: flex; align-items: center; margin-top: 3px;">
+                                <span class="heatmap-status-dot"></span>
+                                <span class="heatmap-status-label">{{ topic.status | replace('_', ' ') | title }}</span>
+                            </div>
+                        </div>
+                        <div class="heatmap-fraction">
+                            {{ topic.correct }}/{{ topic.total }}<br>correct
+                        </div>
+                    </div>
+                    <div class="heatmap-bar-wrap">
+                        <div class="heatmap-bar-fill" data-score="{{ topic.accuracy }}" style="width: 0%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# ── 4. Speed × Accuracy Quadrant ── #}
+        {% if analytics.quadrants %}
+        {% set q = analytics.quadrants %}
+        <div class="card">
+            <div class="card-heading">Speed &times; Accuracy Quadrant</div>
+
+            <div class="quadrant-axis-labels">
+                <div class="axis-label speed">Fast</div>
+                <div class="axis-label slow">Slow</div>
+            </div>
+
+            <div class="quadrant-wrapper">
+                <div class="row-label-correct">
+                    <span class="row-label-text" style="color: var(--green);">Correct</span>
+                </div>
+                <div class="row-label-wrong">
+                    <span class="row-label-text" style="color: var(--red);">Wrong</span>
+                </div>
+
+                <div class="quadrant-grid">
+                    <div class="quadrant-cell mastered">
+                        <div class="quadrant-pct">{{ q.mastered | round(0) | int }}%</div>
+                        <div class="quadrant-title">Mastered</div>
+                        <div class="quadrant-sub">Fast and correct — these are your strongest skills</div>
+                    </div>
+                    <div class="quadrant-cell fluency_gap">
+                        <div class="quadrant-pct">{{ q.fluency_gap | round(0) | int }}%</div>
+                        <div class="quadrant-title">Fluency Gap</div>
+                        <div class="quadrant-sub">You know it — but need speed practice</div>
+                    </div>
+                    <div class="quadrant-cell careless">
+                        <div class="quadrant-pct">{{ q.careless | round(0) | int }}%</div>
+                        <div class="quadrant-title">Careless</div>
+                        <div class="quadrant-sub">Moving too fast — slow down here</div>
+                    </div>
+                    <div class="quadrant-cell content_gap">
+                        <div class="quadrant-pct">{{ q.content_gap | round(0) | int }}%</div>
+                        <div class="quadrant-title">Content Gap</div>
+                        <div class="quadrant-sub">Slow and wrong — needs focused learning</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-box" style="margin-top: 16px;">
+                {% set top_q = [('mastered', q.mastered), ('fluency_gap', q.fluency_gap), ('careless', q.careless), ('content_gap', q.content_gap)] | sort(attribute='1', reverse=True) | first %}
+                {% if top_q[0] == 'mastered' %}
+                Your largest quadrant is <strong>Mastered ({{ q.mastered | round(0) | int }}%)</strong> — great foundation. Focus next on converting Fluency Gap questions to Mastered.
+                {% elif top_q[0] == 'fluency_gap' %}
+                Your largest quadrant is <strong>Fluency Gap ({{ q.fluency_gap | round(0) | int }}%)</strong> — you know the material but need to build speed. Timed drills will move these to Mastered.
+                {% elif top_q[0] == 'careless' %}
+                Your largest quadrant is <strong>Careless ({{ q.careless | round(0) | int }}%)</strong> — you're rushing too fast. Slow down by 10 seconds per question and check your work.
+                {% else %}
+                Your largest quadrant is <strong>Content Gap ({{ q.content_gap | round(0) | int }}%)</strong> — these topics need focused study, not just more practice.
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# ── 5. Stamina Curve ── #}
+        {% if analytics.stamina and analytics.stamina.thirds %}
+        {% set stamina = analytics.stamina %}
+        <div class="card">
+            <div class="card-heading">Stamina Curve</div>
+
+            {% set max_acc = stamina.thirds | map(attribute='accuracy') | list | max %}
+            <div class="stamina-bars" id="staminaBars">
+                {% for third in stamina.thirds %}
+                <div class="stamina-bar-group">
+                    <div class="stamina-bar-pct">{{ third.accuracy | round(0) | int }}%</div>
+                    <div class="stamina-bar-outer">
+                        <div class="stamina-bar-fill"
+                             data-height="{{ (third.accuracy / (max_acc if max_acc > 0 else 100) * 100) | round(1) }}"
+                             style="height: 0%"></div>
+                    </div>
+                    <div class="stamina-bar-label">{{ third.label }}</div>
+                    <div class="stamina-bar-time">{{ third.avg_time | round(0) | int }}s avg</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="insight-box">{{ stamina.insight }}</div>
+        </div>
+        {% endif %}
+
+        {# ── 6. Time Profile ── #}
+        {% if analytics.time_profile and analytics.time_profile.by_dimension %}
+        {% set tp = analytics.time_profile %}
+        <div class="card card-full">
+            <div class="card-heading">Time Profile by Dimension</div>
+
+            {% set max_time = tp.by_dimension.values() | list | max %}
+            <div class="time-profile-bars" id="timeBars">
+                {% for i in range(4) %}
+                {% set key = dim_keys[i] %}
+                {% set t   = tp.by_dimension[key] | default(0) %}
+                <div class="time-bar-row">
+                    <div class="time-bar-label">
+                        <span class="time-dim-name" style="color: {{ dim_color_map[key] }};">{{ dim_names[i] }}</span>
+                        {% if key == tp.fastest %}
+                        <span class="time-dim-badge fastest">Fastest</span>
+                        {% elif key == tp.slowest %}
+                        <span class="time-dim-badge slowest">Slowest</span>
+                        {% endif %}
+                    </div>
+                    <div class="time-bar-track">
+                        <div class="time-bar-fill"
+                             data-score="{{ (t / (max_time if max_time > 0 else 1) * 100) | round(1) }}"
+                             style="width: 0%; background: {{ dim_color_map[key] }}; opacity: 0.8;"></div>
+                    </div>
+                    <div class="time-bar-val">{{ t | round(0) | int }}s</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="insight-box">{{ tp.insight }}</div>
+        </div>
+        {% endif %}
+
+        {# ── 7. Error Patterns ── #}
+        {% if analytics.error_patterns %}
+        <div class="card card-full">
+            <div class="card-heading">Error Pattern Analysis</div>
+            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                Your most frequent mistake clusters — ranked by impact on your score.
+            </div>
+            <div class="error-list">
+                {% for err in analytics.error_patterns %}
+                <div class="error-item">
+                    <div class="error-header">
+                        <div class="error-meta">
+                            <div class="error-rank">{{ loop.index }}</div>
+                            <div>
+                                <div class="error-domain">{{ err.domain }}</div>
+                                <div style="margin-top: 4px;">
+                                    <span class="error-dim-tag">{{ err.dimension }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="error-count-badge">
+                            {{ err.count }}
+                            <span class="error-count-label"> wrong</span>
+                        </div>
+                    </div>
+                    {% if err.examples %}
+                    <div class="error-examples">
+                        {% for ex in err.examples %}
+                        <div class="error-example">
+                            <div class="error-question-text">{{ ex.question }}{% if ex.question | length >= 100 %}…{% endif %}</div>
+                            <div class="error-answer-row">
+                                <span class="answer-chip picked">
+                                    <span class="answer-chip-label">You chose</span>
+                                    {{ ex.picked }}
+                                </span>
+                                <span class="arrow-sep">→</span>
+                                <span class="answer-chip correct">
+                                    <span class="answer-chip-label">Correct</span>
+                                    {{ ex.correct }}
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {# ── Empty state: no analytics yet ── #}
+        {% if not analytics %}
+        <div class="card card-full">
+            <div class="empty-state">
+                <div style="font-size: 32px; margin-bottom: 16px;">&#9889;</div>
+                <div style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Complete your assessment to unlock analytics</div>
+                <div>Your full diagnostic report appears after answering practice questions.</div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>{# /analytics-grid #}
+
+    {# ── Bottom CTA ── #}
+    <div class="analytics-cta-section">
+        <div class="analytics-cta-card">
+            <div class="cta-left">
+                <div class="cta-heading">Ready to close your gaps?</div>
+                <div class="cta-sub">
+                    Your daily workouts are built around exactly this data —
+                    each session targets your weakest dimension with the right type of problem.
+                </div>
+                <div class="cta-report-note">
+                    <div class="cta-report-dot"></div>
+                    Your full written report arrives within 48 hours
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start; flex-shrink: 0;">
+                <a href="/practice/today" class="btn btn-primary btn-large">
+                    Start Daily Practice
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="/dashboard" class="btn btn-secondary">
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>{# /analytics-wrapper #}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.addEventListener('load', function () {
+
+        // FUAR bars
+        document.querySelectorAll('.fuar-fill').forEach(function (bar) {
+            bar.style.width = bar.getAttribute('data-score') + '%';
+        });
+
+        // Pacing bars
+        document.querySelectorAll('.pacing-bar-fill').forEach(function (bar) {
+            bar.style.width = bar.getAttribute('data-score') + '%';
+        });
+
+        // Heatmap bars
+        document.querySelectorAll('.heatmap-bar-fill').forEach(function (bar) {
+            bar.style.width = bar.getAttribute('data-score') + '%';
+        });
+
+        // Stamina bars (height-based)
+        document.querySelectorAll('.stamina-bar-fill').forEach(function (bar) {
+            bar.style.height = bar.getAttribute('data-height') + '%';
+        });
+
+        // Time profile bars
+        document.querySelectorAll('.time-bar-fill').forEach(function (bar) {
+            bar.style.width = bar.getAttribute('data-score') + '%';
+        });
+    });
+</script>
+{% endblock %}

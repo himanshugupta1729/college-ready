@@ -1,0 +1,940 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — College Ready{% endblock %}
+
+{% block extra_css %}
+/* ─── Page layout ─── */
+.dashboard-wrapper {
+    padding: 0 0 60px;
+}
+
+/* ─── Header / hero strip ─── */
+.dash-header {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+    margin-bottom: 36px;
+}
+
+.dash-header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.dash-identity {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.dash-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--archetype-bg, rgba(255,186,7,0.12));
+    border: 2px solid var(--archetype-color, var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.dash-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+
+.archetype-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--archetype-bg, rgba(255,186,7,0.12));
+    border: 1px solid var(--archetype-color, var(--accent));
+    border-radius: 100px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--archetype-color, var(--accent));
+}
+
+.dash-sat {
+    text-align: right;
+}
+
+.sat-label-small {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.sat-val {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--archetype-color, var(--accent));
+}
+
+.sat-note {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* ─── Grid ─── */
+.dash-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.dash-grid .card-full { grid-column: 1 / -1; }
+
+/* ─── Section labels ─── */
+.card-heading {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+}
+
+/* ─── FUAR profile card ─── */
+.fuar-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.fuar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fuar-label-group {
+    width: 110px;
+    flex-shrink: 0;
+}
+
+.fuar-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    display: block;
+}
+
+.fuar-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: block;
+    margin-top: 1px;
+}
+
+.fuar-track {
+    flex: 1;
+    height: 7px;
+    background: var(--surface-3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fuar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fuar-score {
+    width: 34px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.fill-fluency      { background: #3B82F6; }
+.fill-understanding{ background: #10B981; }
+.fill-application  { background: #F59E0B; }
+.fill-reasoning    { background: #8B5CF6; }
+.score-fluency     { color: #3B82F6; }
+.score-understanding{color: #10B981; }
+.score-application { color: #F59E0B; }
+.score-reasoning   { color: #8B5CF6; }
+
+/* ─── 4-week plan card ─── */
+.week-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.week-tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--surface-2);
+}
+
+.week-tab.active {
+    background: var(--archetype-bg, rgba(255,186,7,0.12));
+    border-color: var(--archetype-color, var(--accent));
+    color: var(--archetype-color, var(--accent));
+}
+
+.week-focus {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.week-focus strong { color: var(--text); }
+
+.day-tracker {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.day-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.day-dot.done {
+    background: var(--archetype-color, var(--accent));
+    border-color: var(--archetype-color, var(--accent));
+    color: #191919;
+}
+
+.day-dot.today {
+    border-color: var(--archetype-color, var(--accent));
+    color: var(--archetype-color, var(--accent));
+    box-shadow: 0 0 0 3px var(--archetype-glow, rgba(255,186,7,0.2));
+}
+
+/* ─── Plan overview card ─── */
+.plan-overview {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border: 1px solid var(--archetype-color, var(--accent));
+    border-radius: var(--radius);
+    padding: 24px;
+}
+
+.plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.plan-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.plan-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.plan-stat {
+    text-align: center;
+}
+
+.plan-stat-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--archetype-color, var(--accent));
+}
+
+.plan-stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.week-timeline {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.week-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.week-circle.completed {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+}
+
+.week-circle.current {
+    border-color: var(--archetype-color, var(--accent));
+    color: var(--archetype-color, var(--accent));
+    box-shadow: 0 0 0 3px var(--archetype-glow, rgba(255,186,7,0.2));
+}
+
+.week-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    max-width: 40px;
+}
+
+/* ─── Weekly check-in card ─── */
+.weekly-check-card {
+    grid-column: 1 / -1;
+    background: rgba(139, 92, 246, 0.06);
+    border: 1px solid var(--purple);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.weekly-check-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.weekly-check-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.weekly-check-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.weekly-check-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* ─── FUAR history table ─── */
+.fuar-history-card {
+    grid-column: 1 / -1;
+}
+
+.fuar-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.fuar-history-table th {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.fuar-history-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--surface-3);
+}
+
+.fuar-history-table .arrow-up {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.fuar-history-table .arrow-down {
+    color: var(--red);
+    font-weight: 700;
+}
+
+.fuar-history-table .arrow-same {
+    color: var(--text-secondary);
+}
+
+/* ─── Growth card ─── */
+.growth-card {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.growth-archetype {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 16px;
+}
+
+.growth-archetype-icon {
+    font-size: 36px;
+    margin-bottom: 6px;
+}
+
+.growth-archetype-name {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.growth-archetype-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.growth-arrow {
+    font-size: 24px;
+    color: var(--green);
+    flex-shrink: 0;
+}
+
+/* ─── Today's practice CTA card ─── */
+.practice-cta-card {
+    background: var(--surface-2);
+    border: 1px solid var(--archetype-color, var(--accent));
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.practice-cta-card .cta-meta {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--archetype-color, var(--accent-hover));
+}
+
+.practice-cta-card .cta-headline {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+    color: var(--text);
+}
+
+.practice-cta-card .cta-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+    align-self: flex-start;
+}
+
+/* ─── Progress chart ─── */
+.chart-card {
+    grid-column: 1 / -1;
+}
+
+.chart-area {
+    position: relative;
+    height: 140px;
+    margin: 8px 0;
+}
+
+.chart-area svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.chart-labels span {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.no-data-msg {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ─── Recent workouts ─── */
+.workout-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.workout-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.workout-row:last-child { border-bottom: none; }
+
+.workout-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.workout-dim-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.workout-info-primary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+.workout-info-secondary {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+}
+
+.workout-score {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.score-hi   { color: #10B981; }
+.score-mid  { color: #F59E0B; }
+.score-low  { color: #DC2626; }
+
+/* ─── Responsive ─── */
+@media (max-width: 680px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .dash-grid .card-full { grid-column: 1; }
+    .chart-card { grid-column: 1; }
+    .dash-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .dash-sat { text-align: left; }
+}
+{% endblock %}
+
+{% block content %}
+{% set dim_keys = ['F', 'U', 'A', 'R'] %}
+{% set dim_names = ['Fluency', 'Understanding', 'Application', 'Reasoning'] %}
+{% set dim_fills = ['fill-fluency', 'fill-understanding', 'fill-application', 'fill-reasoning'] %}
+{% set dim_scores = ['score-fluency', 'score-understanding', 'score-application', 'score-reasoning'] %}
+
+{# Compute weakest dimension for CTA #}
+{% set fuar_list = [('Fluency', fuar.F), ('Understanding', fuar.U), ('Application', fuar.A), ('Reasoning', fuar.R)] %}
+{% set weakest = fuar_list | sort(attribute='1') | first %}
+
+<style>
+    :root {
+        --archetype-color: {{ archetype.color | default('var(--accent)') }};
+        --archetype-bg:   {{ archetype.color | default('rgba(255,186,7,0.12)') }}26;
+        --archetype-glow: {{ archetype.color | default('rgba(255,186,7,0.2)') }}4d;
+    }
+</style>
+
+<div class="dashboard-wrapper">
+
+    {% if is_demo %}
+    <div style="background: #FEF3C7; border: 1px solid #FDE68A; border-radius: 12px; padding: 16px 20px; margin: 0 24px 24px; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin-left: auto; margin-right: auto;">
+        <div>
+            <div style="font-weight: 700; color: #92400E;">Demo Mode</div>
+            <div style="font-size: 13px; color: #B45309;">You can retake the test as many times as you want.</div>
+        </div>
+        <a href="/reset-test" style="background: #F59E0B; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;">Take Again</a>
+    </div>
+    {% endif %}
+
+    {# ── Header ── #}
+    <div class="dash-header">
+        <div class="dash-header-inner">
+            <div class="dash-identity">
+                <div class="dash-avatar">{{ archetype.icon }}</div>
+                <div>
+                    <div class="dash-name">{{ student.student_name.split()[0] }}</div>
+                    <div class="archetype-badge">
+                        {{ archetype.icon }} {{ archetype.name }}
+                    </div>
+                </div>
+            </div>
+            <div class="dash-sat">
+                <div class="sat-label-small">Estimated SAT Math</div>
+                <div class="sat-val">{{ student.sat_estimate_low }}–{{ student.sat_estimate_high }}</div>
+                <div class="sat-note">Updates as you practice</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dash-grid">
+
+        {% if plan %}
+        {# ── Plan overview ── #}
+        <div class="plan-overview">
+            <div class="plan-header">
+                <div>
+                    <div class="card-heading" style="margin-bottom:6px;">Your 4-Week Growth Plan</div>
+                    <div class="plan-title">Week {{ plan.current_week | default(1) }} of 4</div>
+                </div>
+                <div class="plan-stats">
+                    <div class="plan-stat">
+                        <div class="plan-stat-val">{{ plan.sessions_this_week | default(0) }}/{{ plan.sessions_per_week | default(5) }}</div>
+                        <div class="plan-stat-label">This Week</div>
+                    </div>
+                    <div class="plan-stat">
+                        <div class="plan-stat-val">{{ plan.total_sessions | default(0) }}</div>
+                        <div class="plan-stat-label">Total Done</div>
+                    </div>
+                    <div class="plan-stat">
+                        <div class="plan-stat-val" style="color: var(--orange);">🔥 {{ plan.streak | default(0) }}</div>
+                        <div class="plan-stat-label">Streak</div>
+                    </div>
+                </div>
+            </div>
+            <div class="week-timeline">
+                {% for w in range(1, 5) %}
+                    {% if w < plan.current_week | default(1) %}
+                        <div class="week-circle completed">✓</div>
+                    {% elif w == plan.current_week | default(1) %}
+                        <div class="week-circle current">{{ w }}</div>
+                    {% else %}
+                        <div class="week-circle">{{ w }}</div>
+                    {% endif %}
+                    {% if not loop.last %}<div class="week-connector"></div>{% endif %}
+                {% endfor %}
+            </div>
+            <a href="/practice/today" class="btn btn-primary" style="align-self: flex-start;">
+                Start Today's Practice
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+
+        {# ── Weekly check-in prompt ── #}
+        {% if weekly_check_due %}
+        <div class="weekly-check-card">
+            <div class="weekly-check-info">
+                <div class="weekly-check-icon">📋</div>
+                <div>
+                    <div class="weekly-check-title">Week {{ plan.current_week | default(1) }} Check-In Ready</div>
+                    <div class="weekly-check-sub">10 questions to measure your progress this week.</div>
+                </div>
+            </div>
+            <a href="/practice/weekly-check" class="btn btn-primary">Take Check-In</a>
+        </div>
+        {% endif %}
+
+        {# ── FUAR progress over time ── #}
+        {% if fuar_history and fuar_history | length > 1 %}
+        <div class="card fuar-history-card">
+            <div class="card-heading">FUAR Progress Over Time</div>
+            <table class="fuar-history-table">
+                <thead>
+                    <tr>
+                        <th>Assessment</th>
+                        <th>Fluency</th>
+                        <th>Understanding</th>
+                        <th>Application</th>
+                        <th>Reasoning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in fuar_history %}
+                    {% set entry_idx = loop.index0 %}
+                    <tr>
+                        <td style="font-weight:600;">{{ entry.label | default('Week ' ~ loop.index) }}</td>
+                        {% for dim in ['F', 'U', 'A', 'R'] %}
+                        <td>
+                            {{ entry[dim] | round | int }}%
+                            {% if entry_idx > 0 %}
+                                {% set prev_entry = fuar_history[entry_idx - 1] %}
+                                {% set diff = entry[dim] - prev_entry[dim] %}
+                                {% if diff > 0 %}
+                                    <span class="arrow-up">↑</span>
+                                {% elif diff < 0 %}
+                                    <span class="arrow-down">↓</span>
+                                {% else %}
+                                    <span class="arrow-same">→</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {# ── Archetype evolution ── #}
+        {% if plan.status == 'completed' and plan.archetype_end and plan.archetype_start and plan.archetype_end != plan.archetype_start %}
+        <div class="card growth-card">
+            <div class="card-heading" style="grid-column:1/-1; width:100%;">Your Growth</div>
+            <div class="growth-archetype">
+                <div class="growth-archetype-label">Started As</div>
+                <div class="growth-archetype-icon">{{ plan.archetype_start_icon | default('📊') }}</div>
+                <div class="growth-archetype-name">{{ plan.archetype_start }}</div>
+            </div>
+            <div class="growth-arrow">→</div>
+            <div class="growth-archetype">
+                <div class="growth-archetype-label">Now</div>
+                <div class="growth-archetype-icon">{{ plan.archetype_end_icon | default('🎯') }}</div>
+                <div class="growth-archetype-name">{{ plan.archetype_end }}</div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {# ── FUAR profile ── #}
+        <div class="card">
+            <div class="card-heading">Your FUAR Profile</div>
+            <div class="fuar-bars" id="fuarBars">
+                {% for i in range(4) %}
+                {% set key = dim_keys[i] %}
+                {% set score = fuar[key] %}
+                {% set dim = fuar_dims[key] if key in fuar_dims else {} %}
+                <div class="fuar-row">
+                    <div class="fuar-label-group">
+                        <span class="fuar-name">{{ dim_names[i] }}</span>
+                        {% if dim and dim.student_desc is defined %}
+                        <span class="fuar-desc">{{ dim.student_desc | truncate(28, True, '…') }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="fuar-track">
+                        <div class="fuar-fill {{ dim_fills[i] }}" data-score="{{ score }}" style="width: 0%"></div>
+                    </div>
+                    <div class="fuar-score {{ dim_scores[i] }}">{{ score }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# ── 4-week plan ── #}
+        <div class="card">
+            <div class="card-heading">Your 4-Week Plan</div>
+            {% set current_week = student.current_week | default(1) %}
+            {% set current_day  = student.current_day  | default(1) %}
+
+            <div class="week-tabs">
+                {% for w in range(1, 5) %}
+                <div class="week-tab {% if w == current_week %}active{% endif %}">Wk {{ w }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="week-focus">
+                This week: <strong>{{ workouts[0].focus_dimension | default('Building your foundation') if workouts else 'Getting started' }}</strong>
+            </div>
+
+            <div class="day-tracker">
+                {% for d in range(1, 8) %}
+                {% set day_done = (d < current_day and student.current_week == current_week) %}
+                <div class="day-dot {% if day_done %}done{% elif d == current_day %}today{% endif %}">
+                    {% if day_done %}✓{% else %}{{ d }}{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# ── Today's practice CTA ── #}
+        <div class="practice-cta-card">
+            <div class="cta-meta">Today's Workout</div>
+            <div class="cta-headline">10 minutes. 8 questions.<br>Focus: {{ weakest[0] }}.</div>
+            <div class="cta-sub">Your {{ weakest[0] }} score is {{ weakest[1] }} — the fastest path to a higher SAT.</div>
+            <a href="/practice" class="btn btn-primary btn-large" style="align-self: flex-start;">
+                Start Today's Workout
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+            <div class="streak-badge">
+                {{ student.daily_practice_streak | default(0) }} day streak
+            </div>
+        </div>
+
+        {# ── Progress over time (SVG line chart) ── #}
+        {% if assessments and assessments | length > 1 %}
+        <div class="card chart-card">
+            <div class="card-heading">SAT Score Progress</div>
+            <div class="chart-area">
+                {% set n = assessments | length %}
+                {% set scores = assessments | map(attribute='sat_estimate') | list %}
+                {% set min_s = scores | min %}
+                {% set max_s = scores | max %}
+                {% set range_s = (max_s - min_s) | default(1) %}
+                {% set chart_w = 100 %}
+                {% set chart_h = 100 %}
+
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    {# Grid lines #}
+                    <line x1="0" y1="25"  x2="100" y2="25"  stroke="#E0E0E0" stroke-width="0.5"/>
+                    <line x1="0" y1="50"  x2="100" y2="50"  stroke="#E0E0E0" stroke-width="0.5"/>
+                    <line x1="0" y1="75"  x2="100" y2="75"  stroke="#E0E0E0" stroke-width="0.5"/>
+
+                    {# Line path #}
+                    {% set ns = namespace(path='') %}
+                    {% for a in assessments %}
+                    {% set xi = (loop.index0 / (n - 1) * 98 + 1) | round(2) %}
+                    {% set yi = (100 - ((a.sat_estimate - min_s) / range_s * 80 + 10)) | round(2) %}
+                    {% if loop.first %}
+                        {% set ns.path = 'M ' ~ xi ~ ' ' ~ yi %}
+                    {% else %}
+                        {% set ns.path = ns.path ~ ' L ' ~ xi ~ ' ' ~ yi %}
+                    {% endif %}
+                    {% endfor %}
+
+                    {# Area fill under line #}
+                    {% set last_a = assessments[-1] %}
+                    {% set last_xi = 99 | float %}
+                    {% set first_xi = 1 | float %}
+                    <path d="{{ ns.path }} L {{ last_xi }} 100 L {{ first_xi }} 100 Z"
+                          fill="url(#chartGrad)" opacity="0.3"/>
+                    <path d="{{ ns.path }}" fill="none"
+                          stroke="{{ archetype.color | default('#FFBA07') }}"
+                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+                    {# Dots #}
+                    {% for a in assessments %}
+                    {% set xi = (loop.index0 / (n - 1) * 98 + 1) | round(2) %}
+                    {% set yi = (100 - ((a.sat_estimate - min_s) / range_s * 80 + 10)) | round(2) %}
+                    <circle cx="{{ xi }}" cy="{{ yi }}" r="2.5"
+                            fill="{{ archetype.color | default('#FFBA07') }}"/>
+                    {% endfor %}
+
+                    <defs>
+                        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%"   stop-color="{{ archetype.color | default('#FFBA07') }}" stop-opacity="0.5"/>
+                            <stop offset="100%" stop-color="{{ archetype.color | default('#FFBA07') }}" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="chart-labels">
+                {% for a in assessments %}
+                <span>Wk {{ loop.index }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="card chart-card">
+            <div class="card-heading">SAT Score Progress</div>
+            <div class="no-data-msg">Complete more workouts to see your progress chart.</div>
+        </div>
+        {% endif %}
+
+        {# ── Recent workouts ── #}
+        {% if workouts %}
+        <div class="card card-full">
+            <div class="card-heading">Recent Workouts</div>
+            <div class="workout-list">
+                {% for w in workouts[:7] %}
+                {% set dim_color_map = {'F': '#3B82F6', 'U': '#10B981', 'A': '#F59E0B', 'R': '#8B5CF6'} %}
+                {% set dim_name_map  = {'F': 'Fluency', 'U': 'Understanding', 'A': 'Application', 'R': 'Reasoning'} %}
+                {% set d_color = dim_color_map.get(w.focus_dimension, '#FFBA07') %}
+                {% set d_name  = dim_name_map.get(w.focus_dimension, w.focus_dimension) %}
+                <div class="workout-row">
+                    <div class="workout-meta">
+                        <div class="workout-dim-dot" style="background: {{ d_color }};"></div>
+                        <div>
+                            <div class="workout-info-primary">Day {{ w.day_number }} — {{ d_name }}</div>
+                            <div class="workout-info-secondary">{{ w.completed_at | default('') }}</div>
+                        </div>
+                    </div>
+                    {% if w.score is defined and w.score is not none %}
+                    <div class="workout-score {% if w.score >= 80 %}score-hi{% elif w.score >= 50 %}score-mid{% else %}score-low{% endif %}">
+                        {{ w.score }}%
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>{# /dash-grid #}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.addEventListener('load', function () {
+        document.querySelectorAll('.fuar-fill').forEach(function (bar) {
+            bar.style.width = bar.getAttribute('data-score') + '%';
+        });
+    });
+</script>
+{% endblock %}

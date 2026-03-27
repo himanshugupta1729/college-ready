@@ -1,0 +1,768 @@
+{% extends "base.html" %}
+
+{% block title %}Register — College Ready{% endblock %}
+
+{% block extra_css %}
+.register-wrap {
+    padding: 20px 0 80px;
+}
+
+/* ── Page header ── */
+.register-header {
+    margin-bottom: 48px;
+}
+
+.register-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-bottom: 32px;
+    transition: color 0.2s;
+}
+
+.register-header .back-link:hover { color: var(--text); }
+
+.register-header .back-link svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0.7;
+}
+
+.register-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.register-header h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 12px;
+}
+
+.register-header p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    max-width: 460px;
+}
+
+/* ── Form card ── */
+.register-form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* ── Section dividers within form ── */
+.form-section {
+    padding: 32px 32px 0;
+}
+
+.form-section:last-of-type {
+    padding-bottom: 32px;
+}
+
+.form-section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.form-section-label span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: rgba(108, 92, 231, 0.15);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0;
+    flex-shrink: 0;
+}
+
+.form-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 32px;
+}
+
+/* ── Form grid ── */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ── Form controls override for this page ── */
+.register-form-card .form-group label {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.register-form-card .form-control {
+    background: var(--surface-2);
+    font-size: 14px;
+}
+
+.register-form-card .form-control:focus {
+    background: var(--surface-3);
+}
+
+.form-control::placeholder {
+    color: #3a3a3a;
+}
+
+/* ── Radio group (track selection) ── */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+}
+
+.radio-option:hover {
+    border-color: rgba(108, 92, 231, 0.35);
+    background: rgba(108, 92, 231, 0.04);
+}
+
+.radio-option input[type="radio"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #3a3a3a;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    background: transparent;
+}
+
+.radio-option input[type="radio"]:checked {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 3px var(--surface-2);
+}
+
+.radio-option:has(input[type="radio"]:checked) {
+    border-color: rgba(108, 92, 231, 0.5);
+    background: rgba(108, 92, 231, 0.06);
+}
+
+.radio-text-wrap {
+    flex: 1;
+}
+
+.track-group {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.track-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--surface);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.track-group-header:hover {
+    background: var(--surface-2);
+}
+
+.track-group-header .group-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.track-group-header .group-title .group-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.track-group-header .group-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.track-group-header .chevron {
+    color: var(--text-secondary);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+
+.track-group.open .chevron {
+    transform: rotate(180deg);
+}
+
+.track-group-body {
+    display: none;
+    padding: 4px 8px 8px;
+    background: var(--bg);
+}
+
+.track-group.open .track-group-body {
+    display: block;
+}
+
+.track-group-body .radio-option {
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-top: 4px;
+}
+
+.track-group-body .radio-title {
+    font-size: 13px;
+}
+
+.track-group-body .radio-desc {
+    font-size: 11px;
+}
+
+/* Standalone SAT option - slightly larger treatment */
+.radio-option.track-primary {
+    padding: 16px;
+    border-width: 1.5px;
+}
+
+.radio-option.track-primary .radio-title {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.track-group-label {
+    display: none; /* replaced by group headers */
+}
+
+.radio-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.radio-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+/* ── Parent note ── */
+.field-note {
+    font-size: 12px;
+    color: #555;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+/* ── Optional badge ── */
+.optional-badge {
+    font-size: 10px;
+    font-weight: 500;
+    color: #444;
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: lowercase;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+/* ── Submit strip ── */
+.submit-strip {
+    padding: 24px 32px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.submit-strip .submit-note {
+    font-size: 12px;
+    color: #444;
+    line-height: 1.5;
+    max-width: 300px;
+}
+
+.btn-submit {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 0 24px var(--accent-glow);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 14px 36px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.btn-submit:hover {
+    background: #7c6ef0;
+    box-shadow: 0 0 36px var(--accent-glow);
+    transform: translateY(-1px);
+}
+
+/* ── Side panel ── */
+.register-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 28px;
+    align-items: start;
+}
+
+.info-panel {
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.info-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+}
+
+.info-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+.info-list li::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    margin-top: 5px;
+    opacity: 0.7;
+}
+
+.fuar-pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-right: 4px;
+    margin-bottom: 6px;
+}
+
+.fuar-f { background: rgba(108, 92, 231, 0.15); color: var(--accent); }
+.fuar-u { background: rgba(0, 210, 160, 0.15); color: var(--green); }
+.fuar-a { background: rgba(255, 149, 0, 0.15); color: var(--orange); }
+.fuar-r { background: rgba(78, 205, 196, 0.15); color: var(--blue); }
+
+@media (max-width: 900px) {
+    .register-layout {
+        grid-template-columns: 1fr;
+    }
+    .info-panel { position: static; }
+}
+
+@media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+    .form-section { padding: 24px 20px 0; }
+    .form-section:last-of-type { padding-bottom: 24px; }
+    .form-divider { margin: 0 20px; }
+    .submit-strip {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px;
+        text-align: center;
+    }
+    .submit-strip .submit-note { max-width: 100%; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="register-wrap">
+    <div class="container-wide">
+
+        <div class="register-header">
+            <a href="/" class="back-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+                Back
+            </a>
+            <div class="register-eyebrow">Register</div>
+            <h1>Begin your diagnostic.</h1>
+            <p>Takes about 60 minutes. Have a quiet space ready — treat it like the real thing.</p>
+        </div>
+
+        <div class="register-layout">
+
+            <!-- Form -->
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}" style="margin-bottom: 20px;">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="/register" class="register-form-card">
+
+                    <!-- Student info -->
+                    <div class="form-section">
+                        <div class="form-section-label">
+                            <span>1</span>
+                            Student Information
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="student_name">Student Name</label>
+                                <input type="text" id="student_name" name="student_name" class="form-control" placeholder="First and last name" required autocomplete="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="student_email">Student Email</label>
+                                <input type="email" id="student_email" name="student_email" class="form-control" placeholder="student@school.edu" autocomplete="email">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="grade">Grade <span style="color: var(--red);">*</span></label>
+                                <select id="grade" name="grade" class="form-control" required>
+                                    <option value="" disabled selected>Select grade</option>
+                                    <option value="9">Grade 9</option>
+                                    <option value="10">Grade 10</option>
+                                    <option value="11">Grade 11</option>
+                                    <option value="12">Grade 12</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="school_name">School Name</label>
+                                <input type="text" id="school_name" name="school_name" class="form-control" placeholder="Your high school">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <!-- Track selection -->
+                    <div class="form-section">
+                        <div class="form-section-label">
+                            <span>2</span>
+                            Assessment Track
+                        </div>
+
+                        <div class="form-group">
+                            <div class="radio-group" id="trackGroup">
+                                <!-- SAT Math — top level, standalone -->
+                                <label class="radio-option track-primary">
+                                    <input type="radio" name="track" value="sat" checked>
+                                    <div class="radio-text-wrap">
+                                        <div class="radio-title">SAT Math</div>
+                                        <div class="radio-desc">44 questions &middot; 70 min &middot; Estimated SAT score + FUAR profile + 4-week plan</div>
+                                    </div>
+                                </label>
+
+                                <!-- AP Courses — nested group -->
+                                <div class="track-group" id="apGroup">
+                                    <div class="track-group-header" onclick="toggleGroup('apGroup')">
+                                        <div>
+                                            <div class="group-title">
+                                                <span class="group-icon" style="background: rgba(108, 92, 231, 0.15); color: var(--accent);">AP</span>
+                                                AP Courses
+                                            </div>
+                                            <div class="group-subtitle">Precalculus, Calculus AB, Calculus BC, Statistics</div>
+                                        </div>
+                                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="track-group-body">
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="ap_precalc">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">AP Precalculus</div>
+                                                <div class="radio-desc">24 questions &middot; 70 min &middot; Polynomial, exponential, trig readiness</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="ap_calc_ab">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">AP Calculus AB</div>
+                                                <div class="radio-desc">28 questions &middot; 70 min &middot; Limits, derivatives, integrals</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="ap_calc_bc">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">AP Calculus BC</div>
+                                                <div class="radio-desc">30 questions &middot; 70 min &middot; AB content + series, parametric, polar</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="ap_stats">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">AP Statistics</div>
+                                                <div class="radio-desc">28 questions &middot; 70 min &middot; Data analysis, probability, inference</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- High School Courses — nested group -->
+                                <div class="track-group" id="courseGroup">
+                                    <div class="track-group-header" onclick="toggleGroup('courseGroup')">
+                                        <div>
+                                            <div class="group-title">
+                                                <span class="group-icon" style="background: rgba(0, 210, 160, 0.15); color: var(--green);">HS</span>
+                                                High School Courses
+                                            </div>
+                                            <div class="group-subtitle">Algebra 1, Geometry, Algebra 2, Precalculus, Statistics</div>
+                                        </div>
+                                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div class="track-group-body">
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="algebra_1">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">Algebra 1</div>
+                                                <div class="radio-desc">25 questions &middot; 60 min &middot; Linear equations, systems, intro quadratics</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="geometry">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">Geometry</div>
+                                                <div class="radio-desc">25 questions &middot; 60 min &middot; Triangles, circles, area, volume, basic trig</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="algebra_2">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">Algebra 2</div>
+                                                <div class="radio-desc">28 questions &middot; 60 min &middot; Polynomials, rational functions, exponentials, logs</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="precalculus">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">Precalculus</div>
+                                                <div class="radio-desc">28 questions &middot; 60 min &middot; Trig functions, identities, polar, limits intro</div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="track" value="statistics">
+                                            <div class="radio-text-wrap">
+                                                <div class="radio-title">Statistics</div>
+                                                <div class="radio-desc">22 questions &middot; 60 min &middot; Descriptive stats, probability, inference basics</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                            function toggleGroup(groupId) {
+                                var group = document.getElementById(groupId);
+                                group.classList.toggle('open');
+                            }
+
+                            // Auto-open group when a radio inside it is selected
+                            document.querySelectorAll('.track-group-body input[type="radio"]').forEach(function(radio) {
+                                radio.addEventListener('change', function() {
+                                    // Close other group if open (only one group should show selection)
+                                    document.querySelectorAll('.track-group').forEach(function(g) {
+                                        if (!g.contains(radio)) {
+                                            // Don't close, just let it be
+                                        }
+                                    });
+                                });
+                            });
+
+                            // Auto-open group if it contains the checked radio (e.g., on back navigation)
+                            document.addEventListener('DOMContentLoaded', function() {
+                                document.querySelectorAll('.track-group-body input[type="radio"]:checked').forEach(function(radio) {
+                                    radio.closest('.track-group').classList.add('open');
+                                });
+                            });
+                            </script>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <!-- Parent info -->
+                    <div class="form-section">
+                        <div class="form-section-label">
+                            <span>3</span>
+                            Parent / Guardian
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parent_name">Parent Name</label>
+                                <input type="text" id="parent_name" name="parent_name" class="form-control" placeholder="Parent or guardian name" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="parent_email">Parent Email <span style="color: var(--red);">*</span></label>
+                                <input type="email" id="parent_email" name="parent_email" class="form-control" placeholder="parent@email.com" required autocomplete="off">
+                                <div class="field-note">Your detailed report will be sent to this email</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <!-- Event code -->
+                    <div class="form-section" style="padding-bottom: 32px;">
+                        <div class="form-section-label">
+                            <span>4</span>
+                            Event Code
+                            <span class="optional-badge">optional</span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0; max-width: 320px;">
+                            <label for="event_code">Code</label>
+                            <input type="text" id="event_code" name="event_code" class="form-control" placeholder="e.g. WESTLAKE25" autocomplete="off" style="text-transform: uppercase; letter-spacing: 1px;">
+                            <div class="field-note">If your school or program provided a session code, enter it here</div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="submit-strip">
+                        <div class="submit-note">By registering, you agree to receive your diagnostic report and practice recommendations. No spam — ever.</div>
+                        <button type="submit" class="btn-submit">Begin Diagnostic &rarr;</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Info panel -->
+            <aside class="info-panel">
+                <div class="info-card">
+                    <div class="info-card-title">What happens next</div>
+                    <ul class="info-list">
+                        <li>You'll receive a confirmation email with your diagnostic link</li>
+                        <li>Complete the 60-minute assessment in one sitting</li>
+                        <li>See your Math Archetype immediately after</li>
+                        <li>Full FUAR report + SAT score estimate delivered to parent email within 48 hours</li>
+                        <li>Your personalized 4-week practice plan activates on Day 3</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-title">The FUAR Framework</div>
+                    <div style="margin-bottom: 12px;">
+                        <span class="fuar-pill fuar-f">F — Fluency</span>
+                        <span class="fuar-pill fuar-u">U — Understanding</span>
+                        <span class="fuar-pill fuar-a">A — Application</span>
+                        <span class="fuar-pill fuar-r">R — Reasoning</span>
+                    </div>
+                    <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.55;">Four dimensions, one complete picture of how you do math — not just whether you can get the answer.</p>
+                </div>
+
+                <div class="info-card" style="border-color: rgba(108, 92, 231, 0.25); background: rgba(108, 92, 231, 0.04);">
+                    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                        <span style="font-weight: 600; color: var(--text);">Built on the methodology</span> used by Cuemath to develop mathematical thinkers across 50+ countries.
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    // Uppercase event code as user types
+    const codeInput = document.getElementById('event_code');
+    if (codeInput) {
+        codeInput.addEventListener('input', function() {
+            const pos = this.selectionStart;
+            this.value = this.value.toUpperCase();
+            this.setSelectionRange(pos, pos);
+        });
+    }
+</script>
+{% endblock %}
+
+{% endblock %}

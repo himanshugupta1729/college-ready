@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+{% set show_nav = false %}
+
+{% block title %}{{ student.student_name }}'s Math Assessment — College Ready Night{% endblock %}
+
+{% set fuar_labels = {'F': 'Fluency', 'U': 'Understanding', 'A': 'Application', 'R': 'Reasoning'} %}
+{% set fuar_parent_desc = {
+    'F': 'Can solve problems accurately and efficiently — strong math foundations',
+    'U': 'Understands the "why" behind math concepts — deep conceptual grasp',
+    'A': 'Applies math to real-world situations — practical problem-solving',
+    'R': 'Thinks through new problems logically — creative problem-solving'
+} %}
+{% set fuar_colors = {'F': '#4CAF50', 'U': '#2196F3', 'A': '#FF9800', 'R': '#9C27B0'} %}
+
+{# Track-specific FUAR one-liner descriptions #}
+{% if score.score_type == 'sat' %}
+  {% set fuar_context = {
+    'F': 'Speed & Accuracy — can solve SAT problems quickly without errors',
+    'U': 'Conceptual Depth — grasps why formulas work, not just how to use them',
+    'A': 'Real-World Problems — handles word problems and data interpretation',
+    'R': 'Novel Problem-Solving — works through unfamiliar question types'
+  } %}
+  {% set track_exam_name = 'SAT Math' %}
+{% elif score.score_type == 'ap' %}
+  {% set fuar_context = {
+    'F': 'Computational Accuracy — executes procedures and calculations correctly',
+    'U': 'Conceptual Grasp — understands the theory behind the methods',
+    'A': 'Applied Problems — connects concepts to real scenarios and data',
+    'R': 'Analytical Thinking — reasons through multi-step and proof-based problems'
+  } %}
+  {% set track_exam_name = track_config.name|default(student.track, true) %}
+{% else %}
+  {% set fuar_context = {
+    'F': 'Math Foundations — accurate with grade-level calculations and procedures',
+    'U': 'Conceptual Understanding — grasps the "why" behind math rules',
+    'A': 'Word Problems — applies math to everyday and real-world situations',
+    'R': 'Problem-Solving — figures out unfamiliar problems without being shown how'
+  } %}
+  {% set track_exam_name = 'Grade ' ~ student.grade %}
+{% endif %}
+
+{% block extra_css %}
+body { background: #F9FAFB !important; color: #191919; }
+
+.pr { max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ── Top bar ── */
+.pr-top { padding: 16px 0; margin-bottom: 24px; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; }
+.pr-top-logo { height: 32px; }
+.pr-top-logo img { height: 32px; }
+.pr-top-event { font-size: 15px; color: #6B7280; text-align: right; font-weight: 600; }
+.pr-top-event strong { color: #374151; font-size: 16px; font-weight: 700; }
+
+/* ── Cards ── */
+.pr-card { background: #fff; border-radius: 12px; border: 1px solid #E5E7EB; padding: 20px 22px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.pr-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #FFBA07; margin-bottom: 14px; }
+
+/* ══ SECTION 1: STUDENT + ARCHETYPE ══ */
+.pr-hero { display: flex; gap: 20px; align-items: stretch; margin-bottom: 16px; }
+.pr-hero-left { flex: 1; }
+.pr-hero-name { font-size: 24px; font-weight: 800; margin-bottom: 2px; }
+.pr-hero-meta { font-size: 13px; color: #6B7280; margin-bottom: 12px; }
+
+.pr-archetype-box {
+  display: flex; gap: 14px; align-items: center;
+  background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 12px 16px;
+  border-left: 4px solid var(--arch-color, #FFBA07);
+}
+.pr-arch-sym { font-size: 32px; font-weight: 900; flex-shrink: 0; }
+.pr-arch-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9CA3AF; }
+.pr-arch-title { font-size: 17px; font-weight: 800; margin: 2px 0; }
+.pr-arch-desc { font-size: 13px; color: #6B7280; line-height: 1.5; }
+
+/* Score estimate — two blocks side by side */
+.pr-score-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+}
+.pr-score-block {
+  background: #fff; border-radius: 14px; border: 1px solid #E5E7EB;
+  padding: 24px 20px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.pr-score-block.predicted { background: #FFFBEB; border-color: #FDE68A; }
+.pr-score-block.readiness { background: #F0F9FF; border-color: #BAE6FD; }
+.pr-score-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 8px; }
+.pr-score-value { font-size: 32px; font-weight: 900; color: #191919; margin-bottom: 4px; }
+.pr-score-block.predicted .pr-score-value { color: #B45309; }
+.pr-score-block.readiness .pr-score-value { color: #0369A1; }
+.pr-score-detail { font-size: 13px; color: #6B7280; margin-bottom: 0; }
+.pr-score-note { font-size: 10px; color: #B0B0B0; font-style: italic; line-height: 1.4; margin-top: 12px; text-align: center; }
+
+/* ══ SECTION 2: MATH SKILLS PROFILE ══ */
+.pr-fuar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pr-fuar-item { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px; }
+.pr-fuar-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.pr-fuar-name { font-size: 14px; font-weight: 700; }
+.pr-fuar-score { font-size: 20px; font-weight: 900; }
+.pr-fuar-desc { font-size: 12px; color: #6B7280; line-height: 1.5; margin-bottom: 10px; }
+.pr-fuar-bar { height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden; }
+.pr-fuar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.pr-fuar-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-top: 8px; }
+.badge-strong { background: #D1FAE5; color: #065F46; }
+.badge-growth { background: #FEF3C7; color: #92400E; }
+
+/* ══ SECTION 3: PERCENTILE ══ */
+.pr-pct-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.pr-pct-block {
+  background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 12px;
+  padding: 24px 20px; text-align: center;
+}
+.pr-pct-block.active { background: #FFFBEB; border-color: #FDE68A; }
+.pr-pct-block.coming { opacity: 0.5; }
+.pr-pct-scope { font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.pr-pct-number { font-size: 36px; font-weight: 900; color: #191919; margin-bottom: 4px; }
+.pr-pct-block.active .pr-pct-number { color: #B45309; }
+.pr-pct-of { font-size: 11px; color: #9CA3AF; }
+.pr-pct-coming { font-size: 11px; color: #B0B0B0; font-style: italic; margin-top: 4px; }
+
+/* ══ SECTION 4: TOPICS ══ */
+.pr-topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; }
+.pr-topic-item { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 13px; }
+.pr-topic-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.pr-topic-name { flex: 1; color: #191919; font-weight: 600; }
+.pr-topic-score { font-size: 11px; color: #9CA3AF; font-weight: 600; min-width: 28px; text-align: right; }
+
+/* ══ SECTION 5: NEXT STEPS ══ */
+.pr-steps { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.pr-step { display: flex; gap: 12px; padding: 10px 14px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; }
+.pr-step-num { width: 26px; height: 26px; background: #FFBA07; color: #191919; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+.pr-step-text { font-size: 13px; line-height: 1.55; color: #374151; }
+.pr-step-text strong { color: #191919; }
+
+/* CTA */
+.pr-cta { background: #191919; border-radius: 14px; padding: 24px; text-align: center; color: white; margin-bottom: 16px; }
+.pr-cta-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.pr-cta-body { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 18px; }
+.pr-cta-btn { display: inline-block; background: #FFBA07; color: #191919; font-weight: 700; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 14px; }
+.pr-cta-btn:hover { background: #E0A406; }
+
+.pr-footer { text-align: center; font-size: 11px; color: #B0B0B0; padding: 20px 0; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .pr-hero { flex-direction: column; }
+  .pr-score-row { grid-template-columns: 1fr; }
+  .pr-fuar-grid { grid-template-columns: 1fr; }
+  .pr-pct-grid { grid-template-columns: 1fr; }
+  .pr-topic-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .pr-cta { display: none; }
+  body { background: white !important; }
+  .pr-card { box-shadow: none; border: 1px solid #ddd; }
+}
+{% endblock %}
+
+{% block content %}
+{% set child = student.student_name.split(' ')[0] %}
+<div class="pr">
+
+  <!-- Top Bar -->
+  <div class="pr-top">
+    <div class="pr-top-logo"><img src="{{ url_for('static', filename='cuemath-logo.svg') }}" alt="Cuemath"></div>
+    <div class="pr-top-event">
+      {% if event %}<strong>{{ event.school_name }}</strong><br>{{ event.event_date }}{% endif %}
+    </div>
+  </div>
+
+  <!-- ══ SECTION 1: STUDENT + ARCHETYPE ══ -->
+  <div class="pr-card" style="margin-bottom: 20px;">
+    <div class="pr-section-label">Math Assessment Report</div>
+    <div class="pr-hero-name">{{ student.student_name }}</div>
+    <div class="pr-hero-meta"><strong>{{ track_config.name|default(student.track, true) }}</strong> · Grade {{ student.grade }} · {% if event %}{{ event.event_name }}{% endif %}</div>
+
+    <div class="pr-archetype-box" style="--arch-color: {{ archetype.color }}">
+      <div class="pr-arch-sym" style="color: {{ archetype.color }}">{{ archetype.symbol }}</div>
+      <div>
+        <div class="pr-arch-label">Math Archetype: {{ archetype.greek_name }}</div>
+        <div class="pr-arch-title">{{ archetype.name }}</div>
+        <div class="pr-arch-desc">{{ archetype.superpower|truncate(120) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCORE: Two blocks side by side ══ -->
+  <div class="pr-score-row">
+    <div class="pr-score-block predicted">
+      <div class="pr-score-eyebrow">
+        {% if score.score_type == 'sat' %}SAT Estimate{% elif score.score_type == 'ap' %}Predicted AP Score{% else %}Proficiency{% endif %}
+      </div>
+      <div class="pr-score-value">
+        {% if score.score_type == 'ap' %}
+          {# Parse predicted score number from detail like "Predicted AP Score: 2 (Developing)" #}
+          {% set detail_parts = score.detail.split(': ') %}
+          {% if detail_parts|length > 1 %}
+            {{ detail_parts[-1].split(' ')[0] }}
+          {% else %}
+            {{ score.detail.split(' ')[0] }}
+          {% endif %}
+        {% elif score.score_type == 'sat' %}
+          {# Parse score range from label like "Estimated SAT: 640-720" #}
+          {{ score.label.split(': ')[-1] if ': ' in score.label else score.label }}
+        {% else %}
+          {# Grade level: show proficiency label from detail #}
+          {% set detail_parts = score.detail.split(': ') %}
+          {% if detail_parts|length > 1 %}
+            {{ detail_parts[-1] }}
+          {% else %}
+            {{ score.detail }}
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="pr-score-detail">
+        {% if score.score_type == 'ap' %}
+          {# Parse label like "Developing" from "Predicted AP Score: 2 (Developing)" #}
+          {% set detail_text = score.detail.split(': ')[-1] if ': ' in score.detail else score.detail %}
+          {% if '(' in detail_text and ')' in detail_text %}
+            {{ detail_text.split('(')[1].split(')')[0] }}
+          {% else %}
+            {{ detail_text }}
+          {% endif %}
+        {% elif score.score_type == 'sat' %}
+          {{ score.detail }}
+        {% else %}
+          {{ score.detail }}
+          {% if score.predicted_grade is defined and score.predicted_grade %}
+            <div style="margin-top:8px; font-size:14px; font-weight:700; color:#B45309;">
+              Predicted Course Grade: {{ score.predicted_grade }}
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    {% if score.score_type != 'sat' or true %}
+    <div class="pr-score-block readiness">
+      <div class="pr-score-eyebrow">
+        {% if score.score_type == 'sat' %}SAT Readiness{% elif score.score_type == 'ap' %}AP Readiness{% else %}Grade-Level Readiness{% endif %}
+      </div>
+      <div class="pr-score-value">
+        {% if score.score_type == 'ap' %}
+          {# Parse percentage from label like "AP Statistics Readiness: 39%" #}
+          {% set label_val = score.label.split(': ')[-1] if ': ' in score.label else score.label %}
+          {{ label_val }}
+        {% elif score.readiness is defined and score.readiness %}
+          {{ score.readiness }}
+        {% elif score.percentage is defined and score.percentage %}
+          {{ score.percentage }}%
+        {% else %}
+          {{ ((fuar.F + fuar.U + fuar.A + fuar.R) / 4)|round|int }}%
+        {% endif %}
+      </div>
+      <div class="pr-score-detail">{% if score.score_type == 'sat' %}of SAT Math skills demonstrated{% elif score.score_type == 'ap' %}of AP course skills demonstrated{% else %}of grade-level skills demonstrated{% endif %}</div>
+    </div>
+    {% endif %}
+  </div>
+  <div class="pr-score-note" style="margin-bottom: 20px;">
+    {% if score.score_type == 'sat' %}Based on a 60-minute adaptive diagnostic. Not an official SAT score.{% elif score.score_type == 'ap' %}Estimated readiness based on diagnostic performance.{% else %}Based on grade-level diagnostic assessment.{% endif %}
+  </div>
+
+  <!-- ══ SECTION 2: MATH SKILLS PROFILE ══ -->
+  <div class="pr-card">
+    <div class="pr-section-label">Math Skills Profile</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <!-- Left: FUAR bars with track-specific descriptions -->
+      <div>
+        {% for dim in ['F', 'U', 'A', 'R'] %}
+        <div style="margin-bottom: 20px;">
+          <div class="pr-fuar-head">
+            <span class="pr-fuar-name">{{ fuar_labels[dim] }}
+              {% if dim == strongest_fuar %}<span class="pr-fuar-badge badge-strong">Strongest</span>{% elif dim == weakest_fuar %}<span class="pr-fuar-badge badge-growth">Needs practice</span>{% endif %}
+            </span>
+            <span class="pr-fuar-score" style="color: {{ fuar_colors[dim] }}">{{ fuar[dim]|round|int }}</span>
+          </div>
+          <div style="font-size: 11px; color: #6B7280; margin: 3px 0 8px;">{{ fuar_context[dim] }}</div>
+          <div class="pr-fuar-bar">
+            <div class="pr-fuar-fill" style="width: {{ fuar[dim] }}%; background: {{ fuar_colors[dim] }};"></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- Right: Learning style summary (compact) -->
+      <div style="background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px; padding: 20px;">
+        <div style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">About {{ child }}'s Math Learning</div>
+        <div style="font-size: 13px; color: #374151; line-height: 1.65;">
+          {% if strongest_fuar == 'F' %}
+          {{ child }}'s strongest area is <strong>Fluency</strong> — accurate, efficient problem-solving that frees up mental energy for harder concepts. This is the foundation that {{ track_exam_name }} rewards on timed sections.
+          {% elif strongest_fuar == 'U' %}
+          {{ child }}'s strongest area is <strong>Understanding</strong> — grasping why math works, not just how. This transfers to new material far better than memorization, which is exactly what {{ track_exam_name }} tests.
+          {% elif strongest_fuar == 'A' %}
+          {{ child }}'s strongest area is <strong>Application</strong> — using math in real-world situations and word problems. This is the skill most valued in {{ track_exam_name }} and STEM careers.
+          {% elif strongest_fuar == 'R' %}
+          {{ child }}'s strongest area is <strong>Reasoning</strong> — working through unfamiliar problems logically. This is the hardest skill to develop, and a real advantage on {{ track_exam_name }}.
+          {% endif %}
+          <br><br>
+          The area to develop is <strong>{{ fuar_labels[weakest_fuar] }}</strong> —
+          {% if weakest_fuar == 'F' %}speed and accuracy with core procedures. The good news:{% elif weakest_fuar == 'U' %}moving beyond memorized steps to true conceptual grasp. The good news:{% elif weakest_fuar == 'A' %}connecting concepts to real-world and word problems. The good news:{% elif weakest_fuar == 'R' %}tackling unfamiliar, multi-step problems. The good news:{% endif %}
+          {% if gric %}
+            {% set g_val = gric.G|default(0)|float %}
+            {% set r_val = gric.R_gric|default(0)|float %}
+            {% set i_val = gric.I|default(0)|float %}
+            {% set c_val = gric.C|default(0)|float %}
+            {% set max_gric = [g_val, r_val, i_val, c_val]|max %}
+            {% if g_val == max_gric %}{{ child }} shows a <strong>growth mindset</strong> — they believe effort leads to improvement, which is the strongest predictor of long-term math gains.{% elif i_val == max_gric %}{{ child }} shows genuine <strong>curiosity</strong> about math, which means targeted practice feels like a puzzle worth solving, not a chore.{% elif r_val == max_gric %}{{ child }} is motivated when math connects to <strong>real life and goals</strong> — purposeful practice in this area will stick.{% elif c_val == max_gric %}{{ child }} has strong <strong>confidence</strong> in their math ability — they're willing to attempt hard problems, which is exactly what builds this skill.{% endif %}
+          {% else %}
+            this is one of the most improvable skills with consistent, targeted practice.
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: PERCENTILE ══ -->
+  <div class="pr-card">
+    <div class="pr-section-label">Percentile</div>
+    <div class="pr-pct-grid">
+      <div class="pr-pct-block {% if percentiles.school is not none %}active{% endif %}">
+        <div class="pr-pct-scope">School</div>
+        {% if percentiles.school is not none %}
+        <div class="pr-pct-number">{{ percentiles.school }}<span style="font-size:18px;">th</span></div>
+        <div class="pr-pct-of">out of {{ total_event_students }} students</div>
+        {% else %}
+        <div class="pr-pct-number" style="font-size:18px; color:#B0B0B0;">—</div>
+        {% endif %}
+      </div>
+      <div class="pr-pct-block coming">
+        <div class="pr-pct-scope">State</div>
+        <div class="pr-pct-number" style="font-size:18px; color:#B0B0B0;">—</div>
+        <div class="pr-pct-coming">Coming soon</div>
+      </div>
+      <div class="pr-pct-block coming">
+        <div class="pr-pct-scope">National</div>
+        <div class="pr-pct-number" style="font-size:18px; color:#B0B0B0;">—</div>
+        <div class="pr-pct-coming">Coming soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4: TOPICS ══ -->
+  <div class="pr-card">
+    <div class="pr-section-label">Topics</div>
+    {% if analytics and analytics.topic_heatmap %}
+      {% set sorted_topics = analytics.topic_heatmap|sort(attribute='accuracy', reverse=true) %}
+      <div class="pr-topic-grid">
+        {% for topic in sorted_topics %}
+          {% if topic.accuracy >= 70 %}
+            {% set dot_color = '#16a34a' %}
+          {% elif topic.accuracy >= 40 %}
+            {% set dot_color = '#d97706' %}
+          {% else %}
+            {% set dot_color = '#ea580c' %}
+          {% endif %}
+          <div class="pr-topic-item">
+            <span class="pr-topic-dot" style="background: {{ dot_color }};"></span>
+            <span class="pr-topic-name">{{ topic.domain }}</span>
+            <span class="pr-topic-score">{{ topic.accuracy|round|int }}%</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% set fuar_sorted = [('F', fuar.F), ('U', fuar.U), ('A', fuar.A), ('R', fuar.R)] %}
+      <div class="pr-topic-grid">
+        {% for dim_pair in fuar_sorted|sort(attribute='1', reverse=true) %}
+          {% set dim = dim_pair[0] %}
+          {% set val = dim_pair[1] %}
+          {% if val >= 70 %}
+            {% set dot_color = '#16a34a' %}
+          {% elif val >= 40 %}
+            {% set dot_color = '#d97706' %}
+          {% else %}
+            {% set dot_color = '#ea580c' %}
+          {% endif %}
+          <div class="pr-topic-item">
+            <span class="pr-topic-dot" style="background: {{ dot_color }};"></span>
+            <span class="pr-topic-name">{{ fuar_labels[dim] }}</span>
+            <span class="pr-topic-score">{{ val|round|int }}%</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- ══ SECTION 5: WHAT YOU CAN DO ══ -->
+  <div class="pr-card">
+    <div class="pr-section-label">What You Can Do</div>
+    <div class="pr-steps">
+      <div class="pr-step">
+        <div class="pr-step-num">1</div>
+        <div class="pr-step-text"><strong>Start a conversation, not a review.</strong> Ask {{ child }} what they found interesting or challenging in the diagnostic. Showing interest in their thinking process — not just the score — is the single most impactful thing a parent can do.</div>
+      </div>
+      <div class="pr-step">
+        <div class="pr-step-num">2</div>
+        <div class="pr-step-text"><strong>{% if weakest_fuar == 'F' %}Practice together at home — even 10 minutes helps.{% elif weakest_fuar == 'U' %}Watch math explainer videos together.{% elif weakest_fuar == 'A' %}Point out math in everyday life.{% elif weakest_fuar == 'R' %}Try a weekly math puzzle together.{% endif %}</strong>
+        {% if weakest_fuar == 'F' %}Sit with {{ child }} while they work through a few problems. You don't need to teach — just being present and showing interest makes practice feel less isolating. Consistency matters more than duration.{% elif weakest_fuar == 'U' %}Find a short math explainer video and watch it together. Then ask {{ child }} to explain it back to you as if you're the student. When they teach it, they understand it deeper — and it builds their confidence.{% elif weakest_fuar == 'A' %}Talk about percentages at the grocery store, probability during sports, or budgeting for something they want to buy. When {{ child }} sees math in their own world, it clicks in a way textbooks can't replicate.{% elif weakest_fuar == 'R' %}Pick up a math puzzle book or find puzzles online and try them together at home. You don't need to solve them — just working through the thinking process alongside {{ child }} shows that struggle is normal and valued.{% endif %}</div>
+      </div>
+      <div class="pr-step">
+        <div class="pr-step-num">3</div>
+        <div class="pr-step-text"><strong>{% if score.score_type == 'sat' %}Look into SAT prep options early.{% elif score.score_type == 'ap' %}Review AP course selection with {{ child }}.{% else %}Check if {{ child }}'s current course is the right level.{% endif %}</strong>
+        {% if score.score_type == 'sat' %}Starting SAT prep 6+ months before the test makes a significant difference. {{ child }}'s diagnostic shows clear strengths to build on — a structured prep plan targeting {{ fuar_labels[weakest_fuar]|lower }} could meaningfully move their score.{% elif score.score_type == 'ap' %}Based on this diagnostic, discuss with {{ child }} whether the AP course load feels right. Students who are aware of their growth areas before the school year can prepare more strategically.{% else %}If {{ child }} is finding the current course too easy or too hard, this report gives concrete data for a conversation with the school counselor about placement.{% endif %}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="pr-cta">
+    <div class="pr-cta-title">Want personalized math support?</div>
+    <div class="pr-cta-body">A Cuemath tutor can build a plan tailored to {{ student.student_name.split(' ')[0] }}'s specific profile — strengthening {{ fuar_labels[weakest_fuar]|lower }} while leveraging their {{ fuar_labels[strongest_fuar]|lower }}.</div>
+    <a href="#" class="pr-cta-btn">Book a Free Consultation</a>
+  </div>
+
+  <div class="pr-footer">Powered by Cuemath · College Ready Night{% if event %} · {{ event.school_name }}{% endif %}</div>
+
+</div>
+{% endblock %}

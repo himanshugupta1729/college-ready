@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block title %}Workout Complete — College Ready{% endblock %}
+
+{% block extra_css %}
+.done-wrapper {
+    min-height: calc(100vh - 81px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.done-card {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+}
+
+/* ─── Trophy mark ─── */
+.done-mark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(0, 210, 160, 0.12);
+    border: 2px solid var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 28px;
+    box-shadow: 0 0 32px rgba(0, 210, 160, 0.2);
+}
+
+/* ─── Headline ─── */
+.done-headline {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+}
+
+.done-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ─── Score recap ─── */
+.score-recap {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 28px;
+    margin-bottom: 32px;
+}
+
+.score-recap .recap-item {
+    text-align: center;
+}
+
+.score-recap .recap-val {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: block;
+}
+
+.score-recap .recap-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    display: block;
+    margin-top: 2px;
+}
+
+.score-recap .recap-divider {
+    width: 1px;
+    height: 36px;
+    background: var(--border);
+}
+
+/* ─── Return time ─── */
+.return-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.return-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.return-text .return-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 3px;
+}
+
+.return-text .return-headline {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.return-text .return-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* ─── CTA ─── */
+.done-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.done-cta .btn {
+    min-width: 220px;
+}
+
+/* ─── Weekly check prompt ─── */
+.weekly-check-prompt {
+    background: rgba(139, 92, 246, 0.06);
+    border: 1px solid var(--purple);
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+}
+
+.weekly-check-prompt .prompt-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.weekly-check-prompt .prompt-text .prompt-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.weekly-check-prompt .prompt-text .prompt-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+{% endblock %}
+
+{% block content %}
+{% set score = workout.score | default(0) | int %}
+{% set correct = (score / 100 * 8) | round | int %}
+
+{% if score >= 80 %}
+    {% set score_color = 'var(--green)' %}
+{% elif score >= 50 %}
+    {% set score_color = 'var(--orange)' %}
+{% else %}
+    {% set score_color = 'var(--accent)' %}
+{% endif %}
+
+<div class="done-wrapper">
+    <div class="done-card">
+
+        {# ── Done mark ── #}
+        <div class="done-mark">✓</div>
+
+        <div class="done-headline">You've already completed<br>today's workout.</div>
+        <div class="done-sub">
+            Nice work. You showed up today — that's what separates students who improve from those who don't.
+        </div>
+
+        {# ── Score recap ── #}
+        {% if workout.score is defined and workout.score is not none %}
+        <div class="score-recap">
+            <div class="recap-item">
+                <span class="recap-val" style="color: {{ score_color }};">{{ score }}%</span>
+                <span class="recap-label">Score</span>
+            </div>
+            <div class="recap-divider"></div>
+            <div class="recap-item">
+                <span class="recap-val">{{ correct }}/8</span>
+                <span class="recap-label">Correct</span>
+            </div>
+            <div class="recap-divider"></div>
+            <div class="recap-item">
+                <span class="recap-val" style="color: var(--orange);">🔥 {{ student.daily_practice_streak | default(1) }}</span>
+                <span class="recap-label">Streak</span>
+            </div>
+        </div>
+        {% endif %}
+
+        {# ── Weekly check-in prompt ── #}
+        {% if plan and plan.weekly_check_due is defined and plan.weekly_check_due %}
+        <div class="weekly-check-prompt">
+            <div class="prompt-icon">📋</div>
+            <div class="prompt-text">
+                <div class="prompt-title">Week {{ plan.current_week | default(1) }} Check-In Ready</div>
+                <div class="prompt-sub">Take a 10-question check-in to measure your progress this week.</div>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <a href="/practice/weekly-check" class="btn btn-primary" style="width: 100%;">
+                Take Weekly Check-In
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+        </div>
+        {% endif %}
+
+        {# ── Come back tomorrow ── #}
+        <div class="return-block">
+            <div class="return-icon">📅</div>
+            <div class="return-text">
+                <div class="return-label">Up Next</div>
+                <div class="return-headline">Day {{ workout.day_number + 1 }} — Come back tomorrow</div>
+                <div class="return-sub">One workout a day is all it takes. See you tomorrow.</div>
+            </div>
+        </div>
+
+        {# ── CTA ── #}
+        <div class="done-cta">
+            <a href="/dashboard" class="btn btn-primary">
+                Go to Dashboard
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+                </svg>
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

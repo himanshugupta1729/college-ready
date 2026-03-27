@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}College Ready{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --surface: #FFFFFF;
+            --surface-2: #F5F5F5;
+            --surface-3: #EBEBEB;
+            --border: #E0E0E0;
+            --text: #191919;
+            --text-secondary: #666666;
+            --accent: #FFBA07;
+            --accent-hover: #E0A406;
+            --accent-glow: rgba(255, 186, 7, 0.2);
+            --green: #10B981;
+            --orange: #F59E0B;
+            --red: #DC2626;
+            --blue: #3B82F6;
+            --purple: #8B5CF6;
+            --caption: #999999;
+            --radius: 4px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 4px yellow accent bar at top of every page */
+        body::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: var(--accent);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-wide {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
+            margin-top: 4px;
+            background: var(--bg);
+        }
+
+        nav .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--accent); }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: var(--text); }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+            gap: 8px;
+            min-height: 44px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #191919;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-3);
+            border-color: #CCCCCC;
+        }
+
+        .btn-large {
+            padding: 16px 40px;
+            font-size: 17px;
+            border-radius: 8px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        /* Flash messages */
+        .flash {
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .flash-danger { background: #FEF2F2; border: 1px solid #FECACA; color: var(--red); }
+        .flash-success { background: #F0FDF4; border: 1px solid #BBF7D0; color: var(--green); }
+        .flash-warning { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--surface-3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .mt-4 { margin-top: 32px; }
+        .mt-2 { margin-top: 16px; }
+        .mb-2 { margin-bottom: 16px; }
+        .text-secondary { color: var(--text-secondary); }
+        .text-sm { font-size: 13px; }
+
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    {% if show_nav is not defined or show_nav %}
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo"><img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath" style="height: 24px;"></a>
+            <div style="display: flex; gap: 24px; align-items: center;">
+                {% if session.get('student_id') %}
+                <a href="{{ url_for('dashboard') }}">My Results</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>
