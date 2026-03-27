@@ -72,11 +72,7 @@
 
 <div class="reg-container">
   <div class="reg-header">
-    {% if event_type == 'middle_school' %}
-    <h1>Foundation Math Night</h1>
-    {% else %}
-    <h1>College Ready Night</h1>
-    {% endif %}
+    <h1>{{ event.event_name | default('College Ready Night' if event_type != 'middle_school' else 'Foundation Math Night') }}</h1>
     <div class="school">{{ event.school_name }}</div>
     {% if event.event_date %}<div class="date">{{ event.event_date }}</div>{% endif %}
   </div>
@@ -172,8 +168,7 @@
       <input type="hidden" name="track" id="track-hidden" value="">
 
       <button type="submit" class="reg-btn">
-        {% if event_type == 'middle_school' %}Register for Foundation Math Night
-        {% else %}Register for College Ready Night{% endif %}
+Register for {{ event.event_name | default('College Ready Night' if event_type != 'middle_school' else 'Foundation Math Night') }}
       </button>
     </form>
   </div>
