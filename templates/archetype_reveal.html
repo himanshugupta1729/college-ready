@@ -4,9 +4,9 @@
 {% block title %}Your Math Archetype — {{ event_display_name | default('College Ready') }}{% endblock %}
 
 {% block extra_css %}
-/* ─── Override base theme: full dark page ─── */
+/* ─── Override base theme: dark page with slight warmth ─── */
 body {
-    background: #0A0A0A !important;
+    background: #121218 !important;
     color: #F3F4F6;
     overflow-x: hidden;
 }
@@ -21,21 +21,19 @@ body {
 /* ─── Logo bar ─── */
 .ar-logo-bar {
     position: sticky;
-    top: 4px; /* account for base.html's 4px yellow bar */
+    top: 4px;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 24px;
-    background: rgba(10,10,10,0.92);
+    padding: 14px 24px;
+    background: rgba(18,18,24,0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.ar-logo-text {
-    font-size: 18px;
-    font-weight: 800;
-    color: white;
-    letter-spacing: 0.03em;
+.ar-logo-bar img {
+    height: 22px;
+    filter: brightness(0) invert(1);
 }
 .ar-logo-right {
     font-size: 11px;
@@ -656,7 +654,7 @@ body {
 
 {# ─── Logo bar ─── #}
 <div class="ar-logo-bar">
-    <span class="ar-logo-text">cuemath</span>
+    <img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath">
     <span class="ar-logo-right">{{ event_display_name | default('College Ready Night') }}</span>
 </div>
 
@@ -830,10 +828,10 @@ body {
     {% endwith %}
 
     {# ══════════════════════════════════════════
-       CTA: Continue to Full Report
+       CTAs: Save Archetype + Full Report
        ══════════════════════════════════════════ #}
     <div class="ar-cta-section ar-reveal" style="text-align: center; padding: 48px 0 32px;">
-        <a href="/report/{{ student.id }}" class="ar-cta-btn" style="
+        <a href="/share/{{ student.id }}" target="_blank" style="
             display: inline-block;
             background: linear-gradient(135deg, {{ archetype.color | default('#FFBA07') }}, {{ archetype.color | default('#FFBA07') }}CC);
             color: #0A0A0A;
@@ -847,11 +845,11 @@ body {
             transition: transform 0.2s, box-shadow 0.2s;
         " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 32px {{ archetype.color | default('#FFBA07') }}66';"
            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 24px {{ archetype.color | default('#FFBA07') }}44';">
-            See Your Full Report →
+            Save Your Archetype →
         </a>
 
         <div style="margin-top: 20px;">
-            <a href="/share/{{ student.id }}" target="_blank" style="
+            <a href="/report/{{ student.id }}" style="
                 display: inline-block;
                 background: rgba(255,255,255,0.08);
                 color: rgba(255,255,255,0.7);
@@ -864,10 +862,9 @@ body {
                 transition: background 0.2s;
             " onmouseover="this.style.background='rgba(255,255,255,0.12)'"
                onmouseout="this.style.background='rgba(255,255,255,0.08)'">
-                Share Your Archetype
+                See Your Full Report
             </a>
         </div>
-        <div style="color: #555; font-size: 0.8rem; margin-top: 8px;">Save the card to your camera roll or share on Stories</div>
     </div>
 
 </div>{# /ar-page #}
