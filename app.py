@@ -815,6 +815,9 @@ def init_db():
             option_d TEXT,
             correct_answer TEXT NOT NULL,
             explanation TEXT,
+            worked_solution_json TEXT,
+            wrong_answer_analyses TEXT,
+            simulation_html TEXT,
             topic_tag TEXT,
             created_at TEXT DEFAULT (datetime('now'))
         );
@@ -838,11 +841,23 @@ def init_db():
             focus_dimension TEXT NOT NULL,
             focus_topic TEXT,
             questions_json TEXT NOT NULL,
+            answers_json TEXT,
             completed INTEGER DEFAULT 0,
             score REAL,
             completed_at TEXT,
             created_at TEXT DEFAULT (datetime('now')),
             FOREIGN KEY (student_id) REFERENCES students(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS workout_answers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            workout_id INTEGER NOT NULL,
+            question_id INTEGER NOT NULL,
+            student_answer TEXT,
+            correct_answer TEXT NOT NULL,
+            is_correct INTEGER NOT NULL DEFAULT 0,
+            FOREIGN KEY (workout_id) REFERENCES daily_workouts(id),
+            FOREIGN KEY (question_id) REFERENCES questions(id)
         );
 
         CREATE TABLE IF NOT EXISTS weekly_assessments (
@@ -935,6 +950,10 @@ def init_db():
         ("students", "parent_name", "TEXT"),
         ("students", "parent_phone", "TEXT"),
         ("events", "is_demo", "INTEGER DEFAULT 0"),
+        ("questions", "worked_solution_json", "TEXT"),
+        ("questions", "wrong_answer_analyses", "TEXT"),
+        ("questions", "simulation_html", "TEXT"),
+        ("daily_workouts", "answers_json", "TEXT"),
     ]
     for table, col, col_type in safe_adds:
         try:
@@ -2502,6 +2521,12 @@ def share_card(student_id):
                            student_name=student['student_name'].split(' ')[0])
 
 
+@app.route('/share/designs')
+def share_card_designs():
+    """Preview all 5 share card design directions."""
+    return render_template('share_card_preview.html')
+
+
 @app.route('/share/preview/<archetype_key>')
 def share_card_preview(archetype_key):
     """Preview a share card for any archetype (no student needed)."""
@@ -2875,49 +2900,68 @@ def submit_practice():
     if not workout:
         return redirect(url_for('dashboard'))
 
+    # Guard: already completed — redirect to results
+    if workout['completed']:
+        return redirect(url_for('practice_results', workout_id=workout_id))
+
     question_ids = json.loads(workout['questions_json'])
     correct = 0
     total = len(question_ids)
+    answers_detail = []
 
     for qid in question_ids:
         selected = answers.get(f'q_{qid}', '')
         q = conn.execute("SELECT correct_answer FROM questions WHERE id = ?", (qid,)).fetchone()
-        if q and selected == q['correct_answer']:
+        is_right = 1 if (q and selected == q['correct_answer']) else 0
+        if is_right:
             correct += 1
+        correct_ans = q['correct_answer'] if q else ''
+        answers_detail.append({
+            'question_id': qid,
+            'student_answer': selected,
+            'correct_answer': correct_ans,
+            'is_correct': is_right
+        })
+        # Save per-question answer
+        conn.execute("""
+            INSERT INTO workout_answers (workout_id, question_id, student_answer, correct_answer, is_correct)
+            VALUES (?, ?, ?, ?, ?)
+        """, (workout_id, qid, selected, correct_ans, is_right))
 
     score = round(correct / total * 100, 1) if total > 0 else 0
 
-    # Mark workout complete
+    # Mark workout complete + store answers summary
     conn.execute("""
-        UPDATE daily_workouts SET completed = 1, score = ?, completed_at = datetime('now')
+        UPDATE daily_workouts SET completed = 1, score = ?, answers_json = ?, completed_at = datetime('now')
         WHERE id = ?
-    """, (score, workout_id))
+    """, (score, json.dumps(answers_detail), workout_id))
 
-    # Update streak
-    last_practice = student['last_practice_date'] if student else None
-    yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+    # Update streak — only if not already practiced today
     today_str = datetime.now().strftime('%Y-%m-%d')
+    last_practice = student['last_practice_date'] if student else None
 
-    # Reset streak if they missed a day (allow weekends — just check it's not >2 days)
-    streak = (student['daily_practice_streak'] or 0) + 1
-    if last_practice and last_practice < yesterday:
-        days_gap = (datetime.strptime(today_str, '%Y-%m-%d') - datetime.strptime(last_practice, '%Y-%m-%d')).days
-        if days_gap > 2:
-            streak = 1  # reset
+    if last_practice != today_str:
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+        streak = (student['daily_practice_streak'] or 0) + 1
+        if last_practice and last_practice < yesterday:
+            days_gap = (datetime.strptime(today_str, '%Y-%m-%d') - datetime.strptime(last_practice, '%Y-%m-%d')).days
+            if days_gap > 2:
+                streak = 1  # reset
 
-    conn.execute("""
-        UPDATE students SET
-            daily_practice_started = 1,
-            daily_practice_streak = ?,
-            last_practice_date = ?
-        WHERE id = ?
-    """, (streak, today_str, student_id))
+        conn.execute("""
+            UPDATE students SET
+                daily_practice_started = 1,
+                daily_practice_streak = ?,
+                last_practice_date = ?
+            WHERE id = ?
+        """, (streak, today_str, student_id))
 
-    # Update plan total_sessions_completed
-    conn.execute("""
-        UPDATE practice_plans SET total_sessions_completed = total_sessions_completed + 1
-        WHERE student_id = ? AND status = 'active'
-    """, (student_id,))
+        # Update plan total_sessions_completed
+        conn.execute("""
+            UPDATE practice_plans SET total_sessions_completed = total_sessions_completed + 1
+            WHERE student_id = ? AND status = 'active'
+        """, (student_id,))
+
     conn.commit()
 
     return redirect(url_for('practice_results', workout_id=workout_id))
@@ -2935,10 +2979,44 @@ def practice_results(workout_id):
     if not workout:
         return redirect(url_for('dashboard'))
 
+    # Load per-question answers + full question data for review
+    wa_rows = conn.execute("""
+        SELECT wa.*, q.question_text, q.option_a, q.option_b, q.option_c, q.option_d,
+               q.explanation, q.worked_solution_json, q.wrong_answer_analyses, q.simulation_html,
+               q.fuar_dimension, q.sat_domain, q.topic_tag
+        FROM workout_answers wa
+        JOIN questions q ON wa.question_id = q.id
+        WHERE wa.workout_id = ?
+        ORDER BY wa.is_correct ASC, wa.id ASC
+    """, (workout_id,)).fetchall()
+
+    review_questions = []
+    for row in wa_rows:
+        rq = dict(row)
+        # Parse JSON fields
+        try:
+            rq['worked_steps'] = json.loads(rq['worked_solution_json']) if rq.get('worked_solution_json') else None
+        except (json.JSONDecodeError, TypeError):
+            rq['worked_steps'] = None
+        try:
+            analyses = json.loads(rq['wrong_answer_analyses']) if rq.get('wrong_answer_analyses') else {}
+        except (json.JSONDecodeError, TypeError):
+            analyses = {}
+        # Get the analysis for this student's specific wrong answer
+        rq['personal_analysis'] = analyses.get(rq['student_answer'], '') if not rq['is_correct'] else ''
+        rq['all_analyses'] = analyses
+        review_questions.append(rq)
+
+    wrong_count = sum(1 for rq in review_questions if not rq['is_correct'])
+    correct_count = len(review_questions) - wrong_count
+
     return render_template('practice_results.html',
                            workout=workout,
                            student=student,
-                           focus_dim=FUAR_DIMENSIONS[workout['focus_dimension']])
+                           focus_dim=FUAR_DIMENSIONS[workout['focus_dimension']],
+                           review_questions=review_questions,
+                           wrong_count=wrong_count,
+                           correct_count=correct_count)
 
 
 # ---------- Analytics Page ----------

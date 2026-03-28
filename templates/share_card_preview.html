@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Share Card — 5 Designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: #0A0A0A;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: white;
+    padding: 40px;
+}
+h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    text-align: center;
+}
+.subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 48px;
+}
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    justify-content: center;
+}
+.card-wrap {
+    text-align: center;
+}
+.card-wrap h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #E5E7EB;
+}
+.card-wrap .desc {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 16px;
+    max-width: 300px;
+}
+
+/* Each card: 1080x1920 scaled to ~270x480 for preview */
+.frame {
+    width: 270px;
+    height: 480px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.5);
+}
+.inner {
+    width: 1080px;
+    height: 1920px;
+    transform: scale(0.25);
+    transform-origin: top left;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   V1 — MUTED BOLD (toned-down current, bigger text)
+   ═══════════════════════════════════════════ */
+.v1 {
+    background: #2557B3;
+    font-family: 'Inter', sans-serif;
+}
+.v1 .watermark {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -55%);
+    font-size: 1000px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.08);
+    line-height: 1;
+}
+.v1 .content {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    padding: 80px 88px;
+}
+.v1 .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+.v1 .badge {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+}
+.v1 .student-pill {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 100px;
+}
+.v1 .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.v1 .greek-label {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 20px;
+}
+.v1 .archetype-name {
+    font-size: 140px;
+    font-weight: 900;
+    color: white;
+    line-height: 0.95;
+    letter-spacing: -4px;
+    margin-bottom: 36px;
+}
+.v1 .tagline {
+    font-size: 40px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.4;
+    max-width: 820px;
+}
+.v1 .mind-card {
+    background: rgba(0,0,0,0.15);
+    border-radius: 24px;
+    padding: 36px 40px;
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+.v1 .mind-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; font-weight: 800; color: white;
+    flex-shrink: 0;
+}
+.v1 .mind-label {
+    font-size: 22px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 6px;
+}
+.v1 .mind-value {
+    font-size: 34px; font-weight: 800; color: white;
+}
+.v1 .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 60px;
+}
+.v1 .cta {
+    font-size: 26px; font-weight: 600; color: rgba(255,255,255,0.4);
+}
+.v1 .cta strong { color: white; }
+.v1 .mark {
+    font-size: 22px; font-weight: 700; color: rgba(255,255,255,0.25);
+    letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   V2 — DARK EDITORIAL (dark bg, color accents)
+   ═══════════════════════════════════════════ */
+.v2 {
+    background: #0D0D0D;
+    font-family: 'Inter', sans-serif;
+}
+.v2 .accent-bar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 8px;
+    background: #3B82F6;
+}
+.v2 .content {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    padding: 100px 88px 80px;
+}
+.v2 .symbol-float {
+    position: absolute;
+    top: 100px; right: 80px;
+    font-size: 240px;
+    font-weight: 900;
+    color: #3B82F6;
+    opacity: 0.15;
+    line-height: 1;
+}
+.v2 .top-label {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #3B82F6;
+    margin-bottom: 20px;
+}
+.v2 .student-name {
+    font-size: 32px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 80px;
+}
+.v2 .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.v2 .greek-label {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: #3B82F6;
+    margin-bottom: 24px;
+}
+.v2 .archetype-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 160px;
+    font-weight: 900;
+    color: #FFFFFF;
+    line-height: 0.9;
+    margin-bottom: 40px;
+}
+.v2 .tagline {
+    font-size: 38px;
+    color: #888;
+    line-height: 1.5;
+    max-width: 800px;
+    border-left: 4px solid #3B82F6;
+    padding-left: 32px;
+}
+.v2 .quote-block {
+    margin-top: 80px;
+    padding: 40px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 20px;
+}
+.v2 .quote-text {
+    font-size: 32px;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+.v2 .quote-attr {
+    font-size: 22px;
+    color: #3B82F6;
+    font-weight: 600;
+}
+.v2 .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 60px;
+}
+.v2 .cta {
+    font-size: 24px;
+    color: #555;
+    font-weight: 500;
+}
+.v2 .cta strong { color: #3B82F6; }
+.v2 .logo-mark {
+    font-size: 20px; font-weight: 800;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   V3 — SPLIT MAGAZINE (half color, half white)
+   ═══════════════════════════════════════════ */
+.v3 {
+    background: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+}
+.v3 .color-half {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 55%;
+    background: #3B82F6;
+}
+.v3 .color-half .watermark {
+    position: absolute;
+    bottom: -100px; right: -40px;
+    font-size: 700px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    line-height: 1;
+}
+.v3 .content {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+}
+.v3 .top-section {
+    padding: 80px 88px 60px;
+    flex: 1;
+}
+.v3 .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 80px;
+}
+.v3 .badge {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+}
+.v3 .student-pill {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 26px; font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 100px;
+}
+.v3 .symbol-huge {
+    font-size: 320px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.25);
+    line-height: 1;
+    margin-bottom: 20px;
+}
+.v3 .greek-label {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 16px;
+}
+.v3 .archetype-name-top {
+    font-size: 130px;
+    font-weight: 900;
+    color: white;
+    line-height: 0.95;
+    letter-spacing: -3px;
+}
+
+.v3 .bottom-section {
+    background: white;
+    padding: 60px 88px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+.v3 .tagline-bottom {
+    font-size: 38px;
+    color: #333;
+    line-height: 1.45;
+    font-weight: 500;
+}
+.v3 .mind-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #F5F5F5;
+    border-radius: 16px;
+    padding: 28px 32px;
+}
+.v3 .mind-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: #3B82F6;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 800; color: white;
+    flex-shrink: 0;
+}
+.v3 .mind-pre {
+    font-size: 18px; font-weight: 600; color: #999;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 4px;
+}
+.v3 .mind-name-val {
+    font-size: 28px; font-weight: 800; color: #191919;
+}
+.v3 .quote-row {
+    font-size: 28px; font-style: italic; color: #777;
+    line-height: 1.45;
+}
+.v3 .cta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.v3 .cta-text {
+    font-size: 22px; color: #AAA; font-weight: 500;
+}
+.v3 .cta-text strong { color: #3B82F6; }
+.v3 .logo-text {
+    font-size: 18px; font-weight: 800; color: #DDD;
+    letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   V4 — MINIMAL WHITE (clean, typographic)
+   ═══════════════════════════════════════════ */
+.v4 {
+    background: #FAFAFA;
+    font-family: 'Inter', sans-serif;
+}
+.v4 .content {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    padding: 100px 88px 80px;
+}
+.v4 .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.v4 .badge {
+    font-size: 20px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: #BBB;
+}
+.v4 .student-name {
+    font-size: 28px; font-weight: 600; color: #999;
+}
+.v4 .divider {
+    width: 80px; height: 4px;
+    background: #3B82F6;
+    border-radius: 2px;
+    margin-bottom: 60px;
+}
+.v4 .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.v4 .symbol-line {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+.v4 .symbol-big {
+    font-size: 120px;
+    font-weight: 900;
+    color: #3B82F6;
+    line-height: 1;
+}
+.v4 .greek-small {
+    font-size: 28px; font-weight: 600;
+    color: #BBB;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+.v4 .archetype-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 140px;
+    font-weight: 900;
+    color: #191919;
+    line-height: 0.95;
+    margin-bottom: 36px;
+}
+.v4 .tagline {
+    font-size: 38px;
+    color: #777;
+    line-height: 1.5;
+    max-width: 800px;
+}
+.v4 .traits {
+    margin-top: 80px;
+    display: flex;
+    gap: 24px;
+}
+.v4 .trait-chip {
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 20px 28px;
+}
+.v4 .trait-label {
+    font-size: 18px; font-weight: 600; color: #BBB;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 6px;
+}
+.v4 .trait-value {
+    font-size: 26px; font-weight: 800; color: #191919;
+}
+.v4 .mind-section {
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.v4 .mind-dot {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: #3B82F6;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 800; color: white;
+    flex-shrink: 0;
+}
+.v4 .mind-pre {
+    font-size: 20px; font-weight: 600; color: #BBB;
+    margin-bottom: 2px;
+}
+.v4 .mind-name-val {
+    font-size: 28px; font-weight: 800; color: #191919;
+}
+.v4 .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 60px;
+}
+.v4 .cta {
+    font-size: 22px; color: #BBB; font-weight: 500;
+}
+.v4 .cta strong { color: #3B82F6; }
+.v4 .mark {
+    font-size: 18px; font-weight: 800; color: #DDD;
+    letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   V5 — CHARACTER PORTRAIT (mathematician focus)
+   ═══════════════════════════════════════════ */
+.v5 {
+    background: #121218;
+    font-family: 'Inter', sans-serif;
+}
+.v5 .bg-glow {
+    position: absolute;
+    top: 30%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.v5 .content {
+    position: relative; z-index: 1;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    padding: 80px 88px;
+}
+.v5 .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+.v5 .badge {
+    font-size: 22px; font-weight: 800;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+}
+.v5 .student-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+    font-size: 26px; font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 100px;
+}
+.v5 .portrait-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.v5 .portrait-circle {
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(59,130,246,0.05));
+    border: 2px solid rgba(59,130,246,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+.v5 .portrait-symbol {
+    font-size: 180px;
+    font-weight: 900;
+    color: #3B82F6;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.v5 .portrait-sub {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(59,130,246,0.5);
+}
+.v5 .archetype-name {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: 130px;
+    font-weight: 700;
+    color: white;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+}
+.v5 .tagline {
+    font-size: 36px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.45;
+    max-width: 800px;
+    text-align: center;
+}
+.v5 .mind-card {
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 32px 40px;
+    width: 100%;
+}
+.v5 .mind-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6, #2563EB);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 800; color: white;
+    flex-shrink: 0;
+}
+.v5 .mind-pre {
+    font-size: 20px; font-weight: 600; color: rgba(255,255,255,0.3);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin-bottom: 4px;
+}
+.v5 .mind-name-val {
+    font-size: 32px; font-weight: 800; color: white;
+}
+.v5 .quote-section {
+    margin-top: 48px;
+    text-align: center;
+    width: 100%;
+}
+.v5 .quote-text {
+    font-size: 30px;
+    font-style: italic;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.45;
+    margin-bottom: 12px;
+}
+.v5 .quote-by {
+    font-size: 22px; font-weight: 600;
+    color: rgba(59,130,246,0.5);
+}
+.v5 .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    padding-top: 40px;
+}
+.v5 .cta {
+    font-size: 24px; color: rgba(255,255,255,0.3); font-weight: 500;
+}
+.v5 .cta strong { color: #3B82F6; }
+.v5 .mark {
+    font-size: 20px; font-weight: 700;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.1em; text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<h1>Share Card — 5 Design Directions</h1>
+<p class="subtitle">Showing "Sigma — The Precision" as the example. Pick a direction and I'll apply it to all 8.</p>
+
+<div class="grid">
+
+<!-- ═══ V1: MUTED BOLD ═══ -->
+<div class="card-wrap">
+    <h2>V1 — Muted Bold</h2>
+    <div class="desc">Toned-down background, bigger text. Same spirit as current but calmer and more readable.</div>
+    <div class="frame">
+        <div class="inner v1">
+            <div class="watermark">σ</div>
+            <div class="content">
+                <div class="top-row">
+                    <div class="badge">My Math Archetype</div>
+                    <div class="student-pill">Aarav M.</div>
+                </div>
+                <div class="hero">
+                    <div class="greek-label">Sigma</div>
+                    <div class="archetype-name">The<br>Precision</div>
+                    <div class="tagline">You don't skip steps — and that's why you rarely get things wrong.</div>
+                </div>
+                <div class="mind-card">
+                    <div class="mind-avatar">E</div>
+                    <div>
+                        <div class="mind-label">Thinks like</div>
+                        <div class="mind-value">Euclid</div>
+                    </div>
+                </div>
+                <div class="bottom-row">
+                    <div class="cta">What's yours? <strong>→ collegeready.cuemath.com</strong></div>
+                    <div class="mark">College Ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ V2: DARK EDITORIAL ═══ -->
+<div class="card-wrap">
+    <h2>V2 — Dark Editorial</h2>
+    <div class="desc">Near-black background, color only in accents. Serif title. Premium, magazine feel.</div>
+    <div class="frame">
+        <div class="inner v2">
+            <div class="accent-bar"></div>
+            <div class="symbol-float">σ</div>
+            <div class="content">
+                <div class="top-label">My Math Archetype</div>
+                <div class="student-name">Aarav M.</div>
+                <div class="hero">
+                    <div class="greek-label">SIGMA</div>
+                    <div class="archetype-name">The<br>Precision</div>
+                    <div class="tagline">You don't skip steps — and that's why you rarely get things wrong.</div>
+                </div>
+                <div class="quote-block">
+                    <div class="quote-text">"If I showed my work, I know it's right."</div>
+                    <div class="quote-attr">— Aarav M.</div>
+                </div>
+                <div class="bottom-row">
+                    <div class="cta">What's yours? <strong>→ collegeready.cuemath.com</strong></div>
+                    <div class="logo-mark">College Ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ V3: SPLIT MAGAZINE ═══ -->
+<div class="card-wrap">
+    <h2>V3 — Split Magazine</h2>
+    <div class="desc">Color top half with symbol, white bottom half with details. Clean, modern, high contrast.</div>
+    <div class="frame">
+        <div class="inner v3">
+            <div class="color-half">
+                <div class="watermark">σ</div>
+            </div>
+            <div class="content">
+                <div class="top-section">
+                    <div class="top-row">
+                        <div class="badge">My Math Archetype</div>
+                        <div class="student-pill">Aarav M.</div>
+                    </div>
+                    <div class="greek-label">Sigma</div>
+                    <div class="archetype-name-top">The<br>Precision</div>
+                </div>
+                <div class="bottom-section">
+                    <div class="tagline-bottom">You don't skip steps — and that's why you rarely get things wrong.</div>
+                    <div class="mind-row">
+                        <div class="mind-icon">E</div>
+                        <div>
+                            <div class="mind-pre">Thinks like</div>
+                            <div class="mind-name-val">Euclid</div>
+                        </div>
+                    </div>
+                    <div class="quote-row">"If I showed my work, I know it's right."</div>
+                    <div class="cta-row">
+                        <div class="cta-text">What's yours? <strong>→ collegeready.cuemath.com</strong></div>
+                        <div class="logo-text">College Ready</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ V4: MINIMAL WHITE ═══ -->
+<div class="card-wrap">
+    <h2>V4 — Minimal White</h2>
+    <div class="desc">Clean white, large serif name, color only in symbol and accents. Typographic and elegant.</div>
+    <div class="frame">
+        <div class="inner v4">
+            <div class="content">
+                <div class="top-row">
+                    <div class="badge">My Math Archetype</div>
+                    <div class="student-name">Aarav M.</div>
+                </div>
+                <div class="divider"></div>
+                <div class="hero">
+                    <div class="symbol-line">
+                        <div class="symbol-big">σ</div>
+                        <div class="greek-small">Sigma</div>
+                    </div>
+                    <div class="archetype-name">The<br>Precision</div>
+                    <div class="tagline">You don't skip steps — and that's why you rarely get things wrong.</div>
+                    <div class="mind-section">
+                        <div class="mind-dot">E</div>
+                        <div>
+                            <div class="mind-pre">Thinks like</div>
+                            <div class="mind-name-val">Euclid</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-row">
+                    <div class="cta">What's yours? <strong>→ collegeready.cuemath.com</strong></div>
+                    <div class="mark">College Ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ V5: CHARACTER PORTRAIT ═══ -->
+<div class="card-wrap">
+    <h2>V5 — Portrait</h2>
+    <div class="desc">Dark with centered glowing symbol portrait. Centered layout, modern tech feel.</div>
+    <div class="frame">
+        <div class="inner v5">
+            <div class="bg-glow"></div>
+            <div class="content">
+                <div class="top-row">
+                    <div class="badge">My Math Archetype</div>
+                    <div class="student-pill">Aarav M.</div>
+                </div>
+                <div class="portrait-area">
+                    <div class="portrait-circle">
+                        <div class="portrait-symbol">σ</div>
+                        <div class="portrait-sub">Sigma</div>
+                    </div>
+                    <div class="archetype-name">The<br>Precision</div>
+                    <div class="tagline">You don't skip steps — and that's why you rarely get things wrong.</div>
+                    <div class="mind-card">
+                        <div class="mind-avatar">E</div>
+                        <div>
+                            <div class="mind-pre">Thinks like</div>
+                            <div class="mind-name-val">Euclid</div>
+                        </div>
+                    </div>
+                    <div class="quote-section">
+                        <div class="quote-text">"If I showed my work, I know it's right."</div>
+                        <div class="quote-by">— Aarav M.</div>
+                    </div>
+                </div>
+                <div class="bottom-row">
+                    <div class="cta">What's yours? <strong>→ collegeready.cuemath.com</strong></div>
+                    <div class="mark">College Ready</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>

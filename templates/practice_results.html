@@ -13,7 +13,7 @@
 }
 
 .results-card {
-    max-width: 560px;
+    max-width: 680px;
     width: 100%;
 }
 
@@ -30,9 +30,7 @@
     margin: 0 auto 24px;
 }
 
-.score-ring-wrap svg {
-    transform: rotate(-90deg);
-}
+.score-ring-wrap svg { transform: rotate(-90deg); }
 
 .score-ring-bg {
     fill: none;
@@ -44,15 +42,14 @@
     fill: none;
     stroke-width: 8;
     stroke-linecap: round;
-    stroke-dasharray: 339.3; /* 2π × 54 */
+    stroke-dasharray: 339.3;
     stroke-dashoffset: 339.3;
     transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
 }
 
 .score-center {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
 }
@@ -80,7 +77,6 @@
     color: var(--text-secondary);
     margin-bottom: 12px;
 }
-
 .score-subtitle strong { color: var(--text); }
 
 /* ─── Motivational message ─── */
@@ -91,43 +87,13 @@
     text-align: center;
     border: 1px solid;
 }
+.motive-banner.great { background: rgba(0,210,160,0.08); border-color: rgba(0,210,160,0.3); color: var(--green); }
+.motive-banner.good { background: rgba(255,149,0,0.08); border-color: rgba(255,149,0,0.3); color: var(--orange); }
+.motive-banner.keep-going { background: rgba(108,92,231,0.08); border-color: rgba(108,92,231,0.3); color: var(--accent); }
 
-.motive-banner.great {
-    background: rgba(0, 210, 160, 0.08);
-    border-color: rgba(0, 210, 160, 0.3);
-    color: var(--green);
-}
-
-.motive-banner.good {
-    background: rgba(255, 149, 0, 0.08);
-    border-color: rgba(255, 149, 0, 0.3);
-    color: var(--orange);
-}
-
-.motive-banner.keep-going {
-    background: rgba(108, 92, 231, 0.08);
-    border-color: rgba(108, 92, 231, 0.3);
-    color: var(--accent);
-}
-
-.motive-banner .motive-emoji {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.motive-banner .motive-headline {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
-    margin-bottom: 4px;
-}
-
-.motive-banner .motive-body {
-    font-size: 14px;
-    opacity: 0.85;
-    line-height: 1.5;
-}
+.motive-banner .motive-emoji { font-size: 28px; display: block; margin-bottom: 8px; }
+.motive-banner .motive-headline { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+.motive-banner .motive-body { font-size: 14px; opacity: 0.85; line-height: 1.5; }
 
 /* ─── Stats row ─── */
 .stats-row {
@@ -136,7 +102,6 @@
     gap: 12px;
     margin-bottom: 28px;
 }
-
 .stat-tile {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -144,95 +109,288 @@
     padding: 16px;
     text-align: center;
 }
+.stat-tile .tile-val { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; display: block; margin-bottom: 4px; }
+.stat-tile .tile-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); }
 
-.stat-tile .tile-val {
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    display: block;
-    margin-bottom: 4px;
+/* ─── Section dividers ─── */
+.review-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 40px 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
 }
-
-.stat-tile .tile-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--text-secondary);
+.review-section-header .section-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
 }
+.review-section-header .section-icon.wrong { background: rgba(248,113,113,0.15); color: #F87171; }
+.review-section-header .section-icon.correct { background: rgba(74,222,128,0.15); color: #4ADE80; }
+.review-section-header h3 { font-size: 16px; font-weight: 700; }
+.review-section-header .section-count { font-size: 13px; color: var(--text-secondary); margin-left: auto; }
 
-/* ─── Streak section ─── */
-.streak-section {
+/* ─── Review question card ─── */
+.review-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px 24px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+.review-card.wrong { border-left: 3px solid #F87171; }
+.review-card.correct { border-left: 3px solid #4ADE80; }
+
+.review-card-header {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
 }
+.review-card-header:hover { background: var(--surface-2); }
 
-.streak-emoji {
-    font-size: 40px;
+.result-badge {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
+    font-size: 14px;
+}
+.result-badge.wrong { background: rgba(248,113,113,0.15); color: #F87171; }
+.result-badge.correct { background: rgba(74,222,128,0.15); color: #4ADE80; }
+
+.review-q-text {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
-.streak-text .streak-count {
+.expand-icon {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-secondary);
+    transition: transform 0.2s;
+}
+.review-card.expanded .expand-icon { transform: rotate(180deg); }
+
+/* ─── Expanded content ─── */
+.review-detail {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+}
+.review-card.expanded .review-detail { display: block; }
+
+/* Answer comparison */
+.answer-comparison {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+}
+.answer-box {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.answer-box.yours {
+    background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.2);
+}
+.answer-box.correct-ans {
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.2);
+}
+.answer-box .ab-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 4px;
+    display: block;
+}
+.answer-box.yours .ab-label { color: #F87171; }
+.answer-box.correct-ans .ab-label { color: #4ADE80; }
+.answer-box .ab-value { font-weight: 600; color: var(--text); }
+
+/* Personal analysis callout */
+.personal-analysis {
+    background: rgba(255,186,7,0.08);
+    border: 1px solid rgba(255,186,7,0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.personal-analysis .pa-icon {
     font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 2px;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 1px;
 }
-
-.streak-text .streak-sub {
+.personal-analysis .pa-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+}
+.personal-analysis .pa-text strong {
+    color: #FFBA07;
+    font-weight: 700;
+}
+.personal-analysis .pa-tip {
+    margin-top: 8px;
     font-size: 13px;
     color: var(--text-secondary);
+    font-style: italic;
 }
 
-/* ─── Next session nudge ─── */
+/* ─── Step-by-step walkthrough ─── */
+.steps-section {
+    margin-bottom: 20px;
+}
+.steps-header {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.step-card {
+    position: relative;
+    padding: 14px 16px 14px 44px;
+    margin-bottom: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    opacity: 0.3;
+    transform: translateY(8px);
+    transition: all 0.3s ease;
+}
+.step-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.step-number {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #191919;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.step-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+.step-math {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    margin-bottom: 4px;
+}
+.step-why {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.step-reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+}
+.step-reveal-btn:hover { background: var(--accent); color: #191919; border-color: var(--accent); }
+.step-reveal-btn.done { display: none; }
+
+
+/* ─── Correct question (collapsed) ─── */
+.correct-summary {
+    padding: 0 20px 16px;
+    display: none;
+}
+.review-card.correct.expanded .correct-summary { display: block; }
+
+.correct-answer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(74,222,128,0.06);
+    border-radius: 8px;
+    margin-top: 12px;
+}
+.correct-answer-row .ca-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4ADE80;
+}
+.correct-answer-row .ca-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* ─── Next nudge + CTA ─── */
 .next-nudge {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px 24px;
-    margin-bottom: 32px;
+    margin: 32px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
 }
+.nudge-text .nudge-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); margin-bottom: 4px; }
+.nudge-text .nudge-headline { font-size: 16px; font-weight: 700; }
+.nudge-text .nudge-sub { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
 
-.nudge-text .nudge-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-secondary);
-    margin-bottom: 4px;
-}
-
-.nudge-text .nudge-headline {
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.nudge-text .nudge-sub {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 2px;
-}
-
-/* ─── CTA ─── */
-.cta-area {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
+.cta-area { display: flex; gap: 12px; justify-content: center; }
 
 /* ─── Responsive ─── */
 @media (max-width: 480px) {
-    .stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .stats-row { gap: 8px; }
+    .answer-comparison { flex-direction: column; }
     .next-nudge { flex-direction: column; align-items: flex-start; }
     .cta-area { flex-direction: column; }
     .cta-area .btn { width: 100%; }
@@ -241,13 +399,14 @@
 
 {% block content %}
 {% set score = workout.score | default(0) | int %}
-{% set correct = (score / 100 * 8) | round | int %}
+{% set total_q = review_questions | length if review_questions else 8 %}
+{% set correct_q = correct_count | default(0) %}
 
 {% if score >= 80 %}
     {% set motive_class = 'great' %}
     {% set motive_emoji = '🔥' %}
     {% set motive_headline = 'Crushing it.' %}
-    {% set motive_body = 'You\'re in the top range for this skill. Keep showing up and the SAT score will follow.' %}
+    {% set motive_body = 'You\'re in the top range for this skill. Keep showing up — this is how scores move.' %}
     {% set ring_color = 'var(--green)' %}
     {% set score_color = 'var(--green)' %}
 {% elif score >= 50 %}
@@ -261,13 +420,15 @@
     {% set motive_class = 'keep-going' %}
     {% set motive_emoji = '🧠' %}
     {% set motive_headline = 'Every rep counts.' %}
-    {% set motive_body = 'Hard questions are where the growth happens. You showed up — that\'s what matters. Tomorrow you\'ll be sharper.' %}
+    {% set motive_body = 'Hard questions are where the growth happens. Review the solutions below — understanding your mistakes is the fastest way to improve.' %}
     {% set ring_color = 'var(--accent)' %}
     {% set score_color = 'var(--accent)' %}
 {% endif %}
 
 {% set circumference = 339.3 %}
 {% set offset = circumference - (score / 100 * circumference) %}
+
+{% set option_map = {'A': 'option_a', 'B': 'option_b', 'C': 'option_c', 'D': 'option_d'} %}
 
 <div class="results-wrapper">
     <div class="results-card">
@@ -287,9 +448,8 @@
                     <span class="score-label">Score</span>
                 </div>
             </div>
-
             <div class="score-subtitle">
-                You got <strong>{{ correct }} of 8</strong> correct on <strong>{{ focus_dim.name | default('this workout') }}</strong>
+                You got <strong>{{ correct_q }} of {{ total_q }}</strong> correct on <strong>{{ focus_dim.name | default('this workout') }}</strong>
             </div>
         </div>
 
@@ -303,7 +463,7 @@
         {# ── Stats ── #}
         <div class="stats-row">
             <div class="stat-tile">
-                <span class="tile-val" style="color: {{ score_color }};">{{ correct }}/8</span>
+                <span class="tile-val" style="color: {{ score_color }};">{{ correct_q }}/{{ total_q }}</span>
                 <span class="tile-label">Correct</span>
             </div>
             <div class="stat-tile">
@@ -316,23 +476,157 @@
             </div>
         </div>
 
-        {# ── Streak ── #}
-        {% if student.daily_practice_streak | default(0) | int > 1 %}
-        <div class="streak-section">
-            <div class="streak-emoji">🔥</div>
-            <div class="streak-text">
-                <div class="streak-count">{{ student.daily_practice_streak }} day streak</div>
-                <div class="streak-sub">
-                    {% if student.daily_practice_streak | int >= 7 %}
-                        You've been consistent for a week. That's how scores move.
-                    {% elif student.daily_practice_streak | int >= 3 %}
-                        Three days in a row — momentum is building.
-                    {% else %}
-                        Back-to-back days. Keep the chain going.
+        {# ══════ QUESTION REVIEW ══════ #}
+        {% if review_questions %}
+
+            {# ── Wrong questions (auto-expanded) ── #}
+            {% set wrong_questions = review_questions | selectattr('is_correct', 'equalto', 0) | list %}
+            {% if wrong_questions %}
+            <div class="review-section-header">
+                <div class="section-icon wrong">✕</div>
+                <h3>Let's Learn From These</h3>
+                <span class="section-count">{{ wrong_questions | length }} question{{ 's' if wrong_questions | length != 1 }}</span>
+            </div>
+
+            {% for rq in wrong_questions %}
+            <div class="review-card wrong expanded" data-card-id="w{{ loop.index }}">
+                <div class="review-card-header" onclick="toggleCard(this)">
+                    <div class="result-badge wrong">✕</div>
+                    <div class="review-q-text">{{ rq.question_text }}</div>
+                    <div class="expand-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="review-detail">
+                    {# Answer comparison #}
+                    <div class="answer-comparison">
+                        <div class="answer-box yours">
+                            <span class="ab-label">Your Answer ({{ rq.student_answer }})</span>
+                            <span class="ab-value">
+                                {% if rq.student_answer == 'A' %}{{ rq.option_a }}
+                                {% elif rq.student_answer == 'B' %}{{ rq.option_b }}
+                                {% elif rq.student_answer == 'C' %}{{ rq.option_c }}
+                                {% elif rq.student_answer == 'D' %}{{ rq.option_d }}
+                                {% else %}No answer selected{% endif %}
+                            </span>
+                        </div>
+                        <div class="answer-box correct-ans">
+                            <span class="ab-label">Correct Answer ({{ rq.correct_answer }})</span>
+                            <span class="ab-value">
+                                {% if rq.correct_answer == 'A' %}{{ rq.option_a }}
+                                {% elif rq.correct_answer == 'B' %}{{ rq.option_b }}
+                                {% elif rq.correct_answer == 'C' %}{{ rq.option_c }}
+                                {% elif rq.correct_answer == 'D' %}{{ rq.option_d }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    {# Personal wrong-answer analysis #}
+                    {% if rq.personal_analysis %}
+                    <div class="personal-analysis">
+                        <div class="pa-icon">💡</div>
+                        <div class="pa-text">
+                            <strong>What likely happened:</strong> {{ rq.personal_analysis.mistake if rq.personal_analysis is mapping else rq.personal_analysis }}
+                            {% if rq.personal_analysis is mapping and rq.personal_analysis.tip %}
+                            <div class="pa-tip">Tip: {{ rq.personal_analysis.tip }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {# Step-by-step worked solution #}
+                    {% if rq.worked_steps %}
+                    <div class="steps-section" data-steps="{{ rq.worked_steps | length }}">
+                        <div class="steps-header">Step-by-Step Solution</div>
+                        {% for step in rq.worked_steps %}
+                        <div class="step-card {% if loop.first %}revealed{% endif %}" data-step="{{ loop.index }}">
+                            <div class="step-number">{{ step.step | default(loop.index) }}</div>
+                            <div class="step-title">{{ step.title }}</div>
+                            {% if step.math %}
+                            <div class="step-math">{{ step.math }}</div>
+                            {% endif %}
+                            <div class="step-why">{{ step.why }}</div>
+                        </div>
+                        {% endfor %}
+                        {% if rq.worked_steps | length > 1 %}
+                        <button class="step-reveal-btn" onclick="revealNextStep(this)">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                            Next Step
+                        </button>
+                        {% endif %}
+                    </div>
+                    {% elif rq.explanation %}
+                    <div class="steps-section">
+                        <div class="steps-header">Explanation</div>
+                        <div class="step-card revealed" style="padding-left: 16px;">
+                            <div class="step-why">{{ rq.explanation }}</div>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
-        </div>
+            {% endfor %}
+            {% endif %}
+
+            {# ── Correct questions (collapsed) ── #}
+            {% set correct_questions = review_questions | selectattr('is_correct', 'equalto', 1) | list %}
+            {% if correct_questions %}
+            <div class="review-section-header">
+                <div class="section-icon correct">✓</div>
+                <h3>You Got These Right</h3>
+                <span class="section-count">{{ correct_questions | length }} question{{ 's' if correct_questions | length != 1 }}</span>
+            </div>
+
+            {% for rq in correct_questions %}
+            <div class="review-card correct" data-card-id="c{{ loop.index }}">
+                <div class="review-card-header" onclick="toggleCard(this)">
+                    <div class="result-badge correct">✓</div>
+                    <div class="review-q-text">{{ rq.question_text }}</div>
+                    <div class="expand-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="review-detail">
+                    <div class="correct-answer-row" style="margin-top: 12px;">
+                        <span class="ca-label">Your Answer ({{ rq.student_answer }})</span>
+                        <span class="ca-value">
+                            {% if rq.correct_answer == 'A' %}{{ rq.option_a }}
+                            {% elif rq.correct_answer == 'B' %}{{ rq.option_b }}
+                            {% elif rq.correct_answer == 'C' %}{{ rq.option_c }}
+                            {% elif rq.correct_answer == 'D' %}{{ rq.option_d }}
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    {% if rq.worked_steps %}
+                    <div class="steps-section" style="margin-top: 16px;">
+                        <div class="steps-header">Solution Walkthrough</div>
+                        {% for step in rq.worked_steps %}
+                        <div class="step-card revealed" data-step="{{ loop.index }}">
+                            <div class="step-number">{{ step.step | default(loop.index) }}</div>
+                            <div class="step-title">{{ step.title }}</div>
+                            {% if step.math %}
+                            <div class="step-math">{{ step.math }}</div>
+                            {% endif %}
+                            <div class="step-why">{{ step.why }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
         {% endif %}
 
         {# ── Next session nudge ── #}
@@ -362,14 +656,45 @@
 
 {% block scripts %}
 <script>
-    window.addEventListener('load', function () {
-        var ring = document.getElementById('scoreRing');
-        if (ring) {
-            var offset = parseFloat(ring.getAttribute('data-offset'));
-            setTimeout(function () {
-                ring.style.strokeDashoffset = offset;
-            }, 200);
+(function() {
+    // Score ring animation
+    var ring = document.getElementById('scoreRing');
+    if (ring) {
+        var offset = parseFloat(ring.getAttribute('data-offset'));
+        setTimeout(function() { ring.style.strokeDashoffset = offset; }, 200);
+    }
+
+    // Toggle card expand/collapse
+    window.toggleCard = function(header) {
+        var card = header.closest('.review-card');
+        card.classList.toggle('expanded');
+    };
+
+    // Step-by-step reveal
+    window.revealNextStep = function(btn) {
+        var section = btn.closest('.steps-section');
+        var hidden = section.querySelectorAll('.step-card:not(.revealed)');
+        if (hidden.length > 0) {
+            hidden[0].classList.add('revealed');
+            if (hidden.length <= 1) {
+                btn.classList.add('done');
+            }
         }
-    });
+    };
+
+    // Auto-reveal steps on wrong questions with a staggered delay
+    setTimeout(function() {
+        document.querySelectorAll('.review-card.wrong.expanded .steps-section').forEach(function(section) {
+            var steps = section.querySelectorAll('.step-card:not(.revealed)');
+            steps.forEach(function(step, i) {
+                setTimeout(function() { step.classList.add('revealed'); }, (i + 1) * 600);
+            });
+            var btn = section.querySelector('.step-reveal-btn');
+            if (btn) {
+                setTimeout(function() { btn.classList.add('done'); }, (steps.length + 1) * 600);
+            }
+        });
+    }, 800);
+})();
 </script>
 {% endblock %}
