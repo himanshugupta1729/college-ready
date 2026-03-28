@@ -1078,8 +1078,8 @@ def login_required(f):
 def is_middle_school_student(student):
     """Check if a student is middle school (grade 8 or below)."""
     try:
-        return int(student.get('grade', 9) or 9) <= 8
-    except (ValueError, TypeError):
+        return int(student['grade'] or 9) <= 8
+    except (ValueError, TypeError, KeyError):
         return False
 
 
