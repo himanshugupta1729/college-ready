@@ -2162,7 +2162,6 @@ def student_login():
         # Check if test is enabled for this event
         event = conn.execute("SELECT * FROM events WHERE event_code = ?", (event_code,)).fetchone()
         if event and not event['test_enabled']:
-            flash('The test has not started yet. Please wait for the facilitator.', 'info')
             return render_template('student_login.html', event_code=event_code, waiting=True)
 
         session['student_id'] = student['id']
