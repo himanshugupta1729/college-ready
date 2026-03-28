@@ -1274,80 +1274,118 @@
     <h2>The 8 Archetypes</h2>
     <p style="margin-bottom:24px;">Every student gets one of 8 identities — derived from crossing their dominant FUAR dimension with their GRIC mindset mode. The archetype is the thing students screenshot, share, and remember. Below are the live share card designs as they appear on the platform.</p>
 
-    <div class="archetype-iframe-grid">
+    <style>
+      .arch-card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .arch-mini-card {
+        background: #121218; border-radius: 16px; padding: 24px 20px; text-align: center;
+        color: white; font-family: 'Inter', sans-serif; position: relative; overflow: hidden;
+      }
+      .arch-mini-card .glow {
+        position: absolute; top: 30%; left: 50%; transform: translate(-50%,-50%);
+        width: 120px; height: 120px; border-radius: 50%; opacity: 0.15; filter: blur(30px);
+      }
+      .arch-mini-symbol {
+        font-size: 48px; font-weight: 900; margin-bottom: 4px; position: relative;
+      }
+      .arch-mini-greek {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+        opacity: 0.4; margin-bottom: 16px;
+      }
+      .arch-mini-name {
+        font-family: 'Playfair Display', 'Inter', serif; font-size: 22px; font-weight: 900;
+        line-height: 1.1; margin-bottom: 8px; position: relative;
+      }
+      .arch-mini-tagline { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.4; position: relative; }
+      .arch-mini-math { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 12px; position: relative; }
+      .arch-mini-math span { font-weight: 700; }
+      .arch-card-labels { text-align: center; margin-top: 8px; }
+      .arch-card-labels .hs { font-size: 12px; font-weight: 700; color: var(--dark); }
+      .arch-card-labels .ms { font-size: 11px; color: var(--muted); }
+      @media print { .arch-card-grid { grid-template-columns: repeat(4, 1fr); } }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 
-      <!-- Sigma -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/sigma" style="width:200px;height:355px;border:none;border-radius:12px;" title="Sigma share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Sigma · σ</div>
-          <div class="archetype-iframe-name">The Perfectionist</div>
+    <div class="arch-card-grid">
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#3B82F6"></div>
+          <div class="arch-mini-symbol" style="color:#3B82F6">σ</div>
+          <div class="arch-mini-greek">Sigma</div>
+          <div class="arch-mini-name">The Perfectionist</div>
+          <div class="arch-mini-tagline">You don't skip steps, and that's why you rarely get things wrong.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#3B82F6">Euclid</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Perfectionist</div><div class="ms">MS: The Machine</div></div>
       </div>
-
-      <!-- Delta -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/delta" style="width:200px;height:355px;border:none;border-radius:12px;" title="Delta share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Delta · δ</div>
-          <div class="archetype-iframe-name">The Relentless</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#EF4444"></div>
+          <div class="arch-mini-symbol" style="color:#EF4444">δ</div>
+          <div class="arch-mini-greek">Delta</div>
+          <div class="arch-mini-name">The Relentless</div>
+          <div class="arch-mini-tagline">You outwork everyone, and you know it.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#EF4444">Ramanujan</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Relentless</div><div class="ms">MS: The Relentless</div></div>
       </div>
-
-      <!-- Pi -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/pi" style="width:200px;height:355px;border:none;border-radius:12px;" title="Pi share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Pi · π</div>
-          <div class="archetype-iframe-name">The Purist</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#2563EB"></div>
+          <div class="arch-mini-symbol" style="color:#2563EB">π</div>
+          <div class="arch-mini-greek">Pi</div>
+          <div class="arch-mini-name">The Purist</div>
+          <div class="arch-mini-tagline">You don't memorize. You understand.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#2563EB">Euler</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Purist</div><div class="ms">MS: The Deep Thinker</div></div>
       </div>
-
-      <!-- Theta -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/theta" style="width:200px;height:355px;border:none;border-radius:12px;" title="Theta share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Theta · θ</div>
-          <div class="archetype-iframe-name">The Quiet Genius</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#8B5CF6"></div>
+          <div class="arch-mini-symbol" style="color:#8B5CF6">θ</div>
+          <div class="arch-mini-greek">Theta</div>
+          <div class="arch-mini-name">The Quiet Genius</div>
+          <div class="arch-mini-tagline">You see things in math that nobody else sees.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#8B5CF6">Gauss</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Quiet Genius</div><div class="ms">MS: The Quiet Genius</div></div>
       </div>
-
-      <!-- Phi -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/phi" style="width:200px;height:355px;border:none;border-radius:12px;" title="Phi share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Phi · φ</div>
-          <div class="archetype-iframe-name">The Natural</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#F59E0B"></div>
+          <div class="arch-mini-symbol" style="color:#F59E0B">φ</div>
+          <div class="arch-mini-greek">Phi</div>
+          <div class="arch-mini-name">The Natural</div>
+          <div class="arch-mini-tagline">You see the math hiding in everything.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#F59E0B">da Vinci</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Natural</div><div class="ms">MS: The Natural</div></div>
       </div>
-
-      <!-- Lambda -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/lambda" style="width:200px;height:355px;border:none;border-radius:12px;" title="Lambda share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Lambda · λ</div>
-          <div class="archetype-iframe-name">The Dormant Force</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#6366F1"></div>
+          <div class="arch-mini-symbol" style="color:#6366F1">λ</div>
+          <div class="arch-mini-greek">Lambda</div>
+          <div class="arch-mini-name">The Dormant Force</div>
+          <div class="arch-mini-tagline">You're waiting for math to earn your attention.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#6366F1">Mirzakhani</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Dormant Force</div><div class="ms">MS: The Undercover</div></div>
       </div>
-
-      <!-- Alpha -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/alpha" style="width:200px;height:355px;border:none;border-radius:12px;" title="Alpha share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Alpha · α</div>
-          <div class="archetype-iframe-name">The Inventor</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#10B981"></div>
+          <div class="arch-mini-symbol" style="color:#10B981">α</div>
+          <div class="arch-mini-greek">Alpha</div>
+          <div class="arch-mini-name">The Inventor</div>
+          <div class="arch-mini-tagline">You don't follow methods. You invent them.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#10B981">Newton</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Inventor</div><div class="ms">MS: The Builder</div></div>
       </div>
-
-      <!-- Gamma -->
-      <div class="archetype-iframe-wrapper no-break">
-        <iframe src="https://college-ready.onrender.com/share/preview/gamma" style="width:200px;height:355px;border:none;border-radius:12px;" title="Gamma share card"></iframe>
-        <div class="archetype-iframe-label">
-          <div class="archetype-iframe-greek">Gamma · γ</div>
-          <div class="archetype-iframe-name">The Maverick</div>
+      <div>
+        <div class="arch-mini-card"><div class="glow" style="background:#EC4899"></div>
+          <div class="arch-mini-symbol" style="color:#EC4899">γ</div>
+          <div class="arch-mini-greek">Gamma</div>
+          <div class="arch-mini-name">The Maverick</div>
+          <div class="arch-mini-tagline">Your best work is brilliant. Your worst work is... interesting.</div>
+          <div class="arch-mini-math">Thinks like <span style="color:#EC4899">Turing</span></div>
         </div>
+        <div class="arch-card-labels"><div class="hs">HS: The Maverick</div><div class="ms">MS: The Wildcard</div></div>
       </div>
-
     </div>
 
     <!-- Archetype matrix -->
@@ -1737,7 +1775,13 @@
   <div class="section">
     <div class="section-label">Section 07</div>
     <h2>Report Snapshots</h2>
-    <p style="margin-bottom: 24px;">Every student gets five outputs automatically — no staff intervention required. Here's what each looks like.</p>
+    <p style="margin-bottom: 16px;">Every student gets five outputs automatically — no staff intervention required. Click the links below to see live samples.</p>
+    <p style="margin-bottom: 24px; padding: 12px 16px; background: var(--yellow-light); border-radius: 8px; font-size: 13px;">
+      <strong>Live preview:</strong>
+      <a href="https://college-ready.onrender.com/share/preview/sigma" target="_blank">Share Card</a> ·
+      <a href="https://college-ready.onrender.com/register/DEMO-2026" target="_blank">Registration</a> ·
+      <a href="https://college-ready.onrender.com/foundation" target="_blank">MS Landing</a>
+    </p>
 
     <div class="report-snapshots-grid">
 
