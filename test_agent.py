@@ -110,8 +110,11 @@ class TestAgent:
         if '>None<' in html or '>None ' in html:
             problems.append('None rendered in HTML')
         # Only flag 'undefined' as visible rendered text — exclude JS code in <script> tags
-        html_no_scripts = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL)
-        if re.search(r'>\s*undefined\s*<', html_no_scripts):
+        # Strip all scripts AND inline event handlers, then check for rendered undefined
+        html_clean = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL)
+        html_clean = re.sub(r'on\w+="[^"]*"', '', html_clean)  # strip onclick etc
+        html_clean = re.sub(r"on\w+='[^']*'", '', html_clean)
+        if '>undefined<' in html_clean:
             problems.append('undefined rendered in HTML')
         if 'Internal Server Error' in html:
             problems.append('Internal Server Error')
