@@ -18,7 +18,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 from flask import (Flask, render_template, request, redirect, url_for,
-                   session, flash, jsonify, g, Response, make_response)
+                   session, flash, jsonify, g, Response, make_response, send_file)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'college-ready-dev-key-change-in-prod')
@@ -2130,6 +2130,12 @@ def select_demo_questions(track='sat'):
 def showcase():
     """Design showcase — all screens on one page for review."""
     return render_template('showcase.html')
+
+
+@app.route('/overview')
+def product_overview():
+    """Product overview — hosted HTML version for sharing."""
+    return send_file('product-overview.html')
 
 
 @app.route('/')

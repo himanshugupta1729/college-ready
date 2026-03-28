@@ -905,22 +905,98 @@
 
     /* ===== PRINT ===== */
     @media print {
-      body { font-size: 14px; }
-      .page { padding: 0 32px; }
-      .cover { padding: 60px 0 56px; }
-      .section { padding: 48px 0; }
-
-      .page-break { page-break-before: always; }
-      .no-break { page-break-inside: avoid; }
-
       @page {
-        margin: 0.6in 0.5in;
+        margin: 18mm 16mm;
         size: letter;
+      }
+
+      body { font-size: 13px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page { padding: 0 24px; }
+      .cover { padding: 48px 0 40px; }
+      .section { padding: 36px 0; border-bottom: none; }
+
+      /* Page break controls */
+      .page-break { page-break-before: always; break-before: page; }
+      .no-break { page-break-inside: avoid; break-inside: avoid; }
+
+      /* ALL major containers must not split */
+      .stat-row,
+      .stat-chip,
+      .product-card,
+      .product-cards,
+      .flow-step,
+      .flow-steps,
+      .fuar-grid,
+      .fuar-card,
+      .compare-table,
+      .qb-table,
+      .report-snapshots-grid,
+      .report-snapshot-card,
+      .test-section,
+      .url-block,
+      .tech-grid,
+      .tech-item,
+      .callout,
+      .logic-matrix,
+      .roadmap-table,
+      .admin-flow,
+      .footer,
+      .archetype-iframe-grid,
+      .archetype-iframe-wrapper,
+      .arch-card-grid,
+      .arch-mini-card {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Table rows must not split */
+      table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Archetype card rows — keep each row of cards together */
+      .archetype-row {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Report snapshot cards grid */
+      .report-output-grid {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* GRIC + Mindset section */
+      .gric-mindset-grid {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* MST diagram */
+      .mst-diagram {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Question bank summary chips */
+      .qb-summary-row {
+        page-break-inside: avoid;
+        break-inside: avoid;
       }
 
       .archetype-iframe-grid { grid-template-columns: repeat(4, 1fr); }
       .fuar-grid { grid-template-columns: repeat(4, 1fr); }
       .archetype-iframe-wrapper iframe { height: 200px; }
+
+      /* Reduce archetype card sizes for print */
+      .arch-mini-card { font-size: 11px; }
+
+      /* Prevent widows/orphans */
+      p, li { orphans: 3; widows: 3; }
+
+      /* Hide link underlines in print */
+      a { text-decoration: none !important; }
     }
 
     /* ===== RESPONSIVE ===== */
@@ -1305,7 +1381,7 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+    <div class="archetype-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px;">
       <div style="text-align:center;">
         <div style="background:#121218;border-radius:16px;padding:28px 20px;color:white;font-family:'Inter',sans-serif;aspect-ratio:9/16;display:flex;flex-direction:column;overflow:hidden;position:relative;">
           <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:#3B82F6;border-radius:50%;filter:blur(40px);opacity:0.12;"></div>
@@ -1369,6 +1445,8 @@
         <div style="margin-top:8px;font-size:12px;font-weight:700;">HS: The Purist</div>
         <div style="font-size:11px;color:#6B7280;">MS: The Deep Thinker</div>
       </div>
+    </div>
+    <div class="archetype-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px;">
       <div style="text-align:center;">
         <div style="background:#121218;border-radius:16px;padding:28px 20px;color:white;font-family:'Inter',sans-serif;aspect-ratio:9/16;display:flex;flex-direction:column;overflow:hidden;position:relative;">
           <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:#8B5CF6;border-radius:50%;filter:blur(40px);opacity:0.12;"></div>
@@ -1432,6 +1510,8 @@
         <div style="margin-top:8px;font-size:12px;font-weight:700;">HS: The Dormant Force</div>
         <div style="font-size:11px;color:#6B7280;">MS: The Undercover</div>
       </div>
+    </div>
+    <div class="archetype-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
       <div style="text-align:center;">
         <div style="background:#121218;border-radius:16px;padding:28px 20px;color:white;font-family:'Inter',sans-serif;aspect-ratio:9/16;display:flex;flex-direction:column;overflow:hidden;position:relative;">
           <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:120px;height:120px;background:#10B981;border-radius:50%;filter:blur(40px);opacity:0.12;"></div>
@@ -1630,7 +1710,7 @@
     <h3 style="margin-top: 40px; margin-bottom: 12px;">GRIC Mindset Layer</h3>
     <p style="margin-bottom: 20px;">After the diagnostic, students answer 12 questions measuring Growth, Relevance, Interest, and Confidence. Dominant dimensions determine mindset mode.</p>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    <div class="gric-mindset-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <div style="border: 1px solid var(--border); border-radius: var(--radius); padding: 24px;">
         <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px;">GRIC Dimensions</div>
         <div style="display: flex; flex-direction: column; gap: 10px;">
@@ -1671,7 +1751,7 @@
     <!-- Adaptive MST -->
     <h3 style="margin-top: 40px; margin-bottom: 12px;">Adaptive MST — Multi-Stage Testing</h3>
 
-    <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; align-items: center; gap: 0; flex-wrap: wrap;">
+    <div class="mst-diagram" style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; align-items: center; gap: 0; flex-wrap: wrap;">
       <div style="flex: 1; min-width: 160px; text-align: center; padding: 12px;">
         <div style="background: var(--yellow); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 8px;">
           <div style="font-size: 1.4rem; font-weight: 800; color: var(--dark);">12</div>
@@ -1838,7 +1918,7 @@
       </tbody>
     </table>
 
-    <div style="margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+    <div class="qb-summary-row" style="margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
       <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; text-align: center;">
         <div style="font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px;">Per Question — 4 Tags</div>
         <div style="font-size: 0.8rem; color: var(--mid);">Track · FUAR Dimension · Difficulty (1–5) · Topic</div>
@@ -1864,39 +1944,43 @@
     <h2>Report Snapshots</h2>
     <p style="margin-bottom: 24px;">Every student gets five outputs automatically — no staff intervention required.</p>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
-      <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+    <div class="report-output-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
+      <div class="no-break" style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
         <div style="font-size: 24px; margin-bottom: 8px;">🎭</div>
         <div style="font-weight: 700; margin-bottom: 4px;">Archetype Reveal</div>
         <div style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px;">Full-screen dark reveal with Greek symbol, archetype name, superpower, kryptonite, mathematician pairing, "This Is You" scenarios</div>
         <a href="https://college-ready.onrender.com/sample/reveal" target="_blank" style="font-size: 12px; color: var(--yellow); font-weight: 600;">See sample archetype reveal →</a>
       </div>
-      <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+      <div class="no-break" style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
         <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
         <div style="font-weight: 700; margin-bottom: 4px;">Student Report</div>
         <div style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px;">Dark theme. FUAR scores with visual bars, topic-level heatmap (clickable), school percentile, score estimate (SAT) or proficiency level (MS)</div>
         <a href="https://college-ready.onrender.com/sample/report" target="_blank" style="font-size: 12px; color: var(--yellow); font-weight: 600;">See sample report →</a>
       </div>
-      <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+      <div class="no-break" style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
         <div style="font-size: 24px; margin-bottom: 8px;">👨‍👩‍👧</div>
         <div style="font-weight: 700; margin-bottom: 4px;">Parent Report</div>
         <div style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px;">Light theme. Proficiency overview, FUAR breakdown in parent-friendly language, topic dot grid, "About Math Learning" section, next steps</div>
         <a href="https://college-ready.onrender.com/sample/parent-report" target="_blank" style="font-size: 12px; color: var(--yellow); font-weight: 600;">See sample parent report →</a>
       </div>
-      <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+      <div class="no-break" style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
         <div style="font-size: 24px; margin-bottom: 8px;">📱</div>
         <div style="font-weight: 700; margin-bottom: 4px;">Share Card</div>
         <div style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px;">Dark card with glowing symbol, archetype name (Playfair Display), mathematician pairing + quote. Save Image or Share via native share sheet</div>
         <a href="https://college-ready.onrender.com/share/preview/sigma" target="_blank" style="font-size: 12px; color: var(--yellow); font-weight: 600;">See sample card →</a>
       </div>
-      <div style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px; grid-column: 1 / -1;">
+      <div class="no-break" style="background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px; grid-column: 1 / -1;">
         <div style="font-size: 24px; margin-bottom: 8px;">🏠</div>
         <div style="font-weight: 700; margin-bottom: 4px;">Dashboard</div>
         <div style="font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 12px;">Student hub: quick links (My Report, My Archetype, Practice), 4-week growth plan with week timeline, FUAR profile bars, today's workout CTA, streak counter, recent workouts (clickable for review)</div>
         <span style="font-size: 12px; color: var(--muted);">Primary home after diagnostic completion</span><br><a href="https://college-ready.onrender.com/register/DEMO-2026" target="_blank" style="font-size: 12px; color: var(--yellow); font-weight: 600;">Try the demo to see dashboard →</a>
       </div>
     </div>
+  </div>
+</div>
 
+<!-- ============================================================ -->
+<!-- SECTION 8: HOW TO TEST -->
 <!-- ============================================================ -->
 <div class="page page-break">
   <div class="section">
