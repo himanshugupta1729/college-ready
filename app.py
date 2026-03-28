@@ -164,7 +164,7 @@ GRIC_SECTIONS = [
 
 ARCHETYPES = {
     'sigma': {
-        'name': 'The Precision', 'symbol': 'σ', 'greek_name': 'Sigma',
+        'name': 'The Perfectionist', 'symbol': 'σ', 'greek_name': 'Sigma',
         'tagline': 'You don\'t skip steps — and that\'s why you rarely get things wrong.',
         'signature': 'If I showed my work, I know it\'s right.',
         'fuar': 'F', 'mindset': 'engaged',
@@ -191,6 +191,7 @@ ARCHETYPES = {
             ('Katherine Johnson', 'Calculated NASA trajectories by hand with zero margin for error.'),
             ('Sal Khan', 'Built Khan Academy by breaking every concept into methodical, sequential lessons.'),
         ],
+        'mathematician_quote': 'There is no royal road to geometry.',
     },
     'delta': {
         'name': 'The Relentless', 'symbol': 'δ', 'greek_name': 'Delta',
@@ -220,6 +221,7 @@ ARCHETYPES = {
             ('Kobe Bryant', 'Mamba Mentality — relentless practice is exactly how you approach math.'),
             ('Maryam Mirzakhani', 'Spent years grinding on problems until they cracked. Won the Fields Medal.'),
         ],
+        'mathematician_quote': 'An equation means nothing to me unless it expresses a thought of God.',
     },
     'pi': {
         'name': 'The Purist', 'symbol': 'π', 'greek_name': 'Pi',
@@ -249,6 +251,7 @@ ARCHETYPES = {
             ('Emmy Noether', 'Saw the deep structure beneath algebra and physics that nobody else could see.'),
             ('Grant Sanderson', '3Blue1Brown — making math deeply understandable, not just correct.'),
         ],
+        'mathematician_quote': 'Nothing takes place in the world whose meaning is not that of some maximum or minimum.',
     },
     'theta': {
         'name': 'The Quiet Genius', 'symbol': 'θ', 'greek_name': 'Theta',
@@ -278,6 +281,7 @@ ARCHETYPES = {
             ('Ada Lovelace', 'Saw the potential of computing decades before anyone else.'),
             ('Terence Tao', 'Known for seeing unexpected angles in problems, connecting areas of math nobody thought were related.'),
         ],
+        'mathematician_quote': 'It is not knowledge, but the act of learning, that grants the greatest enjoyment.',
     },
     'phi': {
         'name': 'The Natural', 'symbol': 'φ', 'greek_name': 'Phi',
@@ -307,6 +311,7 @@ ARCHETYPES = {
             ('Nate Silver', 'Turned pattern recognition into one of the most influential data platforms.'),
             ('Elon Musk', 'Thinks in applied mathematical systems, from physics to financial modeling.'),
         ],
+        'mathematician_quote': 'Simplicity is the ultimate sophistication.',
     },
     'lambda': {
         'name': 'The Dormant Force', 'symbol': 'λ', 'greek_name': 'Lambda',
@@ -336,9 +341,10 @@ ARCHETYPES = {
             ('Jay-Z', 'Built a billion-dollar empire using applied math — margins, scale, compound growth.'),
             ('Simone Biles', 'Total mastery when math connects to her craft — physics, angles, spatial reasoning in gymnastics.'),
         ],
+        'mathematician_quote': 'The beauty of mathematics only shows itself to more patient followers.',
     },
     'alpha': {
-        'name': 'The First Principle', 'symbol': 'α', 'greek_name': 'Alpha',
+        'name': 'The Inventor', 'symbol': 'α', 'greek_name': 'Alpha',
         'tagline': 'You don\'t follow methods — you invent them.',
         'signature': 'There\'s always another way to solve it — and I\'ll find it.',
         'fuar': 'R', 'mindset': 'engaged',
@@ -365,6 +371,7 @@ ARCHETYPES = {
             ('John von Neumann', 'Invented game theory, contributed to quantum mechanics, helped design the first computers.'),
             ('Maryam Mirzakhani', 'Drew pictures, built new methods, won the Fields Medal with pure creativity.'),
         ],
+        'mathematician_quote': 'If I have seen further, it is by standing on the shoulders of giants.',
     },
     'gamma': {
         'name': 'The Maverick', 'symbol': 'γ', 'greek_name': 'Gamma',
@@ -394,6 +401,7 @@ ARCHETYPES = {
             ('Nikola Tesla', 'Brilliant, creative, saw solutions others couldn\'t imagine, struggled with systematic execution.'),
             ('Kanye West', 'Wild creative genius with inconsistent follow-through. When it hits, it\'s undeniable.'),
         ],
+        'mathematician_quote': 'Those who can imagine anything can create the impossible.',
     },
 }
 
