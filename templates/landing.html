@@ -681,21 +681,24 @@
                 <div class="track-tile-icon track-tile-icon--sat">6</div>
                 <div class="track-tile-label">
                     <strong>Grade 6 Math</strong>
-                    <span>Number &amp; operations</span>
                 </div>
             </div>
             <div class="track-tile">
                 <div class="track-tile-icon track-tile-icon--calc">7</div>
                 <div class="track-tile-label">
                     <strong>Grade 7 Math</strong>
-                    <span>Ratios &amp; algebra</span>
                 </div>
             </div>
             <div class="track-tile">
                 <div class="track-tile-icon track-tile-icon--stats">8</div>
                 <div class="track-tile-label">
                     <strong>Grade 8 Math</strong>
-                    <span>Algebra &amp; functions</span>
+                </div>
+            </div>
+            <div class="track-tile">
+                <div class="track-tile-icon track-tile-icon--precalc">+</div>
+                <div class="track-tile-label">
+                    <strong>Accelerated</strong>
                 </div>
             </div>
         </div>
@@ -755,7 +758,7 @@
 <!-- ═══════════════════════════════════ ARCHETYPES ═══════════════════════════════════ -->
 <section class="archetype-section">
     <div class="section-header reveal">
-        <div class="section-tag">The 16 Archetypes</div>
+        <div class="section-tag">The 8 Archetypes</div>
         <h2 class="section-title">Every math student has a type.</h2>
         <p class="section-desc">Your archetype reveals your natural strengths, your blind spots, and the fastest path to {% if is_middle_school %}where you want to go{% else %}the score you want{% endif %}.</p>
     </div>
@@ -791,7 +794,7 @@
     </div>
 
     <div class="archetype-tease reveal">
-        <p>These are just 4 of <strong>16 archetypes</strong>. Take the diagnostic to discover yours.</p>
+        <p>These are just 4 of <strong>8 archetypes</strong>. Take the diagnostic to discover yours.</p>
     </div>
 </section>
 
@@ -842,7 +845,7 @@
     <div class="container-wide">
         <div class="section-header reveal">
             <div class="section-tag">How It Works</div>
-            <h2 class="section-title">Three steps. One hour. Total clarity.</h2>
+            <h2 class="section-title">Three steps. {% if is_middle_school %}45 minutes.{% else %}One hour.{% endif %} Total clarity.</h2>
         </div>
     </div>
 
@@ -873,13 +876,13 @@
         <div class="step-item reveal">
             <div class="step-number">3</div>
             <div class="step-body">
-                <h3>Receive your full report</h3>
+                <h3>See your full report + personalized plan</h3>
                 {% if is_middle_school %}
-                <p>A detailed breakdown sent to you and your parent — skill-level analysis, gap map, and a personalized practice plan.</p>
+                <p>Instantly see your detailed breakdown, skill-level analysis, gap map, and a week-by-week practice plan built just for you.</p>
                 {% else %}
-                <p>A detailed breakdown sent to you and your parent — score estimates, gap analysis, and a personalized study plan.</p>
+                <p>Instantly see your detailed breakdown, score estimates, gap analysis, and a personalized study plan built just for you.</p>
                 {% endif %}
-                <span class="step-time">48 hours</span>
+                <span class="step-time">Instant</span>
             </div>
         </div>
     </div>
@@ -889,7 +892,7 @@
 <section class="cta-section">
     <div class="container cta-content reveal">
         <h2>Stop guessing.<br><span class="cta-highlight">Start knowing.</span></h2>
-        <p>60 minutes from now, you'll know exactly where you stand — and what to do next.</p>
+        <p>{% if is_middle_school %}45{% else %}60{% endif %} minutes from now, you'll know exactly where you stand and what to do next.</p>
         <a href="/login" class="btn-hero">
             Log In to Your Event
             <span class="btn-hero-arrow">&rarr;</span>
@@ -900,7 +903,7 @@
 <!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
 <div class="footer-section">
     <div class="container">
-        <p>Powered by <img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath" style="height: 16px; vertical-align: middle;"> &nbsp;&middot;&nbsp; Built on 8 years of math learning research</p>
+        <p>Powered by <img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath" style="height: 16px; vertical-align: middle;"></p>
     </div>
 </div>
 {% endblock %}

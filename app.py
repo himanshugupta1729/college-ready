@@ -2134,8 +2134,14 @@ def showcase():
 
 @app.route('/')
 def landing():
-    """Landing page — event day login for students."""
-    return render_template('landing.html')
+    """Landing page — College Ready Night (high school)."""
+    return render_template('landing.html', is_middle_school=False)
+
+
+@app.route('/foundation')
+def foundation_landing():
+    """Landing page — Foundation Math Night (middle school)."""
+    return render_template('landing.html', is_middle_school=True)
 
 
 @app.route('/login', methods=['GET', 'POST'])
