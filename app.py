@@ -25,6 +25,24 @@ app.secret_key = os.environ.get('SECRET_KEY', 'college-ready-dev-key-change-in-p
 
 DB_PATH = os.environ.get('DATABASE_PATH', 'college_ready.db')
 
+
+@app.context_processor
+def inject_middle_school_flag():
+    """Auto-inject is_middle_school into all templates based on session."""
+    if 'student_id' in session:
+        try:
+            conn = get_db()
+            student = conn.execute("SELECT grade FROM students WHERE id = ?",
+                                   (session['student_id'],)).fetchone()
+            if student:
+                grade = int(student['grade'] or 9)
+                is_ms = grade <= 8
+                event_name = 'Foundation Math Night' if is_ms else 'College Ready Night'
+                return {'is_middle_school': is_ms, 'event_display_name': event_name}
+        except Exception:
+            pass
+    return {'is_middle_school': False, 'event_display_name': 'College Ready Night'}
+
 # ---------- FUAR + SAT Domain Mappings ----------
 
 FUAR_DIMENSIONS = {
@@ -192,6 +210,16 @@ ARCHETYPES = {
             ('Sal Khan', 'Built Khan Academy by breaking every concept into methodical, sequential lessons.'),
         ],
         'mathematician_quote': 'There is no royal road to geometry.',
+        # Middle school packaging
+        'ms_name': 'The Machine',
+        'ms_tagline': 'You don\'t skip steps, and that\'s why you almost never get things wrong.',
+        'ms_superpower': 'When everyone else rushes through a test and makes careless mistakes, you execute cleanly. Your step-by-step process means you catch errors before they happen.',
+        'ms_growth': 'Your next level-up is learning to try things even when you\'re not sure of the steps. The best math students can work without a roadmap. Building comfort with "let me just try this" will make you unstoppable.',
+        'ms_this_is_you': [
+            'You\'ve rewritten a homework problem from scratch because you skipped one step and it didn\'t feel right.',
+            'When the teacher shows a shortcut, you need to understand WHY it works before you\'ll use it.',
+            'People say you\'re "slow" at math, but you almost never get things wrong on tests.',
+        ],
     },
     'delta': {
         'name': 'The Relentless', 'symbol': 'δ', 'greek_name': 'Delta',
@@ -222,6 +250,15 @@ ARCHETYPES = {
             ('Maryam Mirzakhani', 'Spent years grinding on problems until they cracked. Won the Fields Medal.'),
         ],
         'mathematician_quote': 'An equation means nothing to me unless it expresses a thought of God.',
+        'ms_name': 'The Relentless',
+        'ms_tagline': 'You outwork everyone, and you know it.',
+        'ms_superpower': 'You don\'t have "good days" and "bad days" like other students. Your preparation is so thorough that even your worst day is better than most people\'s best.',
+        'ms_growth': 'Your next level-up is flexibility. You\'ve mastered the grind. Now learn to step back and ask "is there a smarter way?" The students who ace every class aren\'t just hardworking, they\'re strategically hardworking.',
+        'ms_this_is_you': [
+            'You\'ve done extra practice problems that weren\'t even assigned, just because you weren\'t confident enough yet.',
+            'When you get a problem wrong, you don\'t just check the answer. You redo the entire thing until you get it right without help.',
+            'You\'ve watched a math video at 11 PM before a test. Not cramming. Just one more pass.',
+        ],
     },
     'pi': {
         'name': 'The Purist', 'symbol': 'π', 'greek_name': 'Pi',
@@ -252,6 +289,15 @@ ARCHETYPES = {
             ('Grant Sanderson', '3Blue1Brown — making math deeply understandable, not just correct.'),
         ],
         'mathematician_quote': 'Nothing takes place in the world whose meaning is not that of some maximum or minimum.',
+        'ms_name': 'The Deep Thinker',
+        'ms_tagline': 'You don\'t memorize. You understand.',
+        'ms_superpower': 'Because you understand the WHY behind math, you can figure out problems you\'ve never seen before. While other kids freeze on new question types, you reason your way through.',
+        'ms_growth': 'Your next level-up is trusting your understanding enough to move quickly. You already know more than you think. Learning to work at speed will make you crush every math class through high school.',
+        'ms_this_is_you': [
+            'You\'ve figured out a formula on a test instead of memorizing it, because memorizing felt wrong.',
+            'You\'ve asked a question in class that made your teacher pause and think.',
+            'You\'ve gone down a rabbit hole reading about a math concept and lost track of time, not for a grade, just because you were curious.',
+        ],
     },
     'theta': {
         'name': 'The Quiet Genius', 'symbol': 'θ', 'greek_name': 'Theta',
@@ -282,6 +328,15 @@ ARCHETYPES = {
             ('Terence Tao', 'Known for seeing unexpected angles in problems, connecting areas of math nobody thought were related.'),
         ],
         'mathematician_quote': 'It is not knowledge, but the act of learning, that grants the greatest enjoyment.',
+        'ms_name': 'The Quiet Genius',
+        'ms_tagline': 'You see things in math that nobody else in the room sees.',
+        'ms_superpower': 'You notice patterns and connections that other students walk right past. Your understanding isn\'t just deep, it\'s original. You see things textbooks don\'t point out.',
+        'ms_growth': 'Your next level-up is trusting your gut. You already have the understanding. What you need is the confidence to commit to your answers instead of second-guessing yourself.',
+        'ms_this_is_you': [
+            'You\'ve solved a problem a different way than the teacher showed and gotten the right answer, but still felt unsure about it.',
+            'You\'ve understood something perfectly while studying, then blanked on the test because the pressure got to you.',
+            'You\'ve explained a concept to a friend and watched them get it, and thought "wait, maybe I understand this better than I think."',
+        ],
     },
     'phi': {
         'name': 'The Natural', 'symbol': 'φ', 'greek_name': 'Phi',
@@ -312,6 +367,15 @@ ARCHETYPES = {
             ('Elon Musk', 'Thinks in applied mathematical systems, from physics to financial modeling.'),
         ],
         'mathematician_quote': 'Simplicity is the ultimate sophistication.',
+        'ms_name': 'The Natural',
+        'ms_tagline': 'You don\'t just solve problems. You see the math hiding in everything.',
+        'ms_superpower': 'You can take a messy real-life situation and turn it into a math problem. Tip percentages, game stats, building projects. You see numbers where others see chaos.',
+        'ms_growth': 'Your next level-up is getting comfortable with abstract math. Some of the most powerful concepts seem pointless at first but connect to real things later. Trusting that process will open doors.',
+        'ms_this_is_you': [
+            'You\'ve calculated something in real life, like game probabilities or how much paint you need for a room, and enjoyed it more than any homework problem.',
+            'You\'ve argued with a teacher about a "wrong" answer because your real-world reasoning gave a different result.',
+            'You\'ve looked at a chart or graph and immediately spotted something off that nobody else noticed.',
+        ],
     },
     'lambda': {
         'name': 'The Dormant Force', 'symbol': 'λ', 'greek_name': 'Lambda',
@@ -342,6 +406,15 @@ ARCHETYPES = {
             ('Simone Biles', 'Total mastery when math connects to her craft — physics, angles, spatial reasoning in gymnastics.'),
         ],
         'mathematician_quote': 'The beauty of mathematics only shows itself to more patient followers.',
+        'ms_name': 'The Undercover',
+        'ms_tagline': 'You\'re not bad at math. You\'re just waiting for math to earn your attention.',
+        'ms_superpower': 'When you care about something, your effort and thinking are as good as anyone in class. You\'re not lazy. You\'re selective. And when something clicks, you go all in.',
+        'ms_growth': 'Your next level-up is finding the connection between "math I have to learn" and "things I actually care about." Every boring topic connects to something real. You just haven\'t found all the links yet.',
+        'ms_this_is_you': [
+            'You\'ve done well on a project that connected to something you care about, and surprised yourself.',
+            'You\'ve asked "when am I ever going to use this?" and you actually meant it as a real question.',
+            'You\'ve used math outside school, like for gaming strategy or budgeting, and thought "okay, THIS I can do."',
+        ],
     },
     'alpha': {
         'name': 'The Inventor', 'symbol': 'α', 'greek_name': 'Alpha',
@@ -372,6 +445,15 @@ ARCHETYPES = {
             ('Maryam Mirzakhani', 'Drew pictures, built new methods, won the Fields Medal with pure creativity.'),
         ],
         'mathematician_quote': 'If I have seen further, it is by standing on the shoulders of giants.',
+        'ms_name': 'The Builder',
+        'ms_tagline': 'You don\'t follow methods. You invent them.',
+        'ms_superpower': 'You can solve problems nobody has taught you how to solve. While other students need step-by-step instructions, you figure out your own path. That\'s the rarest math ability there is.',
+        'ms_growth': 'Your next level-up is disciplined execution. You already have the ideas. What would make you extraordinary is the precision to carry them through without errors. The greatest builders are creative AND careful.',
+        'ms_this_is_you': [
+            'You\'ve solved a problem using a method your teacher had never seen before.',
+            'You\'ve been bored in math class not because it\'s hard, but because the approach felt too predictable.',
+            'You\'ve connected something from science, coding, or music to a math concept and thought "wait, it\'s the same thing."',
+        ],
     },
     'gamma': {
         'name': 'The Maverick', 'symbol': 'γ', 'greek_name': 'Gamma',
@@ -402,6 +484,15 @@ ARCHETYPES = {
             ('Kanye West', 'Wild creative genius with inconsistent follow-through. When it hits, it\'s undeniable.'),
         ],
         'mathematician_quote': 'Those who can imagine anything can create the impossible.',
+        'ms_name': 'The Wildcard',
+        'ms_tagline': 'Your best work is brilliant. Your worst work is... interesting.',
+        'ms_superpower': 'When everyone else is stuck, you\'re the one who has the idea that cracks the problem open. You think in leaps, not steps, and that ability to jump over complexity is genuinely rare.',
+        'ms_growth': 'Your next level-up is making your brilliance reliable. Right now your talent shows up in flashes. The goal isn\'t to dim the flashes. It\'s to build a foundation so strong that your creative leaps always have a solid launch pad.',
+        'ms_this_is_you': [
+            'You\'ve aced a hard problem and then lost points on easy ones because of careless mistakes.',
+            'You\'ve solved a problem in your head and just written the answer, then lost points for not showing work.',
+            'A teacher has said "you clearly understand this, but your grades don\'t show it." And you\'ve heard it more than once.',
+        ],
     },
 }
 
@@ -982,6 +1073,36 @@ def login_required(f):
             return redirect(url_for('student_login'))
         return f(*args, **kwargs)
     return decorated
+
+
+def is_middle_school_student(student):
+    """Check if a student is middle school (grade 8 or below)."""
+    try:
+        return int(student.get('grade', 9) or 9) <= 8
+    except (ValueError, TypeError):
+        return False
+
+
+def get_archetype_for_student(student, archetype_key):
+    """Get archetype dict with MS-specific fields applied if middle school."""
+    archetype = ALL_ARCHETYPES.get(archetype_key, ARCHETYPES.get('sigma'))
+    if not archetype:
+        return archetype
+    if is_middle_school_student(student):
+        # Return a copy with MS fields overriding HS fields
+        ms = dict(archetype)
+        if archetype.get('ms_name'):
+            ms['name'] = archetype['ms_name']
+        if archetype.get('ms_tagline'):
+            ms['tagline'] = archetype['ms_tagline']
+        if archetype.get('ms_superpower'):
+            ms['superpower'] = archetype['ms_superpower']
+        if archetype.get('ms_growth'):
+            ms['growth'] = archetype['ms_growth']
+        if archetype.get('ms_this_is_you'):
+            ms['this_is_you'] = archetype['ms_this_is_you']
+        return ms
+    return archetype
 
 
 def admin_required(f):
@@ -2484,7 +2605,8 @@ def archetype_reveal():
         return redirect(url_for('test_intro'))
 
     archetype_key = student['archetype']
-    archetype = ALL_ARCHETYPES.get(archetype_key, ARCHETYPES['sigma'])
+    is_ms = is_middle_school_student(student)
+    archetype = get_archetype_for_student(student, archetype_key)
 
     fuar_scores = {
         'F': student['fuar_fluency'] or 0, 'U': student['fuar_understanding'] or 0,
@@ -2509,7 +2631,8 @@ def archetype_reveal():
                            student=student,
                            archetypes=ALL_ARCHETYPES,
                            student_name=session.get('student_name', 'Student'),
-                           is_demo=is_demo)
+                           is_demo=is_demo,
+                           is_middle_school=is_ms)
 
 
 @app.route('/share/<int:student_id>')
@@ -2521,7 +2644,7 @@ def share_card(student_id):
         return "Not available.", 404
 
     archetype_key = student['archetype']
-    archetype = ALL_ARCHETYPES.get(archetype_key, ARCHETYPES['sigma'])
+    archetype = get_archetype_for_student(student, archetype_key)
 
     return render_template('share_card.html',
                            archetype=archetype,
@@ -2703,7 +2826,7 @@ def dashboard():
     if not student['archetype']:
         return redirect(url_for('test_intro'))
 
-    archetype = ALL_ARCHETYPES.get(student['archetype'], ARCHETYPES['sigma'])
+    archetype = get_archetype_for_student(student, student['archetype'])
 
     fuar = {
         'F': student['fuar_fluency'],
@@ -3040,7 +3163,7 @@ def analytics_page():
     if not student['archetype']:
         return redirect(url_for('test_intro'))
 
-    archetype = ALL_ARCHETYPES.get(student['archetype'], ARCHETYPES['sigma'])
+    archetype = get_archetype_for_student(student, student['archetype'])
     fuar = {
         'F': student['fuar_fluency'],
         'U': student['fuar_understanding'],
@@ -3067,7 +3190,7 @@ def get_report_data(student_id):
     if not student:
         return jsonify({'error': 'Student not found'}), 404
 
-    archetype = ALL_ARCHETYPES.get(student['archetype'])
+    archetype = get_archetype_for_student(student, student['archetype'])
     fuar = {
         'F': student['fuar_fluency'],
         'U': student['fuar_understanding'],
@@ -3501,7 +3624,7 @@ def student_report(student_id):
         return "Report not available.", 404
 
     archetype_key = student['archetype']
-    archetype = ALL_ARCHETYPES.get(archetype_key, ARCHETYPES['sigma'])
+    archetype = get_archetype_for_student(student, archetype_key)
     fuar = {
         'F': student['fuar_fluency'] or 50,
         'U': student['fuar_understanding'] or 50,
@@ -3584,7 +3707,7 @@ def student_report_parent(student_id):
         return "Report not available.", 404
 
     archetype_key = student['archetype']
-    archetype = ALL_ARCHETYPES.get(archetype_key, ARCHETYPES['sigma'])
+    archetype = get_archetype_for_student(student, archetype_key)
     fuar = {
         'F': student['fuar_fluency'] or 50,
         'U': student['fuar_understanding'] or 50,
