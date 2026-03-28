@@ -200,12 +200,13 @@ body { background: #F9FAFB !important; color: #191919; }
           {# Parse score range from label like "Estimated SAT: 640-720" #}
           {{ score.label.split(': ')[-1] if ': ' in score.label else score.label }}
         {% else %}
-          {# Grade level: show proficiency label from detail #}
-          {% set detail_parts = score.detail.split(': ') %}
-          {% if detail_parts|length > 1 %}
-            {{ detail_parts[-1] }}
-          {% else %}
-            {{ score.detail }}
+          {# Grade level: show just the proficiency level, not full description #}
+          {% set label_text = score.label if score.label else score.detail %}
+          {% if 'Advanced' in label_text %}Advanced
+          {% elif 'Proficient' in label_text %}Proficient
+          {% elif 'Approaching' in label_text %}Approaching
+          {% elif 'Developing' in label_text or 'Below' in label_text %}Developing
+          {% else %}{{ label_text.split(':')[-1].strip()[:30] }}
           {% endif %}
         {% endif %}
       </div>
