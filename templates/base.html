@@ -237,8 +237,13 @@
     <nav>
         <div class="nav-inner">
             <a href="/" class="logo"><img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath" style="height: 24px;"></a>
-            <div style="display: flex; gap: 24px; align-items: center;">
-                <a href="{% if session.get('student_id') %}{{ url_for('dashboard') }}{% else %}{{ url_for('student_login') }}{% endif %}">Dashboard</a>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                {% if session.get('student_id') %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('student_logout') }}" style="font-size: 13px; color: var(--text-secondary);">Log Out</a>
+                {% else %}
+                <a href="{{ url_for('student_login') }}" style="background: var(--accent, #FFBA07); color: #191919; padding: 8px 20px; border-radius: 6px; font-weight: 700; font-size: 14px; text-decoration: none;">Login</a>
+                {% endif %}
             </div>
         </div>
     </nav>

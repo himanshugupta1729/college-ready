@@ -2138,6 +2138,13 @@ def landing():
     return render_template('landing.html', is_middle_school=False)
 
 
+@app.route('/logout')
+def student_logout():
+    """Log out the current student."""
+    session.clear()
+    return redirect(url_for('landing'))
+
+
 @app.route('/foundation')
 def foundation_landing():
     """Landing page — Foundation Math Night (middle school)."""
