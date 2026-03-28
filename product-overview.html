@@ -338,88 +338,99 @@
       line-height: 1.6;
     }
 
-    /* ===== ARCHETYPE GRID ===== */
-    .archetype-grid {
+    /* ===== ARCHETYPE IFRAME GRID ===== */
+    .archetype-iframe-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-top: 12px;
+      gap: 16px;
+      margin-top: 16px;
     }
 
-    .archetype-card {
-      border-radius: var(--radius);
-      padding: 20px 16px;
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
+    .archetype-iframe-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
 
-    .archetype-card::before {
-      content: '';
-      position: absolute;
-      top: -24px;
-      right: -24px;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      opacity: 0.12;
+    .archetype-iframe-wrapper iframe {
+      width: 100%;
+      max-width: 200px;
+      height: 355px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
 
-    .archetype-symbol {
-      font-size: 2.2rem;
-      line-height: 1;
-      margin-bottom: 10px;
-      display: block;
-      font-weight: 400;
+    .archetype-iframe-label {
+      text-align: center;
     }
 
-    .archetype-greek {
+    .archetype-iframe-greek {
       font-size: 0.65rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
-    .archetype-hs-name {
-      font-size: 0.88rem;
+    .archetype-iframe-name {
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--dark);
-      margin-bottom: 2px;
       line-height: 1.3;
     }
 
-    .archetype-ms-name {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 8px;
+    /* ===== ARCHETYPE MATRIX ===== */
+    .logic-matrix {
+      display: grid;
+      grid-template-columns: 120px 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-top: 24px;
+      font-size: 0.82rem;
     }
 
-    .archetype-fuar-badge {
-      display: inline-flex;
+    .matrix-cell {
+      background: white;
+      padding: 12px 14px;
+      display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 0.62rem;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .matrix-cell.header {
+      background: var(--bg-soft);
       font-weight: 700;
-      padding: 3px 7px;
-      border-radius: 20px;
-      margin-bottom: 8px;
-    }
-
-    .archetype-tagline {
       font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       color: var(--muted);
-      line-height: 1.5;
-      font-style: italic;
-      margin-bottom: 10px;
     }
 
-    .archetype-minds {
-      font-size: 0.68rem;
-      color: var(--muted);
-      font-weight: 500;
+    .matrix-cell.fuar-label {
+      background: var(--bg-soft);
+      font-weight: 600;
+      color: var(--dark);
+      font-size: 0.8rem;
+      justify-content: flex-start;
     }
+
+    .matrix-cell.engaged { background: #F0FDF4; }
+    .matrix-cell.guarded { background: #FFF1F2; }
+
+    .matrix-archetype-symbol {
+      font-size: 1rem;
+      margin-right: 6px;
+    }
+
+    .matrix-name { font-weight: 600; color: var(--dark); }
+    .matrix-ms { font-size: 0.7rem; color: var(--muted); display: block; margin-top: 2px; }
 
     /* ===== COMPARISON TABLE ===== */
     .compare-table {
@@ -508,103 +519,6 @@
       font-weight: 500;
     }
 
-    /* ===== ARCHETYPE LOGIC DIAGRAM ===== */
-    .logic-diagram {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      margin-top: 24px;
-      text-align: center;
-    }
-
-    .logic-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .logic-box {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .logic-box.yellow {
-      background: var(--yellow);
-      border-color: var(--yellow);
-      font-weight: 800;
-    }
-
-    .logic-arrow {
-      font-size: 1.2rem;
-      color: var(--muted);
-    }
-
-    .logic-label {
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
-
-    .logic-matrix {
-      display: grid;
-      grid-template-columns: 120px 1fr 1fr;
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      margin-top: 24px;
-      font-size: 0.82rem;
-    }
-
-    .matrix-cell {
-      background: white;
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .matrix-cell.header {
-      background: var(--bg-soft);
-      font-weight: 700;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-    }
-
-    .matrix-cell.fuar-label {
-      background: var(--bg-soft);
-      font-weight: 600;
-      color: var(--dark);
-      font-size: 0.8rem;
-      justify-content: flex-start;
-    }
-
-    .matrix-cell.engaged { background: #F0FDF4; }
-    .matrix-cell.guarded { background: #FFF1F2; }
-
-    .matrix-archetype-symbol {
-      font-size: 1rem;
-      margin-right: 6px;
-    }
-
-    .matrix-name { font-weight: 600; color: var(--dark); }
-    .matrix-ms { font-size: 0.7rem; color: var(--muted); display: block; margin-top: 2px; }
-
     /* ===== QUESTION BANK TABLE ===== */
     .qb-table {
       width: 100%;
@@ -665,52 +579,100 @@
     .pill-blue { background: #EFF6FF; color: #1D4ED8; }
     .pill-green { background: #F0FDF4; color: #15803D; }
 
-    /* ===== HOW TO TEST ===== */
-    .test-grid {
+    /* ===== REPORT SNAPSHOTS ===== */
+    .report-snapshots-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
-    .test-card {
+    .report-snapshot-card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
     }
 
-    .test-card-header {
-      background: var(--dark);
-      color: white;
-      padding: 16px 20px;
+    .report-snapshot-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .test-card-title {
-      font-size: 0.9rem;
+    .report-snapshot-header.dark-theme {
+      background: #111827;
+    }
+
+    .report-snapshot-header.light-theme {
+      background: var(--bg-soft);
+    }
+
+    .report-snapshot-header.yellow-theme {
+      background: var(--yellow);
+    }
+
+    .report-snapshot-header.slate-theme {
+      background: #1E293B;
+    }
+
+    .report-snapshot-title {
+      font-size: 0.85rem;
       font-weight: 700;
     }
 
-    .test-card-subtitle {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.6);
+    .report-snapshot-subtitle {
+      font-size: 0.7rem;
       margin-top: 2px;
+      opacity: 0.7;
     }
 
-    .test-card-body {
+    .report-snapshot-body {
       padding: 20px;
     }
 
+    .report-element {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--mid);
+    }
+
+    .report-element:last-child { border-bottom: none; }
+
+    .report-element-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    /* ===== HOW TO TEST ===== */
     .test-url {
       background: var(--yellow-light);
       border: 1px solid var(--yellow-mid);
       border-radius: var(--radius-sm);
       padding: 10px 14px;
       font-family: monospace;
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: var(--dark);
-      margin-bottom: 16px;
       word-break: break-all;
+    }
+
+    .url-block {
+      margin-bottom: 12px;
+    }
+
+    .url-block-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
     }
 
     .test-step {
@@ -741,155 +703,130 @@
       line-height: 1.55;
     }
 
-    .review-list {
-      list-style: none;
-      margin-top: 8px;
-    }
-
-    .review-list li {
-      font-size: 0.82rem;
-      color: var(--mid);
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .review-list li:last-child { border-bottom: none; }
-
-    .review-list li::before {
-      content: '→';
-      color: var(--yellow);
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .demo-codes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .demo-code {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 12px 14px;
-    }
-
-    .demo-code-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-
-    .demo-code-value {
-      font-family: monospace;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--dark);
-    }
-
-    /* ===== ROADMAP ===== */
-    .roadmap-cols {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 12px;
-    }
-
-    .roadmap-col {
+    .test-section {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      margin-bottom: 20px;
     }
 
-    .roadmap-col-header {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .roadmap-col-header.immediate { background: var(--yellow); }
-    .roadmap-col-header.short { background: #EFF6FF; }
-    .roadmap-col-header.medium { background: #F0FDF4; }
-
-    .roadmap-col-title {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dark);
-    }
-
-    .roadmap-col-body {
+    .test-section-header {
       padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .roadmap-item {
-      font-size: 0.82rem;
-      color: var(--mid);
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
-      line-height: 1.55;
+    .test-section-header.dark {
+      background: var(--dark);
+    }
+
+    .test-section-header-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .test-section-header-title.light { color: white; }
+    .test-section-header-title.dark-text { color: var(--dark); }
+
+    .test-section-header-sub {
+      font-size: 0.7rem;
+      margin-top: 2px;
+    }
+
+    .test-section-header-sub.light { color: rgba(255,255,255,0.6); }
+    .test-section-header-sub.dark-text { color: var(--muted); }
+
+    .test-section-body {
+      padding: 20px;
+    }
+
+    .admin-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .admin-flow-step {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--dark);
+      text-align: center;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .admin-flow-arrow {
+      font-size: 1rem;
+      color: var(--muted);
+      padding: 0 6px;
+      flex-shrink: 0;
+    }
+
+    /* ===== ROADMAP TABLE ===== */
+    .roadmap-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.88rem;
+    }
+
+    .roadmap-table th {
+      padding: 12px 20px;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+    }
+
+    .roadmap-table th:first-child {
+      width: 140px;
+      background: var(--bg-soft);
+      color: var(--muted);
+    }
+
+    .roadmap-table th:last-child {
+      background: var(--bg-soft);
+      color: var(--muted);
+    }
+
+    .roadmap-table td {
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .roadmap-table td:first-child {
+      font-weight: 700;
+      color: var(--dark);
+      background: var(--bg-soft);
+      white-space: nowrap;
+    }
+
+    .roadmap-bullet {
       display: flex;
       align-items: flex-start;
       gap: 8px;
+      font-size: 0.82rem;
+      color: var(--mid);
+      line-height: 1.55;
+      margin-bottom: 8px;
     }
 
-    .roadmap-item:last-child { border-bottom: none; }
+    .roadmap-bullet:last-child { margin-bottom: 0; }
 
-    .roadmap-item::before {
+    .roadmap-bullet::before {
       content: '◆';
       font-size: 0.5rem;
       color: var(--muted);
       flex-shrink: 0;
       margin-top: 5px;
-    }
-
-    /* ===== FOOTER ===== */
-    .footer {
-      padding: 40px 0;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-left {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .footer-url {
-      font-family: monospace;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--dark);
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      padding: 5px 12px;
-      border-radius: 20px;
-    }
-
-    /* ===== CALLOUT ===== */
-    .callout {
-      background: var(--yellow-light);
-      border-left: 4px solid var(--yellow);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 16px 20px;
-      margin: 24px 0;
-    }
-
-    .callout p {
-      font-size: 0.88rem;
-      color: var(--dark);
-      font-weight: 500;
-      margin: 0;
     }
 
     /* ===== TECH STACK ===== */
@@ -925,6 +862,47 @@
       color: var(--mid);
     }
 
+    /* ===== CALLOUT ===== */
+    .callout {
+      background: var(--yellow-light);
+      border-left: 4px solid var(--yellow);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px;
+      margin: 24px 0;
+    }
+
+    .callout p {
+      font-size: 0.88rem;
+      color: var(--dark);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .footer-url {
+      font-family: monospace;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--dark);
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
     /* ===== PRINT ===== */
     @media print {
       body { font-size: 14px; }
@@ -935,24 +913,23 @@
       .page-break { page-break-before: always; }
       .no-break { page-break-inside: avoid; }
 
-      /* No browser chrome */
       @page {
         margin: 0.6in 0.5in;
         size: letter;
       }
 
-      .archetype-grid { grid-template-columns: repeat(4, 1fr); }
+      .archetype-iframe-grid { grid-template-columns: repeat(4, 1fr); }
       .fuar-grid { grid-template-columns: repeat(4, 1fr); }
+      .archetype-iframe-wrapper iframe { height: 200px; }
     }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 700px) {
       h1 { font-size: 2rem; }
       .product-cards { grid-template-columns: 1fr; }
-      .archetype-grid { grid-template-columns: repeat(2, 1fr); }
+      .archetype-iframe-grid { grid-template-columns: repeat(2, 1fr); }
       .fuar-grid { grid-template-columns: repeat(2, 1fr); }
-      .test-grid { grid-template-columns: 1fr; }
-      .roadmap-cols { grid-template-columns: 1fr; }
+      .report-snapshots-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1070,6 +1047,10 @@
             <span class="spec-label">Dashboard widget</span>
             <span class="spec-value">Estimated SAT Math</span>
           </div>
+          <div class="product-card-spec">
+            <span class="spec-label">Production URL</span>
+            <span class="spec-value" style="font-family:monospace; font-size:0.78rem;">college-ready.onrender.com</span>
+          </div>
         </div>
       </div>
 
@@ -1104,6 +1085,10 @@
           <div class="product-card-spec">
             <span class="spec-label">Dashboard widget</span>
             <span class="spec-value">Grade-Level Proficiency</span>
+          </div>
+          <div class="product-card-spec">
+            <span class="spec-label">Production URL</span>
+            <span class="spec-value" style="font-family:monospace; font-size:0.78rem;">college-ready.onrender.com/foundation</span>
           </div>
         </div>
       </div>
@@ -1287,118 +1272,86 @@
   <div class="section">
     <div class="section-label">Section 03</div>
     <h2>The 8 Archetypes</h2>
-    <p style="margin-bottom:24px;">Every student gets one of 8 identities — derived from crossing their dominant FUAR dimension with their GRIC mindset mode. The archetype is the thing students screenshot, share, and remember.</p>
+    <p style="margin-bottom:24px;">Every student gets one of 8 identities — derived from crossing their dominant FUAR dimension with their GRIC mindset mode. The archetype is the thing students screenshot, share, and remember. Below are the live share card designs as they appear on the platform.</p>
 
-    <div class="archetype-grid">
+    <div class="archetype-iframe-grid">
 
       <!-- Sigma -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #3B82F6;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#3B82F6;">σ</span>
-          <div class="archetype-greek">Sigma</div>
-          <div class="archetype-hs-name">The Perfectionist</div>
-          <div class="archetype-ms-name">MS: The Machine</div>
-          <div class="archetype-fuar-badge" style="background:#EFF6FF;color:#1D4ED8;">Fluency · Engaged</div>
-          <div class="archetype-tagline">"You don't skip steps — and that's why you rarely get things wrong."</div>
-          <div class="archetype-minds">Euclid · Katherine Johnson · Sal Khan</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/sigma" style="width:200px;height:355px;border:none;border-radius:12px;" title="Sigma share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Sigma · σ</div>
+          <div class="archetype-iframe-name">The Perfectionist</div>
         </div>
       </div>
 
       <!-- Delta -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #EF4444;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#EF4444;">δ</span>
-          <div class="archetype-greek">Delta</div>
-          <div class="archetype-hs-name">The Relentless</div>
-          <div class="archetype-ms-name">MS: The Relentless</div>
-          <div class="archetype-fuar-badge" style="background:#FEF2F2;color:#B91C1C;">Fluency · Guarded</div>
-          <div class="archetype-tagline">"You outwork everyone — and you know it."</div>
-          <div class="archetype-minds">Ramanujan · Kobe Bryant · Maryam Mirzakhani</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/delta" style="width:200px;height:355px;border:none;border-radius:12px;" title="Delta share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Delta · δ</div>
+          <div class="archetype-iframe-name">The Relentless</div>
         </div>
       </div>
 
       <!-- Pi -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #2563EB;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#2563EB;">π</span>
-          <div class="archetype-greek">Pi</div>
-          <div class="archetype-hs-name">The Purist</div>
-          <div class="archetype-ms-name">MS: The Deep Thinker</div>
-          <div class="archetype-fuar-badge" style="background:#EFF6FF;color:#1D4ED8;">Understanding · Engaged</div>
-          <div class="archetype-tagline">"You don't memorize — you understand."</div>
-          <div class="archetype-minds">Feynman · Emmy Noether · Grant Sanderson</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/pi" style="width:200px;height:355px;border:none;border-radius:12px;" title="Pi share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Pi · π</div>
+          <div class="archetype-iframe-name">The Purist</div>
         </div>
       </div>
 
       <!-- Theta -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #8B5CF6;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#8B5CF6;">θ</span>
-          <div class="archetype-greek">Theta</div>
-          <div class="archetype-hs-name">The Quiet Genius</div>
-          <div class="archetype-ms-name">MS: The Quiet Genius</div>
-          <div class="archetype-fuar-badge" style="background:#F5F3FF;color:#6D28D9;">Understanding · Guarded</div>
-          <div class="archetype-tagline">"You see things in math that nobody else in the room sees."</div>
-          <div class="archetype-minds">Perelman · Ada Lovelace · Terence Tao</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/theta" style="width:200px;height:355px;border:none;border-radius:12px;" title="Theta share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Theta · θ</div>
+          <div class="archetype-iframe-name">The Quiet Genius</div>
         </div>
       </div>
 
       <!-- Phi -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #F59E0B;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#F59E0B;">φ</span>
-          <div class="archetype-greek">Phi</div>
-          <div class="archetype-hs-name">The Natural</div>
-          <div class="archetype-ms-name">MS: The Natural</div>
-          <div class="archetype-fuar-badge" style="background:#FFFBEB;color:#B45309;">Application · Engaged</div>
-          <div class="archetype-tagline">"You don't just solve problems — you see the math hiding in everything."</div>
-          <div class="archetype-minds">Florence Nightingale · Nate Silver · Elon Musk</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/phi" style="width:200px;height:355px;border:none;border-radius:12px;" title="Phi share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Phi · φ</div>
+          <div class="archetype-iframe-name">The Natural</div>
         </div>
       </div>
 
       <!-- Lambda -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #6366F1;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#6366F1;">λ</span>
-          <div class="archetype-greek">Lambda</div>
-          <div class="archetype-hs-name">The Dormant Force</div>
-          <div class="archetype-ms-name">MS: The Undercover</div>
-          <div class="archetype-fuar-badge" style="background:#EEF2FF;color:#4338CA;">Application · Guarded</div>
-          <div class="archetype-tagline">"You're not bad at math — you're just waiting for math to earn your attention."</div>
-          <div class="archetype-minds">Steve Jobs · Jay-Z · Simone Biles</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/lambda" style="width:200px;height:355px;border:none;border-radius:12px;" title="Lambda share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Lambda · λ</div>
+          <div class="archetype-iframe-name">The Dormant Force</div>
         </div>
       </div>
 
       <!-- Alpha -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #10B981;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#10B981;">α</span>
-          <div class="archetype-greek">Alpha</div>
-          <div class="archetype-hs-name">The Inventor</div>
-          <div class="archetype-ms-name">MS: The Builder</div>
-          <div class="archetype-fuar-badge" style="background:#ECFDF5;color:#065F46;">Reasoning · Engaged</div>
-          <div class="archetype-tagline">"You don't follow methods — you invent them."</div>
-          <div class="archetype-minds">Euler · von Neumann · Maryam Mirzakhani</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/alpha" style="width:200px;height:355px;border:none;border-radius:12px;" title="Alpha share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Alpha · α</div>
+          <div class="archetype-iframe-name">The Inventor</div>
         </div>
       </div>
 
       <!-- Gamma -->
-      <div class="archetype-card no-break" style="border-top: 3px solid #EC4899;">
-        <div class="archetype-card" style="border:none;padding:0;">
-          <span class="archetype-symbol" style="color:#EC4899;">γ</span>
-          <div class="archetype-greek">Gamma</div>
-          <div class="archetype-hs-name">The Maverick</div>
-          <div class="archetype-ms-name">MS: The Wildcard</div>
-          <div class="archetype-fuar-badge" style="background:#FDF2F8;color:#9D174D;">Reasoning · Guarded</div>
-          <div class="archetype-tagline">"Your best work is brilliant. Your worst work is... interesting."</div>
-          <div class="archetype-minds">Galois · Nikola Tesla · Kanye West</div>
+      <div class="archetype-iframe-wrapper no-break">
+        <iframe src="https://college-ready.onrender.com/share/preview/gamma" style="width:200px;height:355px;border:none;border-radius:12px;" title="Gamma share card"></iframe>
+        <div class="archetype-iframe-label">
+          <div class="archetype-iframe-greek">Gamma · γ</div>
+          <div class="archetype-iframe-name">The Maverick</div>
         </div>
       </div>
 
     </div>
 
     <!-- Archetype matrix -->
-    <h3 style="margin-top: 40px; margin-bottom: 12px;">Assignment Logic: FUAR × Mindset</h3>
+    <h3 style="margin-top: 48px; margin-bottom: 12px;">Assignment Logic: FUAR × Mindset</h3>
 
     <div class="logic-matrix">
       <div class="matrix-cell header" style="text-align:left; padding-left: 16px;">FUAR Dominant</div>
@@ -1778,152 +1731,308 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- SECTION 7: HOW TO TEST -->
+<!-- SECTION 7: REPORT SNAPSHOTS -->
 <!-- ============================================================ -->
 <div class="page page-break">
   <div class="section">
     <div class="section-label">Section 07</div>
-    <h2>How to Test</h2>
+    <h2>Report Snapshots</h2>
+    <p style="margin-bottom: 24px;">Every student gets five outputs automatically — no staff intervention required. Here's what each looks like.</p>
 
-    <div style="margin-bottom: 24px;">
-      <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Production URL</div>
-      <div class="test-url">https://college-ready.onrender.com</div>
-    </div>
+    <div class="report-snapshots-grid">
 
-    <div class="demo-codes">
-      <div class="demo-code">
-        <div class="demo-code-label">High School Demo</div>
-        <div class="demo-code-value">DEMO-2026</div>
-        <div style="font-size: 0.72rem; color: var(--muted); margin-top: 4px;">URL: /register/DEMO-2026</div>
-      </div>
-      <div class="demo-code">
-        <div class="demo-code-label">Middle School Demo</div>
-        <div class="demo-code-value">FOUNDATION-DEMO</div>
-        <div style="font-size: 0.72rem; color: var(--muted); margin-top: 4px;">URL: /register/FOUNDATION-DEMO</div>
-      </div>
-    </div>
-
-    <div class="test-grid" style="margin-top: 24px;">
-      <!-- Full test flow -->
-      <div class="test-card no-break">
-        <div class="test-card-header">
-          <div class="test-card-title">Full Test Flow</div>
-          <div class="test-card-subtitle">For Rigved, Joita — complete end-to-end</div>
+      <!-- Archetype Reveal -->
+      <div class="report-snapshot-card no-break">
+        <div class="report-snapshot-header dark-theme">
+          <div class="report-snapshot-title" style="color:white;">Archetype Reveal Page</div>
+          <div class="report-snapshot-subtitle" style="color:rgba(255,255,255,0.6);">Dark theme · Full-screen · Immediate post-quiz</div>
         </div>
-        <div class="test-card-body">
-          <div class="test-step">
-            <div class="test-step-num">1</div>
-            <div class="test-step-text">Go to <code style="font-size:0.78rem; background:var(--bg-soft); padding:1px 5px; border-radius:4px;">/register/DEMO-2026</code> (HS) or <code style="font-size:0.78rem; background:var(--bg-soft); padding:1px 5px; border-radius:4px;">/register/FOUNDATION-DEMO</code> (MS)</div>
+        <div class="report-snapshot-body">
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#FFBA07;"></div>
+            <span>Large Greek symbol (σ, π, θ, etc.) centered on screen with archetype color</span>
           </div>
-          <div class="test-step">
-            <div class="test-step-num">2</div>
-            <div class="test-step-text">Register with any name/email, pick a grade and track</div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#FFBA07;"></div>
+            <span>Archetype name + tagline ("You don't skip steps — and that's why you rarely get things wrong.")</span>
           </div>
-          <div class="test-step">
-            <div class="test-step-num">3</div>
-            <div class="test-step-text">Complete the 24-question diagnostic (can answer randomly to speed-test the flow)</div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#FFBA07;"></div>
+            <span>Your Superpower · Your Kryptonite · "This Is You" real-world scenarios</span>
           </div>
-          <div class="test-step">
-            <div class="test-step-num">4</div>
-            <div class="test-step-text">Complete the 12-question mindset quiz</div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#FFBA07;"></div>
+            <span>Mathematician pairings (e.g., Euclid, Katherine Johnson, Sal Khan)</span>
           </div>
-          <div class="test-step">
-            <div class="test-step-num">5</div>
-            <div class="test-step-text">See archetype reveal → share card → student report → parent report</div>
-          </div>
-          <div class="test-step">
-            <div class="test-step-num">6</div>
-            <div class="test-step-text">Access the dashboard, try daily practice, review worked solutions</div>
-          </div>
-          <div class="test-step">
-            <div class="test-step-num">7</div>
-            <div class="test-step-text">Admin portal at <code style="font-size:0.78rem; background:var(--bg-soft); padding:1px 5px; border-radius:4px;">/admin/login</code> (ask Himanshu for credentials)</div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#FFBA07;"></div>
+            <span>Share Card button — one tap to save and share</span>
           </div>
         </div>
       </div>
 
-      <!-- What to review -->
-      <div class="test-card no-break">
-        <div class="test-card-header">
-          <div class="test-card-title">What to Review</div>
-          <div class="test-card-subtitle">Focus areas for Rigved + Joita</div>
+      <!-- Student Report -->
+      <div class="report-snapshot-card no-break">
+        <div class="report-snapshot-header slate-theme">
+          <div class="report-snapshot-title" style="color:white;">Student Report</div>
+          <div class="report-snapshot-subtitle" style="color:rgba(255,255,255,0.6);">Dark theme · Detailed · Student-facing</div>
         </div>
-        <div class="test-card-body">
-          <ul class="review-list">
-            <li>Question quality — well-written? Correct difficulty level? Proper FUAR tagging?</li>
-            <li>Archetype accuracy — does the assigned archetype feel right for the performance pattern?</li>
-            <li>Report content — are FUAR breakdowns, topic heatmaps, and parent reports clear and actionable?</li>
-            <li>FUAR tagging — reference doc: <code style="font-size:0.75rem; background:var(--bg-soft); padding:1px 4px; border-radius:4px;">fuar-tagging-reference.md</code></li>
-            <li>Middle school copy — do MS archetype descriptions and "This Is You" scenarios land for 11–14 year olds?</li>
-            <li>Parent report language — does it translate without math jargon?</li>
-          </ul>
+        <div class="report-snapshot-body">
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#3B82F6;"></div>
+            <span>Overall score with percentile context (vs. other students at your school/event)</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#3B82F6;"></div>
+            <span>FUAR radar chart — 4-axis visual showing F, U, A, R strength relative to each other</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#3B82F6;"></div>
+            <span>Topic-level heatmap: green (strong) → red (gap) across all topics tested</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#3B82F6;"></div>
+            <span>SAT estimate range (HS) or proficiency level (MS) with score band</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#3B82F6;"></div>
+            <span>Full archetype profile embedded — superpower, growth areas, mathematician matches</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- PTA testing -->
-    <div style="margin-top: 20px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
-      <div style="background: var(--dark); padding: 16px 20px;">
-        <div style="font-size: 0.9rem; font-weight: 700; color: white;">For PTAs + School Partners</div>
-        <div style="font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-top: 2px;">Event registration flow</div>
-      </div>
-      <div style="padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div>
-          <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Share Link</div>
-          <div class="test-url">college-ready.onrender.com/register/&lt;EVENT_CODE&gt;</div>
-          <div style="font-size: 0.78rem; color: var(--muted); margin-top: 8px;">Students register with name, email, grade, and track. Results are instant.</div>
+      <!-- Parent Report -->
+      <div class="report-snapshot-card no-break">
+        <div class="report-snapshot-header light-theme">
+          <div class="report-snapshot-title" style="color:var(--dark);">Parent Report</div>
+          <div class="report-snapshot-subtitle" style="color:var(--muted);">Light theme · Plain language · Parent-facing</div>
         </div>
-        <div>
-          <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Admin Can Track Per Event</div>
-          <div style="font-size: 0.82rem; color: var(--mid); line-height: 1.7;">Registration count · Completion rate · Archetype distribution · Demo mode for retakes</div>
+        <div class="report-snapshot-body">
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#10B981;"></div>
+            <span>SAT score estimate (HS) or grade-level proficiency label (MS) — no jargon</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#10B981;"></div>
+            <span>FUAR breakdown in plain English: "Strong at procedures, needs more practice with word problems"</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#10B981;"></div>
+            <span>Algebra readiness indicator (Grades 7–8 only) — ready / approaching / not yet</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#10B981;"></div>
+            <span>AP course readiness (HS only) — specific subject predictions</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#10B981;"></div>
+            <span>Specific next steps: what to focus on and why</span>
+          </div>
         </div>
       </div>
+
+      <!-- Share Card -->
+      <div class="report-snapshot-card no-break">
+        <div class="report-snapshot-header yellow-theme">
+          <div class="report-snapshot-title" style="color:var(--dark);">Share Card</div>
+          <div class="report-snapshot-subtitle" style="color:rgba(0,0,0,0.5);">Archetype color · Instagram-story ratio · Viral</div>
+        </div>
+        <div class="report-snapshot-body">
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#EC4899;"></div>
+            <span>Portrait format (9:16 ratio) designed for Instagram stories and phone screenshots</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#EC4899;"></div>
+            <span>Archetype color as background — each archetype has a distinct visual identity</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#EC4899;"></div>
+            <span>Greek symbol large and centered · Archetype name · Tagline</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#EC4899;"></div>
+            <span>"Cuemath Math Identity" label — brand attribution built in</span>
+          </div>
+          <div class="report-element">
+            <div class="report-element-dot" style="background:#EC4899;"></div>
+            <span>Live previews: <code style="font-size:0.75rem; background:var(--bg-soft); padding:1px 4px; border-radius:4px;">college-ready.onrender.com/share/preview/sigma</code></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="report-snapshot-card no-break" style="grid-column: 1 / -1;">
+        <div class="report-snapshot-header" style="background:#1E3A5F;">
+          <div class="report-snapshot-title" style="color:white;">Persistent Dashboard</div>
+          <div class="report-snapshot-subtitle" style="color:rgba(255,255,255,0.6);">Light theme · Ongoing · Student + parent both have access</div>
+        </div>
+        <div class="report-snapshot-body" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          <div>
+            <div style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Score Widget</div>
+            <div class="report-element" style="border:none; padding:0; margin-bottom:6px;">
+              <div class="report-element-dot" style="background:#1E3A5F; flex-shrink:0;"></div>
+              <span>HS: "Estimated SAT Math: 620–680" with progress over time</span>
+            </div>
+            <div class="report-element" style="border:none; padding:0;">
+              <div class="report-element-dot" style="background:#1E3A5F; flex-shrink:0;"></div>
+              <span>MS: "Grade-Level Proficiency: Advanced" with trend chart</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Practice Plan</div>
+            <div class="report-element" style="border:none; padding:0; margin-bottom:6px;">
+              <div class="report-element-dot" style="background:#1E3A5F; flex-shrink:0;"></div>
+              <span>Daily questions targeting weakest FUAR dimensions and topics</span>
+            </div>
+            <div class="report-element" style="border:none; padding:0;">
+              <div class="report-element-dot" style="background:#1E3A5F; flex-shrink:0;"></div>
+              <span>Full worked solutions with wrong-answer analysis per question</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;">Archetype Evolution</div>
+            <div class="report-element" style="border:none; padding:0; margin-bottom:6px;">
+              <div class="report-element-dot" style="background:#1E3A5F; flex-shrink:0;"></div>
+              <span>FUAR radar chart updates weekly as scores change</span>
+            </div>
+            <div class="report-element" style="border:none; padding:0;">
+              <div class="report-element-dot" style="background:#1E3A5F; flex-shrink:0;"></div>
+              <span>Archetype can evolve (e.g., Gamma → Alpha as Fluency improves)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- SECTION 8: WHAT'S NEXT -->
+<!-- SECTION 8: HOW TO TEST -->
 <!-- ============================================================ -->
 <div class="page page-break">
   <div class="section">
     <div class="section-label">Section 08</div>
-    <h2>What's Next</h2>
+    <h2>How to Test</h2>
 
-    <div class="roadmap-cols">
-      <div class="roadmap-col no-break">
-        <div class="roadmap-col-header immediate">
-          <div class="roadmap-col-title">This Week</div>
+    <!-- Production URLs -->
+    <div style="margin-bottom: 28px;">
+      <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;">Production URLs</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="url-block">
+          <div class="url-block-label">HS Landing</div>
+          <div class="test-url">https://college-ready.onrender.com</div>
         </div>
-        <div class="roadmap-col-body">
-          <div class="roadmap-item">Complete Foundation Math Night template conditionals (branding, scoring display, dashboard widgets)</div>
-          <div class="roadmap-item">MS-specific archetype copy in all templates (superpower, growth, "This Is You" sections)</div>
-          <div class="roadmap-item">End-to-end testing of the middle school flow</div>
+        <div class="url-block">
+          <div class="url-block-label">MS Landing</div>
+          <div class="test-url">https://college-ready.onrender.com/foundation</div>
         </div>
-      </div>
-
-      <div class="roadmap-col no-break">
-        <div class="roadmap-col-header short">
-          <div class="roadmap-col-title">Short-Term</div>
+        <div class="url-block">
+          <div class="url-block-label">HS Demo Registration</div>
+          <div class="test-url">https://college-ready.onrender.com/register/DEMO-2026</div>
         </div>
-        <div class="roadmap-col-body">
-          <div class="roadmap-item">Student testing with real students (shorter diagnostic version TBD for time-constrained settings)</div>
-          <div class="roadmap-item">Feedback collection mechanism (format TBD — direct conversation, survey, or in-app)</div>
-          <div class="roadmap-item">Email notifications for parents (auto-send parent report after test completion)</div>
+        <div class="url-block">
+          <div class="url-block-label">MS Demo Registration</div>
+          <div class="test-url">https://college-ready.onrender.com/register/FOUNDATION-DEMO</div>
         </div>
-      </div>
-
-      <div class="roadmap-col no-break">
-        <div class="roadmap-col-header medium">
-          <div class="roadmap-col-title">Medium-Term</div>
-        </div>
-        <div class="roadmap-col-body">
-          <div class="roadmap-item">Lite quiz — 90-second viral version with 5–6 questions for a quick archetype. Top-of-funnel social hook.</div>
-          <div class="roadmap-item">Archetype evolution tracking — visible progression on dashboard (e.g., Gamma → Alpha as Fluency improves)</div>
-          <div class="roadmap-item">School-level analytics dashboard for partner schools</div>
+        <div class="url-block" style="grid-column: 1 / -1;">
+          <div class="url-block-label">Admin Portal</div>
+          <div class="test-url">https://college-ready.onrender.com/admin/login</div>
         </div>
       </div>
     </div>
+
+    <!-- Team Testing -->
+    <div class="test-section no-break" style="margin-bottom: 20px;">
+      <div class="test-section-header dark">
+        <div class="test-section-header-title light">Team Testing (Rigved, Joita)</div>
+        <div class="test-section-header-sub light">Complete the full end-to-end student flow</div>
+      </div>
+      <div class="test-section-body">
+        <div class="test-step">
+          <div class="test-step-num">1</div>
+          <div class="test-step-text">Go to <code style="font-size:0.78rem; background:var(--bg-soft); padding:1px 5px; border-radius:4px;">/register/DEMO-2026</code> (HS) or <code style="font-size:0.78rem; background:var(--bg-soft); padding:1px 5px; border-radius:4px;">/register/FOUNDATION-DEMO</code> (MS) and register with any name/email</div>
+        </div>
+        <div class="test-step">
+          <div class="test-step-num">2</div>
+          <div class="test-step-text">Pick a grade and track, complete the 24-question diagnostic (can answer randomly to speed-test the flow)</div>
+        </div>
+        <div class="test-step">
+          <div class="test-step-num">3</div>
+          <div class="test-step-text">Complete the 12-question mindset quiz, then see archetype reveal → share card → student report → parent report</div>
+        </div>
+        <div class="test-step">
+          <div class="test-step-num">4</div>
+          <div class="test-step-text">Access the persistent dashboard, try daily practice questions, review worked solutions</div>
+        </div>
+        <div class="test-step">
+          <div class="test-step-num">5</div>
+          <div class="test-step-text">Admin portal at <code style="font-size:0.78rem; background:var(--bg-soft); padding:1px 5px; border-radius:4px;">/admin/login</code> — ask Himanshu for credentials</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PTA + School Partners -->
+    <div class="test-section no-break" style="margin-bottom: 20px;">
+      <div class="test-section-header" style="background: var(--bg-soft); border-bottom: 1px solid var(--border);">
+        <div class="test-section-header-title dark-text">For PTAs + School Partners</div>
+        <div class="test-section-header-sub dark-text">Admin creates event → shares registration link → students take diagnostic → instant results</div>
+      </div>
+      <div class="test-section-body">
+        <div style="font-size: 0.82rem; color: var(--mid); margin-bottom: 16px; line-height: 1.6;">The entire school-night flow is self-serve. The PTA contact or school admin creates an event in the admin portal and shares one registration link. Students register themselves, take the diagnostic independently, and receive their results instantly — no staff required after setup.</div>
+        <div style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px;">Admin Flow</div>
+        <div class="admin-flow">
+          <div class="admin-flow-step">Admin logs in<br><span style="font-size:0.68rem; color:var(--muted); font-weight:400;">/admin/login</span></div>
+          <div class="admin-flow-arrow">→</div>
+          <div class="admin-flow-step">Create event<br><span style="font-size:0.68rem; color:var(--muted); font-weight:400;">Set name, date, type (HS/MS)</span></div>
+          <div class="admin-flow-arrow">→</div>
+          <div class="admin-flow-step">Get event code<br><span style="font-size:0.68rem; color:var(--muted); font-weight:400;">Auto-generated unique code</span></div>
+          <div class="admin-flow-arrow">→</div>
+          <div class="admin-flow-step">Share reg link<br><span style="font-size:0.68rem; color:var(--muted); font-weight:400;">/register/&lt;EVENT_CODE&gt;</span></div>
+          <div class="admin-flow-arrow">→</div>
+          <div class="admin-flow-step">Track results<br><span style="font-size:0.68rem; color:var(--muted); font-weight:400;">Count, completion, archetypes</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 9: ROADMAP -->
+<!-- ============================================================ -->
+<div class="page page-break">
+  <div class="section">
+    <div class="section-label">Section 09</div>
+    <h2>Roadmap</h2>
+
+    <table class="roadmap-table">
+      <thead>
+        <tr>
+          <th>Horizon</th>
+          <th>Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Short Term</td>
+          <td>
+            <div class="roadmap-bullet">Email notifications for parents — auto-send parent report immediately after student completes the diagnostic</div>
+            <div class="roadmap-bullet">Real student testing — run a live pilot with an actual school event or PTA night; collect feedback on question quality, archetype accuracy, and report clarity</div>
+            <div class="roadmap-bullet">Admin analytics — registration count, completion rate, and archetype distribution dashboard per event</div>
+          </td>
+        </tr>
+        <tr>
+          <td>Medium Term</td>
+          <td>
+            <div class="roadmap-bullet">Lite quiz — 90-second viral version (5–6 questions) for a quick archetype reveal; top-of-funnel social hook that feeds into the full diagnostic</div>
+            <div class="roadmap-bullet">School-level analytics — aggregated FUAR heatmaps and archetype distributions for partner schools; positions Cuemath as a school intelligence partner</div>
+            <div class="roadmap-bullet">Archetype evolution visible on dashboard — show the progression path (e.g., Gamma → Alpha) and what it takes to level up</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <!-- Tech stack -->
     <h3 style="margin-top: 40px; margin-bottom: 12px;">Technical Stack</h3>
