@@ -2677,10 +2677,12 @@ def share_card_preview(archetype_key):
     if not archetype:
         return "Archetype not found.", 404
 
+    embed = request.args.get('embed') == '1'
     return render_template('share_card.html',
                            archetype=archetype,
                            archetype_key=archetype_key,
-                           student_name=None)
+                           student_name=None,
+                           embed=embed)
 
 
 @app.route('/type/<archetype_key>')
