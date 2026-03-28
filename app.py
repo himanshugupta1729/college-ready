@@ -2678,10 +2678,11 @@ def share_card_preview(archetype_key):
         return "Archetype not found.", 404
 
     embed = request.args.get('embed') == '1'
+    sample_name = request.args.get('name', 'Sample Student')
     return render_template('share_card.html',
                            archetype=archetype,
                            archetype_key=archetype_key,
-                           student_name=None,
+                           student_name=sample_name if sample_name != 'none' else None,
                            embed=embed)
 
 
@@ -3337,36 +3338,63 @@ def api_topic_drilldown(student_id, topic_domain):
 
 @app.route('/sample/report')
 def sample_student_report():
-    """Sample student report with fake data — for product overview demos."""
-    # Find any completed student, prefer SAT track
+    """Sample student report — redirects to a real completed student."""
     conn = get_db()
     student = conn.execute("""
-        SELECT * FROM students WHERE archetype IS NOT NULL AND track = 'sat'
-        ORDER BY id DESC LIMIT 1
+        SELECT * FROM students WHERE archetype IS NOT NULL
+        ORDER BY id ASC LIMIT 1
     """).fetchone()
     if not student:
-        student = conn.execute("SELECT * FROM students WHERE archetype IS NOT NULL ORDER BY id DESC LIMIT 1").fetchone()
-    if not student:
         return "No sample student available. Complete the demo flow first.", 404
-
-    # Redirect to the actual report (which is already public)
     return redirect(f'/report/{student["id"]}')
 
 
 @app.route('/sample/parent-report')
 def sample_parent_report():
-    """Sample parent report with fake data — for product overview demos."""
+    """Sample parent report — redirects to a real completed student."""
     conn = get_db()
     student = conn.execute("""
-        SELECT * FROM students WHERE archetype IS NOT NULL AND track = 'sat'
-        ORDER BY id DESC LIMIT 1
+        SELECT * FROM students WHERE archetype IS NOT NULL
+        ORDER BY id ASC LIMIT 1
     """).fetchone()
     if not student:
-        student = conn.execute("SELECT * FROM students WHERE archetype IS NOT NULL ORDER BY id DESC LIMIT 1").fetchone()
-    if not student:
         return "No sample student available. Complete the demo flow first.", 404
-
     return redirect(f'/report/{student["id"]}/parent')
+
+
+@app.route('/sample/reveal')
+def sample_archetype_reveal():
+    """Sample archetype reveal page — shows a real student's reveal."""
+    conn = get_db()
+    student = conn.execute("""
+        SELECT * FROM students WHERE archetype IS NOT NULL
+        ORDER BY id ASC LIMIT 1
+    """).fetchone()
+    if not student:
+        return "No sample student available.", 404
+
+    archetype_key = student['archetype']
+    archetype = get_archetype_for_student(student, archetype_key)
+    fuar_scores = {
+        'F': student['fuar_fluency'] or 0, 'U': student['fuar_understanding'] or 0,
+        'A': student['fuar_application'] or 0, 'R': student['fuar_reasoning'] or 0,
+    }
+    score_result = {
+        'score_type': student['score_type'] or 'sat',
+        'label': student['score_label'] or '',
+        'detail': student['score_detail'] or '',
+    }
+
+    return render_template('archetype_reveal.html',
+                           archetype=archetype,
+                           archetype_key=archetype_key,
+                           fuar_scores=fuar_scores,
+                           score_result=score_result,
+                           student=student,
+                           archetypes=ALL_ARCHETYPES,
+                           student_name=student['student_name'].split()[0],
+                           is_demo=False,
+                           is_middle_school=is_middle_school_student(student))
 
 
 # ---------- Solution Import API ----------
