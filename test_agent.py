@@ -109,7 +109,9 @@ class TestAgent:
         problems = []
         if '>None<' in html or '>None ' in html:
             problems.append('None rendered in HTML')
-        if '>undefined<' in html:
+        # Only flag 'undefined' as visible rendered text — exclude JS code in <script> tags
+        html_no_scripts = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL)
+        if re.search(r'>\s*undefined\s*<', html_no_scripts):
             problems.append('undefined rendered in HTML')
         if 'Internal Server Error' in html:
             problems.append('Internal Server Error')
@@ -368,7 +370,7 @@ class TestAgent:
             self._fail('Parent Report', 'No student ID')
             return False
 
-        resp = self._get(f'/report/parent/{self.student_id}')
+        resp = self._get(f'/report/{self.student_id}/parent')
         if resp.status_code != 200:
             self._fail('Parent Report', f'HTTP {resp.status_code}')
             return False
