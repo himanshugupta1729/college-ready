@@ -2228,9 +2228,9 @@ def event_register(event_code):
         ).fetchone() if student_email else None
 
         if existing:
-            flash('You are already registered for this event!', 'info')
             return render_template('event_register.html', event=event, tracks=TRACK_CONFIG,
-                                   registered=True, grade_min=grade_min, grade_max=grade_max,
+                                   registered=True, student_name=student_name,
+                                   grade_min=grade_min, grade_max=grade_max,
                                    event_type=event_type, get_tracks_for_grade=get_tracks_for_grade)
 
         conn.execute("""

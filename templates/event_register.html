@@ -86,9 +86,11 @@
   {% if registered %}
   <div class="success-card">
     <h2>You're registered{{ ', ' + student_name if student_name else '' }}!</h2>
-    <p>On the event day, log in with your email at the event portal. You'll need this event code:</p>
+    <p>Your event code is:</p>
     <div class="event-code">{{ event.event_code }}</div>
-    <p style="margin-top: 16px; font-size: 13px; color: #666666;">Save this code — you'll need it on event day.</p>
+    <a href="/login" style="display: inline-block; margin-top: 20px; background: #FFBA07; color: #191919; padding: 14px 40px; border-radius: 8px; font-weight: 700; font-size: 16px; text-decoration: none;">
+      Go to Login →
+    </a>
   </div>
   {% else %}
   <div class="reg-card">
