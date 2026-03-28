@@ -2854,6 +2854,23 @@ def dashboard():
     ).fetchone()
     plan_dict = dict(plan) if plan else None
 
+    # Add computed fields for dashboard display
+    if plan_dict:
+        total_done = plan_dict.get('total_sessions_completed', 0) or 0
+        days_pw = plan_dict.get('days_per_week', 5) or 5
+        plan_dict['total_sessions'] = total_done
+        plan_dict['sessions_per_week'] = days_pw
+        plan_dict['sessions_this_week'] = total_done % days_pw if total_done > 0 else 0
+        # Use the actual completed workouts this week for accuracy
+        today = datetime.now()
+        week_start = (today - timedelta(days=today.weekday())).strftime('%Y-%m-%d')
+        workouts_this_week = conn.execute("""
+            SELECT COUNT(*) FROM daily_workouts
+            WHERE student_id = ? AND completed = 1 AND date(completed_at) >= ?
+        """, (student_id, week_start)).fetchone()[0]
+        plan_dict['sessions_this_week'] = workouts_this_week
+        plan_dict['streak'] = student['daily_practice_streak'] or 0
+
     # Check if weekly assessment is due
     weekly_check_due = False
     if plan_dict and plan_dict['status'] == 'active':
