@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Ready to Begin — College Ready{% endblock %}
+{% block title %}Ready to Begin — {{ 'Foundation Math Night' if is_middle_school else 'College Ready' }}{% endblock %}
 
 {% block extra_css %}
 .intro-wrapper {

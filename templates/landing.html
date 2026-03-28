@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}College Ready Night by Cuemath — Math Diagnostic{% endblock %}
+{% block title %}{{ 'Foundation Math Night' if is_middle_school else 'College Ready Night' }} by Cuemath — Math Diagnostic{% endblock %}
 
 {% block extra_css %}
 /* ══════════════════════════════════════════════
@@ -672,6 +672,34 @@
         <div class="hero-logo">
             <img src="https://d138zd1ktt9iqe.cloudfront.net/static/website-v3/cuemath-logo.svg" alt="Cuemath">
         </div>
+        {% if is_middle_school %}
+        <h1>Foundation Math <span class="hero-accent">Night</span></h1>
+        <p class="hero-subtitle">A 45-minute diagnostic that reveals your math strengths — and exactly where to grow next.</p>
+
+        <div class="track-tiles">
+            <div class="track-tile">
+                <div class="track-tile-icon track-tile-icon--sat">6</div>
+                <div class="track-tile-label">
+                    <strong>Grade 6 Math</strong>
+                    <span>Number &amp; operations</span>
+                </div>
+            </div>
+            <div class="track-tile">
+                <div class="track-tile-icon track-tile-icon--calc">7</div>
+                <div class="track-tile-label">
+                    <strong>Grade 7 Math</strong>
+                    <span>Ratios &amp; algebra</span>
+                </div>
+            </div>
+            <div class="track-tile">
+                <div class="track-tile-icon track-tile-icon--stats">8</div>
+                <div class="track-tile-label">
+                    <strong>Grade 8 Math</strong>
+                    <span>Algebra &amp; functions</span>
+                </div>
+            </div>
+        </div>
+        {% else %}
         <h1>College Ready <span class="hero-accent">Night</span></h1>
         <p class="hero-subtitle">A 60-minute diagnostic that reveals how you actually think about math — your strengths, your gaps, and exactly what to work on next.</p>
 
@@ -712,6 +740,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <div class="hero-cta-wrap">
             <a href="/login" class="btn-hero">
@@ -728,7 +757,7 @@
     <div class="section-header reveal">
         <div class="section-tag">The 16 Archetypes</div>
         <h2 class="section-title">Every math student has a type.</h2>
-        <p class="section-desc">Your archetype reveals your natural strengths, your blind spots, and the fastest path to the score you want.</p>
+        <p class="section-desc">Your archetype reveals your natural strengths, your blind spots, and the fastest path to {% if is_middle_school %}where you want to go{% else %}the score you want{% endif %}.</p>
     </div>
 
     <div class="archetype-grid">
@@ -791,8 +820,13 @@
 
         <div class="discover-card reveal">
             <div class="discover-icon">&#x1F4CA;</div>
+            {% if is_middle_school %}
+            <h3>Your Math Level</h3>
+            <p>See exactly where you stand in your grade band — what you've mastered and what's next.</p>
+            {% else %}
             <h3>Your Score Estimate</h3>
             <p>Get a predicted SAT or AP score based on your performance, plus what it takes to reach your target.</p>
+            {% endif %}
         </div>
 
         <div class="discover-card reveal">
@@ -817,8 +851,13 @@
             <div class="step-number">1</div>
             <div class="step-body">
                 <h3>Take the diagnostic</h3>
+                {% if is_middle_school %}
+                <p>Pick your grade — 6, 7, or 8. Answer 24+ adaptive questions across number sense, algebra, and reasoning.</p>
+                <span class="step-time">45 min</span>
+                {% else %}
                 <p>Pick your track — SAT, AP Calculus, AP Stats, or course-level. Answer 40+ adaptive questions that get harder as you go.</p>
                 <span class="step-time">60 min</span>
+                {% endif %}
             </div>
         </div>
 
@@ -835,7 +874,11 @@
             <div class="step-number">3</div>
             <div class="step-body">
                 <h3>Receive your full report</h3>
+                {% if is_middle_school %}
+                <p>A detailed breakdown sent to you and your parent — skill-level analysis, gap map, and a personalized practice plan.</p>
+                {% else %}
                 <p>A detailed breakdown sent to you and your parent — score estimates, gap analysis, and a personalized study plan.</p>
+                {% endif %}
                 <span class="step-time">48 hours</span>
             </div>
         </div>

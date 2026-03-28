@@ -658,7 +658,7 @@ body {
 {# ─── Logo bar ─── #}
 <div class="rp-logo-bar">
     <img class="rp-logo-img" src="{{ url_for('static', filename='cuemath-logo.svg') }}" alt="Cuemath">
-    <span class="rp-logo-right">{% if event %}{{ event.school_name }}{% else %}College Ready Night{% endif %}</span>
+    <span class="rp-logo-right">{% if event %}{{ event.school_name }}{% else %}{{ event_display_name | default('College Ready Night') }}{% endif %}</span>
 </div>
 
 <div class="rp-page">

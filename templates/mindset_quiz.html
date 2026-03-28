@@ -238,7 +238,7 @@
       {% if q.section == section.key %}
       <div class="question-block">
         <div class="q-number">{{ q.order }}</div>
-        <div class="q-text">"{{ q.text }}"</div>
+        <div class="q-text">"{{ q.text | replace('after high school', 'in the future') if is_middle_school else q.text }}"</div>
         <div class="scale-row">
           {% for value, label in scale_labels %}
           <div class="scale-pill">

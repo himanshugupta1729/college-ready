@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% set show_nav = false %}
 
-{% block title %}{{ student.student_name }}'s Math Assessment — College Ready Night{% endblock %}
+{% block title %}{{ student.student_name }}'s Math Assessment — {{ event_display_name | default('College Ready Night') }}{% endblock %}
 
 {% set fuar_labels = {'F': 'Fluency', 'U': 'Understanding', 'A': 'Application', 'R': 'Reasoning'} %}
 {% set fuar_parent_desc = {
@@ -408,7 +408,7 @@ body { background: #F9FAFB !important; color: #191919; }
     <a href="#" class="pr-cta-btn">Book a Free Consultation</a>
   </div>
 
-  <div class="pr-footer">Powered by Cuemath · {% if event %}{{ event.event_name }}{% elif score.score_type in ('sat', 'ap', 'course') %}College Ready Night{% else %}Foundation Math Night{% endif %}{% if event %} · {{ event.school_name }}{% endif %}</div>
+  <div class="pr-footer">Powered by Cuemath · {% if event %}{{ event.event_name }}{% else %}{{ event_display_name | default('College Ready Night') }}{% endif %}{% if event %} · {{ event.school_name }}{% endif %}</div>
 
 </div>
 {% endblock %}
