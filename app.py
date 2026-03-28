@@ -3333,6 +3333,42 @@ def api_topic_drilldown(student_id, topic_domain):
     return jsonify({'topic': topic_domain, 'questions': questions})
 
 
+# ---------- Sample Report (no login needed) ----------
+
+@app.route('/sample/report')
+def sample_student_report():
+    """Sample student report with fake data — for product overview demos."""
+    # Find any completed student, prefer SAT track
+    conn = get_db()
+    student = conn.execute("""
+        SELECT * FROM students WHERE archetype IS NOT NULL AND track = 'sat'
+        ORDER BY id DESC LIMIT 1
+    """).fetchone()
+    if not student:
+        student = conn.execute("SELECT * FROM students WHERE archetype IS NOT NULL ORDER BY id DESC LIMIT 1").fetchone()
+    if not student:
+        return "No sample student available. Complete the demo flow first.", 404
+
+    # Redirect to the actual report (which is already public)
+    return redirect(f'/report/{student["id"]}')
+
+
+@app.route('/sample/parent-report')
+def sample_parent_report():
+    """Sample parent report with fake data — for product overview demos."""
+    conn = get_db()
+    student = conn.execute("""
+        SELECT * FROM students WHERE archetype IS NOT NULL AND track = 'sat'
+        ORDER BY id DESC LIMIT 1
+    """).fetchone()
+    if not student:
+        student = conn.execute("SELECT * FROM students WHERE archetype IS NOT NULL ORDER BY id DESC LIMIT 1").fetchone()
+    if not student:
+        return "No sample student available. Complete the demo flow first.", 404
+
+    return redirect(f'/report/{student["id"]}/parent')
+
+
 # ---------- Solution Import API ----------
 
 @app.route('/api/import-solutions', methods=['POST'])
