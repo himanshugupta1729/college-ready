@@ -3333,6 +3333,40 @@ def import_solutions():
     return jsonify({'imported': imported, 'total': len(solutions)})
 
 
+@app.route('/api/clean-test-data', methods=['POST'])
+def clean_test_data():
+    """Remove all student data from demo events. Protected by app secret key."""
+    data = request.get_json(force=True)
+    if data.get('api_key') != app.secret_key:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    conn = get_db()
+    demo_events = conn.execute("SELECT event_code FROM events WHERE is_demo = 1").fetchall()
+    codes = [e['event_code'] for e in demo_events]
+
+    if not codes:
+        return jsonify({'message': 'No demo events found', 'deleted': 0})
+
+    placeholders = ','.join('?' * len(codes))
+    students = conn.execute(f"SELECT id FROM students WHERE event_code IN ({placeholders})", codes).fetchall()
+    student_ids = [s['id'] for s in students]
+
+    if not student_ids:
+        return jsonify({'message': 'No demo students found', 'deleted': 0})
+
+    sid_ph = ','.join('?' * len(student_ids))
+    conn.execute(f"DELETE FROM responses WHERE student_id IN ({sid_ph})", student_ids)
+    conn.execute(f"DELETE FROM gric_responses WHERE student_id IN ({sid_ph})", student_ids)
+    conn.execute(f"DELETE FROM workout_answers WHERE workout_id IN (SELECT id FROM daily_workouts WHERE student_id IN ({sid_ph}))", student_ids)
+    conn.execute(f"DELETE FROM daily_workouts WHERE student_id IN ({sid_ph})", student_ids)
+    conn.execute(f"DELETE FROM weekly_assessments WHERE student_id IN ({sid_ph})", student_ids)
+    conn.execute(f"DELETE FROM practice_plans WHERE student_id IN ({sid_ph})", student_ids)
+    conn.execute(f"DELETE FROM students WHERE id IN ({sid_ph})", student_ids)
+    conn.commit()
+
+    return jsonify({'message': f'Cleaned {len(student_ids)} demo students', 'deleted': len(student_ids), 'events': codes})
+
+
 # ---------- Admin ----------
 
 @app.route('/admin/login', methods=['GET', 'POST'])
