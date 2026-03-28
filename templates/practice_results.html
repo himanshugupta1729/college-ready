@@ -260,10 +260,43 @@
     font-style: italic;
 }
 
-/* ─── Step-by-step walkthrough ─── */
+/* ─── Step-by-step walkthrough (toggle) ─── */
 .steps-section {
     margin-bottom: 20px;
 }
+.steps-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 0;
+    text-align: left;
+}
+.steps-toggle:hover { border-color: var(--accent); color: var(--text); }
+.steps-toggle .toggle-chevron {
+    margin-left: auto;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+.steps-toggle.open .toggle-chevron { transform: rotate(180deg); }
+.steps-toggle.open { margin-bottom: 12px; border-color: var(--accent); color: var(--text); }
+
+.steps-content {
+    display: none;
+}
+.steps-content.visible {
+    display: block;
+}
+
 .steps-header {
     font-size: 12px;
     font-weight: 700;
@@ -538,34 +571,46 @@
                     </div>
                     {% endif %}
 
-                    {# Step-by-step worked solution #}
+                    {# Step-by-step worked solution — toggle #}
                     {% if rq.worked_steps %}
-                    <div class="steps-section" data-steps="{{ rq.worked_steps | length }}">
-                        <div class="steps-header">Step-by-Step Solution</div>
-                        {% for step in rq.worked_steps %}
-                        <div class="step-card {% if loop.first %}revealed{% endif %}" data-step="{{ loop.index }}">
-                            <div class="step-number">{{ step.step | default(loop.index) }}</div>
-                            <div class="step-title">{{ step.title }}</div>
-                            {% if step.math %}
-                            <div class="step-math">{{ step.math }}</div>
-                            {% endif %}
-                            <div class="step-why">{{ step.why }}</div>
-                        </div>
-                        {% endfor %}
-                        {% if rq.worked_steps | length > 1 %}
-                        <button class="step-reveal-btn" onclick="revealNextStep(this)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="steps-section">
+                        <button class="steps-toggle" onclick="toggleSteps(this)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                            Step-by-Step Solution
+                            <svg class="toggle-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            Next Step
                         </button>
-                        {% endif %}
+                        <div class="steps-content">
+                            {% for step in rq.worked_steps %}
+                            <div class="step-card revealed" data-step="{{ loop.index }}">
+                                <div class="step-number">{{ step.step | default(loop.index) }}</div>
+                                <div class="step-title">{{ step.title }}</div>
+                                {% if step.math %}
+                                <div class="step-math">{{ step.math }}</div>
+                                {% endif %}
+                                <div class="step-why">{{ step.why }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                     {% elif rq.explanation %}
                     <div class="steps-section">
-                        <div class="steps-header">Explanation</div>
-                        <div class="step-card revealed" style="padding-left: 16px;">
-                            <div class="step-why">{{ rq.explanation }}</div>
+                        <button class="steps-toggle" onclick="toggleSteps(this)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                            Explanation
+                            <svg class="toggle-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="steps-content">
+                            <div class="step-card revealed" style="padding-left: 16px;">
+                                <div class="step-why">{{ rq.explanation }}</div>
+                            </div>
                         </div>
                     </div>
                     {% endif %}
@@ -609,17 +654,27 @@
 
                     {% if rq.worked_steps %}
                     <div class="steps-section" style="margin-top: 16px;">
-                        <div class="steps-header">Solution Walkthrough</div>
-                        {% for step in rq.worked_steps %}
-                        <div class="step-card revealed" data-step="{{ loop.index }}">
-                            <div class="step-number">{{ step.step | default(loop.index) }}</div>
-                            <div class="step-title">{{ step.title }}</div>
-                            {% if step.math %}
-                            <div class="step-math">{{ step.math }}</div>
-                            {% endif %}
-                            <div class="step-why">{{ step.why }}</div>
+                        <button class="steps-toggle" onclick="toggleSteps(this)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                            </svg>
+                            Solution Walkthrough
+                            <svg class="toggle-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="steps-content">
+                            {% for step in rq.worked_steps %}
+                            <div class="step-card revealed" data-step="{{ loop.index }}">
+                                <div class="step-number">{{ step.step | default(loop.index) }}</div>
+                                <div class="step-title">{{ step.title }}</div>
+                                {% if step.math %}
+                                <div class="step-math">{{ step.math }}</div>
+                                {% endif %}
+                                <div class="step-why">{{ step.why }}</div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -670,31 +725,12 @@
         card.classList.toggle('expanded');
     };
 
-    // Step-by-step reveal
-    window.revealNextStep = function(btn) {
-        var section = btn.closest('.steps-section');
-        var hidden = section.querySelectorAll('.step-card:not(.revealed)');
-        if (hidden.length > 0) {
-            hidden[0].classList.add('revealed');
-            if (hidden.length <= 1) {
-                btn.classList.add('done');
-            }
-        }
+    // Toggle steps section
+    window.toggleSteps = function(btn) {
+        btn.classList.toggle('open');
+        var content = btn.nextElementSibling;
+        content.classList.toggle('visible');
     };
-
-    // Auto-reveal steps on wrong questions with a staggered delay
-    setTimeout(function() {
-        document.querySelectorAll('.review-card.wrong.expanded .steps-section').forEach(function(section) {
-            var steps = section.querySelectorAll('.step-card:not(.revealed)');
-            steps.forEach(function(step, i) {
-                setTimeout(function() { step.classList.add('revealed'); }, (i + 1) * 600);
-            });
-            var btn = section.querySelector('.step-reveal-btn');
-            if (btn) {
-                setTimeout(function() { btn.classList.add('done'); }, (steps.length + 1) * 600);
-            }
-        });
-    }, 800);
 })();
 </script>
 {% endblock %}
