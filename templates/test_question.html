@@ -5,15 +5,8 @@
 
 {% block extra_css %}
 /* Full-screen test mode */
-body {
-    overflow: hidden;
-}
-
-/* Override accent bar for test — keep it but don't let it interfere */
-body::before {
-    position: fixed;
-    z-index: 9999;
-}
+body { overflow: hidden; }
+body::before { position: fixed; z-index: 9999; }
 
 .test-shell {
     height: 100vh;
@@ -22,17 +15,17 @@ body::before {
     padding-top: 4px;
 }
 
-/* ── Top bar ─────────────────────────────────────────────── */
+/* ── Top bar ── */
 .test-topbar {
     flex-shrink: 0;
     background: var(--surface-2);
     border-bottom: 1px solid var(--border);
     padding: 0 28px;
-    height: 60px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 20px;
 }
 
 .topbar-left {
@@ -49,10 +42,19 @@ body::before {
     color: var(--text-secondary);
     white-space: nowrap;
 }
+.q-counter strong { color: var(--text); font-weight: 700; }
 
-.q-counter strong {
-    color: var(--text);
+/* Answered count badge */
+.answered-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #10B981;
+    color: white;
+    font-size: 12px;
     font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 100px;
 }
 
 .progress-track {
@@ -63,7 +65,6 @@ body::before {
     overflow: hidden;
     max-width: 400px;
 }
-
 .progress-track .fill {
     height: 100%;
     background: var(--accent);
@@ -71,62 +72,123 @@ body::before {
     transition: width 0.4s ease;
 }
 
-.topbar-right {
-    flex-shrink: 0;
+.topbar-center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* Timer */
+.topbar-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ── Hideable Timer ── */
+.timer-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .timer {
     display: flex;
     align-items: center;
     gap: 8px;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 8px 14px;
-    font-size: 18px;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 17px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.5px;
     color: var(--text);
-    transition: color 0.3s, border-color 0.3s, background 0.3s;
+    transition: all 0.3s;
+    cursor: pointer;
 }
+.timer svg { flex-shrink: 0; color: var(--text-secondary); }
 
-.timer svg {
-    flex-shrink: 0;
+/* Hidden state */
+.timer.hidden-timer {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-secondary);
+    padding: 7px 10px;
+}
+.timer.hidden-timer #timer-display { display: none; }
+.timer.hidden-timer::after {
+    content: 'Show Timer';
+    font-size: 12px;
+    font-weight: 600;
     color: var(--text-secondary);
 }
 
+/* Warning: 15 min left — amber */
+.timer.warning {
+    color: #D97706;
+    border-color: rgba(217, 119, 6, 0.3);
+    background: #FFFBEB;
+}
+.timer.warning svg { color: #D97706; }
+
+/* Danger: 5 min left — red (auto-shows) */
 .timer.danger {
-    color: var(--red);
-    border-color: rgba(220, 38, 38, 0.4);
+    color: var(--red, #DC2626);
+    border-color: rgba(220, 38, 38, 0.3);
     background: #FEF2F2;
-    animation: pulse-border 1.2s ease-in-out infinite;
+    animation: pulse-amber 2s ease-in-out infinite;
+}
+.timer.danger svg { color: var(--red, #DC2626); }
+
+@keyframes pulse-amber {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+    50%       { box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1); }
 }
 
-.timer.danger svg {
-    color: var(--red);
+/* ── Mark for Review ── */
+.btn-flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.btn-flag:hover { border-color: #F59E0B; color: #D97706; background: #FFFBEB; }
+.btn-flag.flagged {
+    background: #FFFBEB;
+    border-color: #F59E0B;
+    color: #D97706;
 }
 
-@keyframes pulse-border {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-    50%       { box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12); }
-}
-
-/* ── Question body ───────────────────────────────────────── */
+/* ── Question body ── */
 .test-body {
     flex: 1;
     overflow-y: auto;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 40px 24px;
+    padding: 48px 24px;
     background: var(--bg);
 }
 
 .question-card {
     width: 100%;
-    max-width: 680px;
+    max-width: 720px;
+    animation: fadeInQuestion 0.3s ease-out;
+}
+
+@keyframes fadeInQuestion {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .question-number {
@@ -135,23 +197,23 @@ body::before {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--accent-hover);
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .question-text {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 500;
-    line-height: 1.6;
+    line-height: 1.65;
     color: var(--text);
-    margin-bottom: 32px;
-    letter-spacing: -0.1px;
+    margin-bottom: 36px;
+    letter-spacing: -0.2px;
 }
 
-/* Answer options */
+/* ── Answer options — larger touch targets ── */
 .options-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 36px;
 }
 
@@ -162,63 +224,138 @@ body::before {
     background: var(--surface);
     border: 2px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px 20px;
+    padding: 18px 22px;
+    min-height: 60px;
     cursor: pointer;
     transition: border-color 0.15s, background 0.15s, transform 0.1s;
     user-select: none;
     -webkit-user-select: none;
+    position: relative;
 }
 
-.option-card:hover {
-    border-color: #CCCCCC;
-    background: var(--surface-2);
-}
+.option-card:hover { border-color: #CCCCCC; background: var(--surface-2); }
 
 .option-card.selected {
     border-color: var(--accent);
     background: rgba(255, 186, 7, 0.08);
 }
-
 .option-card.selected .option-letter {
     background: var(--accent);
     border-color: var(--accent);
     color: #191919;
 }
 
+/* Eliminated option (strikethrough) */
+.option-card.eliminated {
+    opacity: 0.4;
+    text-decoration: line-through;
+    pointer-events: none;
+}
+.option-card.eliminated .option-letter {
+    background: var(--surface-3);
+    color: var(--text-secondary);
+}
+
+/* Eliminate button */
+.option-eliminate {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.option-card:hover .option-eliminate { opacity: 0.6; }
+.option-eliminate:hover { opacity: 1 !important; background: #FEF2F2; border-color: #FECACA; color: #DC2626; }
+
 .option-letter {
     flex-shrink: 0;
-    width: 34px;
-    height: 34px;
-    border-radius: 4px;
+    width: 36px; height: 36px;
+    border-radius: 6px;
     border: 1.5px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text-secondary);
     transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .option-text {
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 17px;
+    line-height: 1.55;
     color: var(--text);
     flex: 1;
 }
 
-/* ── Question Navigator ──────────────────────────────────── */
-.q-navigator {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
+/* ── Question Map (drawer in footer) ── */
+.q-map-toggle {
+    display: inline-flex;
     align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.q-map-toggle:hover { border-color: var(--accent); color: var(--text); }
+
+.q-map-drawer {
+    display: none;
+    position: fixed;
+    bottom: 64px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.12);
+    z-index: 200;
+    max-width: 600px;
+    width: 90%;
+}
+.q-map-drawer.open { display: block; animation: slideUp 0.2s ease-out; }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.q-map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.q-map-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.q-map-legend { font-size: 11px; color: var(--text-secondary); }
+
+.q-map-grid {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
 }
 
 .q-nav-dot {
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
+    width: 30px; height: 30px;
+    border-radius: 6px;
     border: 1px solid var(--border);
     background: var(--surface);
     display: flex;
@@ -231,42 +368,27 @@ body::before {
     transition: all 0.15s;
     text-decoration: none;
 }
-
 .q-nav-dot:hover { border-color: var(--accent); background: #FFFBEB; }
 .q-nav-dot.current { background: var(--accent); color: #191919; border-color: var(--accent); font-weight: 700; }
 .q-nav-dot.answered { background: #10B981; color: #fff; border-color: #10B981; }
 .q-nav-dot.answered:hover { background: #059669; }
+.q-nav-dot.flagged { border-color: #F59E0B; background: #FFFBEB; color: #D97706; }
+.q-nav-dot.flagged.answered { background: #F59E0B; color: #fff; border-color: #F59E0B; }
 
-.q-nav-label {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-right: 8px;
-    font-weight: 600;
-}
-
-/* ── Bottom action bar ───────────────────────────────────── */
+/* ── Bottom action bar ── */
 .test-footer {
     flex-shrink: 0;
     background: var(--surface-2);
     border-top: 1px solid var(--border);
-    padding: 16px 28px;
+    padding: 12px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
 }
 
-.footer-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.footer-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+.footer-left { display: flex; align-items: center; gap: 10px; }
+.footer-right { display: flex; align-items: center; gap: 10px; }
 
 .btn-skip {
     display: inline-flex;
@@ -276,21 +398,20 @@ body::before {
     background: var(--surface);
     color: var(--text-secondary);
     border: 1px solid var(--border);
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
     min-height: 44px;
 }
-
 .btn-skip:hover { border-color: #ccc; background: var(--surface-2); color: var(--text); }
 
 .btn-next {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 13px 32px;
+    padding: 12px 32px;
     background: var(--accent);
     color: #191919;
     border: none;
@@ -298,27 +419,16 @@ body::before {
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s, opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    transition: background 0.2s, opacity 0.2s, transform 0.15s;
     min-height: 44px;
 }
-
-.btn-next:hover:not(:disabled) {
-    background: var(--accent-hover);
-    box-shadow: 0 4px 12px var(--accent-glow);
-    transform: translateY(-1px);
-}
-
-.btn-next:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    box-shadow: none;
-}
+.btn-next:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+.btn-next:disabled { opacity: 0.35; cursor: not-allowed; }
 
 .keyboard-hint {
     font-size: 12px;
     color: var(--text-secondary);
 }
-
 .keyboard-hint kbd {
     display: inline-block;
     background: var(--surface-3);
@@ -330,6 +440,16 @@ body::before {
     color: var(--text-secondary);
     margin: 0 1px;
 }
+
+/* ── Module transition card ── */
+.module-transition {
+    text-align: center;
+    padding: 80px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+.module-transition h2 { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+.module-transition p { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 32px; }
 {% endblock %}
 
 {% block content %}
@@ -341,17 +461,29 @@ body::before {
             <span class="q-counter">
                 Question <strong>{{ current }}</strong> of {{ total }}
             </span>
+            <span class="answered-badge" id="answered-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="answered-count">{{ answered_count | default(current - 1) }}</span> answered
+            </span>
             <div class="progress-track">
-                <div class="fill" style="width: {{ ((current - 1) / total * 100)|round(1) }}%"></div>
+                <div class="fill" style="width: {{ ((answered_count | default(current - 1)) / total * 100)|round(1) }}%"></div>
             </div>
         </div>
         <div class="topbar-right">
-            <div class="timer" id="timer">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
+            <button class="btn-flag" id="btn-flag" onclick="toggleFlag()" title="Mark for review">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
                 </svg>
-                <span id="timer-display">--:--</span>
+                <span id="flag-text">Flag</span>
+            </button>
+            <div class="timer-wrap">
+                <div class="timer hidden-timer" id="timer" onclick="toggleTimer()" title="Click to show/hide timer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="timer-display">--:--</span>
+                </div>
             </div>
         </div>
     </div>
@@ -378,6 +510,7 @@ body::before {
                     <div class="option-card" data-value="{{ letter }}" role="button" tabindex="0" aria-label="Option {{ letter }}: {{ text }}">
                         <div class="option-letter">{{ letter }}</div>
                         <div class="option-text">{{ text }}</div>
+                        <div class="option-eliminate" onclick="event.stopPropagation(); eliminateOption(this.parentElement)" title="Eliminate">✕</div>
                     </div>
                     {% endfor %}
                 </div>
@@ -385,20 +518,42 @@ body::before {
         </div>
     </div>
 
+    <!-- Question map drawer -->
+    <div class="q-map-drawer" id="q-map-drawer">
+        <div class="q-map-header">
+            <span class="q-map-title">Question Map</span>
+            <span class="q-map-legend">
+                <span style="color: #10B981;">● Answered</span> &nbsp;
+                <span style="color: #F59E0B;">● Flagged</span> &nbsp;
+                <span style="color: var(--text-secondary);">● Unanswered</span>
+            </span>
+        </div>
+        <div class="q-map-grid">
+            {% if nav_items %}
+            {% for item in nav_items %}
+            <a href="/test/question?q={{ item.index }}" class="q-nav-dot {{ item.status }}" title="Question {{ item.number }}">{{ item.number }}</a>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
     <!-- Footer -->
     <div class="test-footer">
         <div class="footer-left">
-            {% if nav_items %}
-            <div class="q-navigator">
-                {% for item in nav_items %}
-                <a href="/test/question?q={{ item.index }}" class="q-nav-dot {{ item.status }}" title="Question {{ item.number }}">{{ item.number }}</a>
-                {% endfor %}
+            <button class="q-map-toggle" onclick="toggleQuestionMap()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                Questions
+            </button>
+            <div class="keyboard-hint">
+                <kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> to select &nbsp; <kbd>Enter</kbd> to submit
             </div>
-            {% endif %}
         </div>
         <div class="footer-right">
             <form action="/test/skip" method="POST" style="display:inline;">
-                <button type="submit" class="btn-skip">Skip &rarr;</button>
+                <button type="submit" class="btn-skip">Skip →</button>
             </form>
             <button class="btn-next" id="btn-next" disabled>
                 {% if current < total %}
@@ -425,18 +580,21 @@ body::before {
 (function () {
     'use strict';
 
-    /* ── Config ──────────────────────────────────────────── */
+    /* ── Config ── */
     const TIME_REMAINING_SECONDS = {{ time_remaining }};
-    const DANGER_THRESHOLD = 300; // 5 minutes
+    const WARNING_THRESHOLD = 900;  // 15 minutes — show amber
+    const DANGER_THRESHOLD = 300;   // 5 minutes — force show + red
 
-    /* ── State ───────────────────────────────────────────── */
+    /* ── State ── */
     let selectedAnswer = null;
     let questionStartTime = Date.now();
     let totalSecondsLeft = TIME_REMAINING_SECONDS;
     let timerInterval = null;
     let submitted = false;
+    let timerVisible = false;  // hidden by default
+    let isFlagged = false;
 
-    /* ── DOM refs ────────────────────────────────────────── */
+    /* ── DOM refs ── */
     const timerEl      = document.getElementById('timer');
     const timerDisplay = document.getElementById('timer-display');
     const answerInput  = document.getElementById('answer-input');
@@ -444,28 +602,46 @@ body::before {
     const btnNext      = document.getElementById('btn-next');
     const form         = document.getElementById('answer-form');
     const optionCards  = document.querySelectorAll('.option-card');
+    const btnFlag      = document.getElementById('btn-flag');
+    const flagText     = document.getElementById('flag-text');
+    const qMapDrawer   = document.getElementById('q-map-drawer');
 
-    /* ── Timer ───────────────────────────────────────────── */
+    /* ── Timer ── */
     function formatTime(secs) {
         const m = Math.floor(secs / 60);
         const s = secs % 60;
         return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     }
 
+    function updateTimerVisibility() {
+        if (totalSecondsLeft <= DANGER_THRESHOLD) {
+            // Force show at 5 min
+            timerEl.classList.remove('hidden-timer', 'warning');
+            timerEl.classList.add('danger');
+            timerDisplay.style.display = '';
+            timerVisible = true;
+        } else if (totalSecondsLeft <= WARNING_THRESHOLD) {
+            // Show amber at 15 min (auto-show if hidden)
+            if (!timerVisible) {
+                timerVisible = true;
+                timerEl.classList.remove('hidden-timer');
+            }
+            timerEl.classList.add('warning');
+            timerEl.classList.remove('danger');
+            timerDisplay.style.display = '';
+        }
+    }
+
     function tickTimer() {
         totalSecondsLeft = Math.max(0, totalSecondsLeft - 1);
         timerDisplay.textContent = formatTime(totalSecondsLeft);
-
-        if (totalSecondsLeft <= DANGER_THRESHOLD) {
-            timerEl.classList.add('danger');
-        }
+        updateTimerVisibility();
 
         if (totalSecondsLeft === 0) {
             clearInterval(timerInterval);
             if (!submitted) {
                 submitted = true;
                 timeSpentInput.value = Math.round((Date.now() - questionStartTime) / 1000);
-                // Submit current answer if one is selected, otherwise go straight to complete
                 if (selectedAnswer) {
                     answerInput.value = selectedAnswer;
                     form.submit();
@@ -476,29 +652,71 @@ body::before {
         }
     }
 
-    // Initialise display immediately (no blank flash)
+    // Init timer
     timerDisplay.textContent = formatTime(totalSecondsLeft);
-    if (totalSecondsLeft <= DANGER_THRESHOLD) timerEl.classList.add('danger');
+    updateTimerVisibility();
     timerInterval = setInterval(tickTimer, 1000);
 
-    /* ── Answer selection ────────────────────────────────── */
+    // Toggle timer visibility
+    window.toggleTimer = function() {
+        if (totalSecondsLeft <= DANGER_THRESHOLD) return; // can't hide at 5 min
+        timerVisible = !timerVisible;
+        if (timerVisible) {
+            timerEl.classList.remove('hidden-timer');
+            timerDisplay.style.display = '';
+        } else {
+            timerEl.classList.add('hidden-timer');
+        }
+    };
+
+    /* ── Mark for Review ── */
+    window.toggleFlag = function() {
+        isFlagged = !isFlagged;
+        btnFlag.classList.toggle('flagged', isFlagged);
+        flagText.textContent = isFlagged ? 'Flagged' : 'Flag';
+        // Update nav dot if exists
+        var currentDot = document.querySelector('.q-nav-dot.current');
+        if (currentDot) {
+            currentDot.classList.toggle('flagged', isFlagged);
+        }
+    };
+
+    /* ── Question Map ── */
+    window.toggleQuestionMap = function() {
+        qMapDrawer.classList.toggle('open');
+    };
+    // Close map on click outside
+    document.addEventListener('click', function(e) {
+        if (qMapDrawer.classList.contains('open') &&
+            !qMapDrawer.contains(e.target) &&
+            !e.target.closest('.q-map-toggle')) {
+            qMapDrawer.classList.remove('open');
+        }
+    });
+
+    /* ── Option Elimination ── */
+    window.eliminateOption = function(card) {
+        if (card.classList.contains('selected')) return; // can't eliminate selected
+        card.classList.toggle('eliminated');
+    };
+
+    /* ── Answer selection ── */
     function selectAnswer(value) {
         if (submitted) return;
+        var card = document.querySelector('.option-card[data-value="' + value + '"]');
+        if (card && card.classList.contains('eliminated')) return; // can't select eliminated
 
         selectedAnswer = value;
         answerInput.value = value;
-
-        optionCards.forEach(card => {
-            card.classList.toggle('selected', card.dataset.value === value);
+        optionCards.forEach(function(c) {
+            c.classList.toggle('selected', c.dataset.value === value);
         });
-
         btnNext.disabled = false;
     }
 
-    optionCards.forEach(card => {
-        card.addEventListener('click', () => selectAnswer(card.dataset.value));
-        // Accessibility: keyboard activation on focusable cards
-        card.addEventListener('keydown', e => {
+    optionCards.forEach(function(card) {
+        card.addEventListener('click', function() { selectAnswer(card.dataset.value); });
+        card.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 selectAnswer(card.dataset.value);
@@ -506,35 +724,29 @@ body::before {
         });
     });
 
-    /* ── Keyboard shortcuts ──────────────────────────────── */
-    document.addEventListener('keydown', e => {
+    /* ── Keyboard shortcuts ── */
+    document.addEventListener('keydown', function(e) {
         if (submitted) return;
-        // Don't fire inside text inputs (future-proof)
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-        const key = e.key.toUpperCase();
-
+        var key = e.key.toUpperCase();
         if (['A', 'B', 'C', 'D'].includes(key)) {
             e.preventDefault();
             selectAnswer(key);
             return;
         }
-
         if (e.key === 'Enter' && selectedAnswer) {
             e.preventDefault();
             submitAnswer();
         }
     });
 
-    /* ── Submit ──────────────────────────────────────────── */
+    /* ── Submit ── */
     function submitAnswer() {
         if (submitted || !selectedAnswer) return;
         submitted = true;
         clearInterval(timerInterval);
-
-        const elapsed = Math.round((Date.now() - questionStartTime) / 1000);
-        timeSpentInput.value = elapsed;
-
+        timeSpentInput.value = Math.round((Date.now() - questionStartTime) / 1000);
         btnNext.disabled = true;
         btnNext.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         form.submit();
@@ -542,17 +754,15 @@ body::before {
 
     btnNext.addEventListener('click', submitAnswer);
 
-    /* ── Prevent accidental navigation ──────────────────── */
-    window.addEventListener('beforeunload', e => {
+    /* ── Prevent accidental navigation ── */
+    window.addEventListener('beforeunload', function(e) {
         if (!submitted && selectedAnswer) {
             e.preventDefault();
             e.returnValue = '';
         }
     });
-
-    // Prevent back button mid-test
     history.pushState(null, '', window.location.href);
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', function() {
         history.pushState(null, '', window.location.href);
     });
 
