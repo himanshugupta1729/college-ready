@@ -3338,12 +3338,20 @@ def api_topic_drilldown(student_id, topic_domain):
 
 @app.route('/sample/report')
 def sample_student_report():
-    """Sample student report — redirects to a real completed student."""
+    """Sample student report — redirects to a real completed student with response data."""
     conn = get_db()
+    # Prefer students with actual response data (for topic heatmap)
     student = conn.execute("""
-        SELECT * FROM students WHERE archetype IS NOT NULL
-        ORDER BY id ASC LIMIT 1
+        SELECT s.* FROM students s
+        WHERE s.archetype IS NOT NULL
+        AND EXISTS (SELECT 1 FROM responses r WHERE r.student_id = s.id)
+        ORDER BY s.id DESC LIMIT 1
     """).fetchone()
+    if not student:
+        student = conn.execute("""
+            SELECT * FROM students WHERE archetype IS NOT NULL
+            ORDER BY id ASC LIMIT 1
+        """).fetchone()
     if not student:
         return "No sample student available. Complete the demo flow first.", 404
     return redirect(f'/report/{student["id"]}')
@@ -3351,12 +3359,19 @@ def sample_student_report():
 
 @app.route('/sample/parent-report')
 def sample_parent_report():
-    """Sample parent report — redirects to a real completed student."""
+    """Sample parent report — redirects to a real completed student with response data."""
     conn = get_db()
     student = conn.execute("""
-        SELECT * FROM students WHERE archetype IS NOT NULL
-        ORDER BY id ASC LIMIT 1
+        SELECT s.* FROM students s
+        WHERE s.archetype IS NOT NULL
+        AND EXISTS (SELECT 1 FROM responses r WHERE r.student_id = s.id)
+        ORDER BY s.id DESC LIMIT 1
     """).fetchone()
+    if not student:
+        student = conn.execute("""
+            SELECT * FROM students WHERE archetype IS NOT NULL
+            ORDER BY id ASC LIMIT 1
+        """).fetchone()
     if not student:
         return "No sample student available. Complete the demo flow first.", 404
     return redirect(f'/report/{student["id"]}/parent')
@@ -3367,9 +3382,13 @@ def sample_archetype_reveal():
     """Sample archetype reveal page — shows a real student's reveal."""
     conn = get_db()
     student = conn.execute("""
-        SELECT * FROM students WHERE archetype IS NOT NULL
-        ORDER BY id ASC LIMIT 1
+        SELECT s.* FROM students s
+        WHERE s.archetype IS NOT NULL
+        AND EXISTS (SELECT 1 FROM responses r WHERE r.student_id = s.id)
+        ORDER BY s.id DESC LIMIT 1
     """).fetchone()
+    if not student:
+        student = conn.execute("SELECT * FROM students WHERE archetype IS NOT NULL ORDER BY id ASC LIMIT 1").fetchone()
     if not student:
         return "No sample student available.", 404
 

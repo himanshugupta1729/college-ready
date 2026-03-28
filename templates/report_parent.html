@@ -359,6 +359,11 @@ body { background: #F9FAFB !important; color: #191919; }
         {% endfor %}
       </div>
     {% else %}
+      <div style="text-align: center; padding: 24px; color: #9CA3AF; font-size: 14px;">
+        Topic breakdown will appear after completing the diagnostic with the updated system.
+      </div>
+      {% if false %}
+      {# Old fallback removed — was showing FUAR as topics which is wrong #}
       {% set fuar_sorted = [('F', fuar.F), ('U', fuar.U), ('A', fuar.A), ('R', fuar.R)] %}
       <div class="pr-topic-grid">
         {% for dim_pair in fuar_sorted|sort(attribute='1', reverse=true) %}
@@ -378,6 +383,7 @@ body { background: #F9FAFB !important; color: #191919; }
           </div>
         {% endfor %}
       </div>
+      {% endif %}
     {% endif %}
   </div>
 
