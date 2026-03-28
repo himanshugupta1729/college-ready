@@ -2770,27 +2770,26 @@ def weekly_assessment():
             VALUES (?, ?, ?, ?, ?, ?)
         """, (student_id, current_week, new_fuar['F'], new_fuar['U'], new_fuar['A'], new_fuar['R']))
 
-        # If week 4, do final archetype reassignment
+        # Update FUAR scores on student record EVERY week (not just week 4)
+        gric = {
+            'G': student['gric_growth'] or 50,
+            'R_gric': student['gric_relevance'] or 50,
+            'I': student['gric_interest'] or 50,
+            'C': student['gric_confidence'] or 50,
+        }
+        new_archetype = assign_archetype(new_fuar, gric, student['grade'])
+
+        conn.execute("""
+            UPDATE students SET
+                fuar_fluency = ?, fuar_understanding = ?,
+                fuar_application = ?, fuar_reasoning = ?,
+                archetype = ?
+            WHERE id = ?
+        """, (new_fuar['F'], new_fuar['U'], new_fuar['A'], new_fuar['R'],
+              new_archetype, student_id))
+
+        # Week 4: complete the plan
         if current_week >= 4:
-            gric = {
-                'G': student['gric_growth'] or 50,
-                'R_gric': student['gric_relevance'] or 50,
-                'I': student['gric_interest'] or 50,
-                'C': student['gric_confidence'] or 50,
-            }
-            new_archetype = assign_archetype(new_fuar, gric, student['grade'])
-
-            # Update student with new scores
-            conn.execute("""
-                UPDATE students SET
-                    fuar_fluency = ?, fuar_understanding = ?,
-                    fuar_application = ?, fuar_reasoning = ?,
-                    archetype = ?
-                WHERE id = ?
-            """, (new_fuar['F'], new_fuar['U'], new_fuar['A'], new_fuar['R'],
-                  new_archetype, student_id))
-
-            # Update plan with end state
             conn.execute("""
                 UPDATE practice_plans SET
                     status = 'completed',
@@ -2871,7 +2870,11 @@ def dashboard():
 
     # Add computed fields for dashboard display
     if plan_dict:
-        total_done = plan_dict.get('total_sessions_completed', 0) or 0
+        # Use actual completed workout count (not plan counter which can be inflated)
+        total_done = conn.execute(
+            "SELECT COUNT(*) FROM daily_workouts WHERE student_id = ? AND completed = 1",
+            (student_id,)
+        ).fetchone()[0]
         days_pw = plan_dict.get('days_per_week', 5) or 5
         plan_dict['total_sessions'] = total_done
         plan_dict['sessions_per_week'] = days_pw
@@ -3153,21 +3156,46 @@ def practice_results(workout_id):
     """, (workout_id,)).fetchall()
 
     review_questions = []
-    for row in wa_rows:
-        rq = dict(row)
-        # Parse JSON fields
+
+    if wa_rows:
+        # New-style: full per-question answers stored
+        for row in wa_rows:
+            rq = dict(row)
+            try:
+                rq['worked_steps'] = json.loads(rq['worked_solution_json']) if rq.get('worked_solution_json') else None
+            except (json.JSONDecodeError, TypeError):
+                rq['worked_steps'] = None
+            try:
+                analyses = json.loads(rq['wrong_answer_analyses']) if rq.get('wrong_answer_analyses') else {}
+            except (json.JSONDecodeError, TypeError):
+                analyses = {}
+            rq['personal_analysis'] = analyses.get(rq.get('student_answer', ''), '') if not rq.get('is_correct') else ''
+            rq['all_analyses'] = analyses
+            review_questions.append(rq)
+    elif workout['questions_json']:
+        # Fallback for old workouts: load questions from questions_json (no per-answer data)
         try:
-            rq['worked_steps'] = json.loads(rq['worked_solution_json']) if rq.get('worked_solution_json') else None
+            q_ids = json.loads(workout['questions_json'])
+            if q_ids:
+                placeholders = ','.join('?' * len(q_ids))
+                q_rows = conn.execute(f"""
+                    SELECT *, NULL as student_answer, NULL as correct_answer, -1 as is_correct
+                    FROM questions WHERE id IN ({placeholders})
+                """, q_ids).fetchall()
+                for row in q_rows:
+                    rq = dict(row)
+                    rq['is_correct'] = -1  # unknown
+                    rq['student_answer'] = ''
+                    rq['correct_answer'] = rq.get('correct_answer', '')
+                    try:
+                        rq['worked_steps'] = json.loads(rq['worked_solution_json']) if rq.get('worked_solution_json') else None
+                    except (json.JSONDecodeError, TypeError):
+                        rq['worked_steps'] = None
+                    rq['personal_analysis'] = ''
+                    rq['all_analyses'] = {}
+                    review_questions.append(rq)
         except (json.JSONDecodeError, TypeError):
-            rq['worked_steps'] = None
-        try:
-            analyses = json.loads(rq['wrong_answer_analyses']) if rq.get('wrong_answer_analyses') else {}
-        except (json.JSONDecodeError, TypeError):
-            analyses = {}
-        # Get the analysis for this student's specific wrong answer
-        rq['personal_analysis'] = analyses.get(rq['student_answer'], '') if not rq['is_correct'] else ''
-        rq['all_analyses'] = analyses
-        review_questions.append(rq)
+            pass
 
     wrong_count = sum(1 for rq in review_questions if not rq['is_correct'])
     correct_count = len(review_questions) - wrong_count
