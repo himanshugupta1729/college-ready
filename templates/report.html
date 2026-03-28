@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% set show_nav = false %}
 
-{% block title %}{{ student.student_name }} — College Ready Report{% endblock %}
+{% block title %}{{ student.student_name }} — {{ event_display_name | default('College Ready') }} Report{% endblock %}
 
 {% block extra_css %}
 /* ─── Dark theme override ─── */

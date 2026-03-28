@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% set show_nav = false %}
 
-{% block title %}Question {{ current }} of {{ total }} — College Ready{% endblock %}
+{% block title %}Question {{ current }} of {{ total }} — {{ event_display_name | default('College Ready') }}{% endblock %}
 
 {% block extra_css %}
 /* Full-screen test mode */

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Your Math Mindset — College Ready{% endblock %}
+{% block title %}Your Math Mindset — {{ event_display_name | default('College Ready') }}{% endblock %}
 
 {% block content %}
 <style>

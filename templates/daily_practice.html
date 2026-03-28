@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Day {{ workout.day_number }} Practice — College Ready{% endblock %}
+{% block title %}Day {{ workout.day_number }} Practice — {{ event_display_name | default('College Ready') }}{% endblock %}
 
 {% block extra_css %}
 /* ─── Layout ─── */

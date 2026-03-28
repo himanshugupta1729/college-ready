@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% set show_nav = false %}
 
-{% block title %}Your Math Archetype — College Ready{% endblock %}
+{% block title %}Your Math Archetype — {{ event_display_name | default('College Ready') }}{% endblock %}
 
 {% block extra_css %}
 /* ─── Override base theme: full dark page ─── */
