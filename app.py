@@ -3143,6 +3143,36 @@ def api_topic_drilldown(student_id, topic_domain):
     return jsonify({'topic': topic_domain, 'questions': questions})
 
 
+# ---------- Solution Import API ----------
+
+@app.route('/api/import-solutions', methods=['POST'])
+def import_solutions():
+    """Import worked solutions from JSON. Protected by app secret key."""
+    data = request.get_json(force=True)
+    api_key = data.get('api_key', '')
+    if api_key != app.secret_key:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    solutions = data.get('solutions', [])
+    if not solutions:
+        return jsonify({'error': 'No solutions provided'}), 400
+
+    conn = get_db()
+    imported = 0
+    for sol in solutions:
+        qid = sol.get('id')
+        worked = sol.get('worked_solution_json')
+        analyses = sol.get('wrong_answer_analyses')
+        if qid and worked:
+            conn.execute("""
+                UPDATE questions SET worked_solution_json = ?, wrong_answer_analyses = ?
+                WHERE id = ? AND worked_solution_json IS NULL
+            """, (worked, analyses, qid))
+            imported += 1
+    conn.commit()
+    return jsonify({'imported': imported, 'total': len(solutions)})
+
+
 # ---------- Admin ----------
 
 @app.route('/admin/login', methods=['GET', 'POST'])
