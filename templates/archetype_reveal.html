@@ -45,15 +45,15 @@ body {
 
 /* ─── Shared card base ─── */
 .ar-card {
-    background: rgba(255,255,255,0.035);
+    background: rgba(255,255,255,0.07);
     border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
     padding: 28px;
     backdrop-filter: blur(8px);
     transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
 }
 .ar-card:hover {
-    border-color: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
     box-shadow: 0 12px 40px rgba(0,0,0,0.4);
     transform: translateY(-2px);
 }
@@ -845,7 +845,7 @@ body {
             transition: transform 0.2s, box-shadow 0.2s;
         " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 32px {{ archetype.color | default('#FFBA07') }}66';"
            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 24px {{ archetype.color | default('#FFBA07') }}44';">
-            Save Your Archetype →
+            See Your Archetype →
         </a>
 
         <div style="margin-top: 20px;">

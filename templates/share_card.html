@@ -183,21 +183,41 @@ html, body {
     line-height: 1.5;
 }
 
-.hint {
+.action-bar {
     position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
-    color: rgba(255,255,255,0.5);
-    padding: 10px 28px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 600;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
-    border: 1px solid rgba(255,255,255,0.1);
-    white-space: nowrap;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 16px 24px 28px;
+    background: linear-gradient(transparent, rgba(10,10,10,0.95) 40%);
+}
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: transform 0.15s, opacity 0.15s;
+}
+.action-btn:hover { transform: translateY(-1px); }
+.action-btn:active { transform: scale(0.97); }
+.action-btn-primary {
+    background: {{ color }};
+    color: #0A0A0A;
+}
+.action-btn-secondary {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.15);
 }
 
 @media (max-height: 750px) {
@@ -246,7 +266,55 @@ html, body {
 </div>
 </div>
 
-<div class="hint">Screenshot to save</div>
+<div class="action-bar">
+    <button class="action-btn action-btn-primary" onclick="saveCard()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Save Image
+    </button>
+    <button class="action-btn action-btn-secondary" onclick="shareCard()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+    </button>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function saveCard() {
+    var frame = document.querySelector('.frame');
+    html2canvas(frame, { scale: 3, backgroundColor: '#121218', useCORS: true }).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = '{{ archetype.greek_name | default("archetype") }}-card.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }).catch(function() {
+        alert('Long-press or screenshot to save the card.');
+    });
+}
+
+function shareCard() {
+    if (navigator.share) {
+        // Mobile: use native share (WhatsApp, Messages, etc.)
+        html2canvas(document.querySelector('.frame'), { scale: 3, backgroundColor: '#121218', useCORS: true }).then(function(canvas) {
+            canvas.toBlob(function(blob) {
+                var file = new File([blob], '{{ archetype.greek_name | default("archetype") }}-card.png', { type: 'image/png' });
+                navigator.share({
+                    title: 'My Math Archetype: {{ archetype.name }}',
+                    text: 'I\'m {{ archetype.name }} ({{ archetype.greek_name }}). What\'s your math archetype?',
+                    files: [file]
+                }).catch(function() {});
+            });
+        });
+    } else {
+        // Desktop: copy link
+        var url = window.location.href;
+        navigator.clipboard.writeText(url).then(function() {
+            var btn = document.querySelector('.action-btn-secondary');
+            btn.textContent = 'Link Copied!';
+            setTimeout(function() { btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share'; }, 2000);
+        });
+    }
+}
+</script>
 
 </body>
 </html>
