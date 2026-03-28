@@ -301,7 +301,7 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                     </svg>
-                    ~10 min
+                    ~22 min
                 </div>
             </div>
         </div>
@@ -328,7 +328,6 @@
                 <div class="question-card" data-q-index="{{ loop.index }}">
                     <div class="question-number-strip">
                         <span class="q-num">Question {{ loop.index }} of {{ questions | length }}</span>
-                        <span class="q-dim-tag">{{ focus_dim.name | default('Practice') }}</span>
                     </div>
                     <div class="question-body">
                         <div class="question-text">{{ q.question_text }}</div>
@@ -433,8 +432,7 @@
                     card.innerHTML =
                         '<div class="question-number-strip">' +
                             '<span class="q-num">Question ' + (idx + 1) + ' of ' + questions.length + '</span>' +
-                            '<span class="q-dim-tag">Practice</span>' +
-                        '</div>' +
+                            '</div>' +
                         '<div class="question-body">' +
                             '<div class="question-text">' + q.question_text + '</div>' +
                             '<div class="choices" data-q="' + q.id + '">' + choicesHtml + '</div>' +
