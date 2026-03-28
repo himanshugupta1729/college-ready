@@ -32,7 +32,7 @@ D) {option_d}
 
 **Topic:** {sat_domain} | **Skill:** {fuar_dimension} | **Difficulty:** {difficulty}/5
 
-Produce a JSON object with exactly these three keys:
+Produce a JSON object with exactly these two keys:
 
 ### 1. "worked_solution" — array of step objects
 Each step:
@@ -47,28 +47,6 @@ For each wrong option:
 {{"mistake": "what YOU probably did wrong (1 sentence, written in second person — say 'You likely...' not 'The student likely...')", "tip": "how to avoid this mistake next time (1 sentence, second person)"}}
 Only include the 3 WRONG options, not the correct one.
 IMPORTANT: Always write in second person ("You picked...", "You probably...", "You confused..."). Never say "the student".
-
-### 3. "simulation" — self-contained HTML/SVG/JS code for an interactive visual
-Requirements:
-- Must be a SINGLE string of HTML that can be injected into a page via innerHTML
-- Use inline SVG and/or inline <script> tags — no external dependencies
-- Maximum 3KB of code
-- Should visually demonstrate the solution — not just repeat the text
-- Choose the best visualization for this specific problem type:
-  * Algebra/equations: animated equation balance or step-by-step term manipulation
-  * Geometry: SVG shapes with labeled measurements, angles highlighting
-  * Coordinate plane: plotted points, lines drawing, intersections marking
-  * Statistics/data: bar charts, dot plots with mean/median markers
-  * Number properties: number line with points, factor trees
-  * Word problems: visual bar models showing quantities
-  * Fractions/ratios: area models, pie segments
-  * Functions: input-output diagram or graph sketch
-- Use these colors: correct=#4ADE80, wrong=#F87171, accent=#FFBA07, bg=#1A1A2E, text=#E5E7EB
-- Include a brief animation (CSS transition or requestAnimationFrame) that plays on load
-- The visual should help a student SEE why the answer is what it is
-- All IDs must be unique — prefix with "sim_{question_id}"
-
-CRITICAL: The "simulation" key MUST be a non-empty string of HTML/SVG code. It must NOT be empty, null, or omitted. Every question can be visualized — equations get balance/step animations, geometry gets shape drawings, word problems get bar models, etc. If unsure, at minimum create an animated step-by-step text walkthrough with colored highlights.
 
 Return ONLY the JSON object, no markdown fences, no extra text.
 """
@@ -91,7 +69,7 @@ def call_claude(prompt, question_id):
         try:
             response = client.messages.create(
                 model="claude-sonnet-4-6",
-                max_tokens=4000,
+                max_tokens=2000,
                 messages=[{"role": "user", "content": prompt}]
             )
             return response.content[0].text.strip()
@@ -176,70 +154,7 @@ def parse_response(raw_text, question_id):
         logging.error(f'  Q#{question_id} missing wrong_answer_analyses dict. Keys: {list(data.keys())}')
         return None
 
-    # Simulation can be string or sometimes dict/list — normalize
-    sim = data.get('simulation') or data.get('simulation_html') or data.get('visual') or ''
-    if isinstance(sim, dict):
-        # Claude sometimes nests {html: "..."} — extract
-        sim = sim.get('html', sim.get('code', json.dumps(sim)))
-    if not isinstance(sim, str) or len(sim) < 20:
-        logging.warning(f'  Q#{question_id} simulation missing/too short ({type(sim).__name__}, {len(str(sim))} chars) — generating placeholder')
-        sim = f'<div style="padding:20px;text-align:center;color:#E5E7EB;font-size:14px;">Visual coming soon</div>'
-    data['simulation'] = sim
-
     return data
-
-
-SIM_ONLY_PROMPT = """Create a self-contained HTML/SVG visual that demonstrates the solution to this math question.
-
-Question: {question_text}
-Options: A) {option_a}  B) {option_b}  C) {option_c}  D) {option_d}
-Correct Answer: {correct_answer}
-
-Requirements:
-- Return ONLY raw HTML code, no markdown, no explanation, no JSON wrapper
-- Use inline styles only, no external CSS/JS
-- Max 3KB
-- Colors: correct=#4ADE80, wrong=#F87171, accent=#FFBA07, bg=#1A1A2E, text=#E5E7EB
-- Include CSS animation that plays on load (use @keyframes in a <style> tag)
-- Choose the best visual: number line, coordinate plane, bar model, equation steps, shape diagram, etc.
-- Make it look polished — rounded corners, good spacing, clear labels
-- All element IDs must start with "sim_{question_id}_"
-"""
-
-
-def generate_simulation_only(question, question_id):
-    """Focused API call to generate just the simulation HTML."""
-    q = question
-    prompt = SIM_ONLY_PROMPT.format(
-        question_text=q['question_text'],
-        option_a=q['option_a'] or '',
-        option_b=q['option_b'] or '',
-        option_c=q['option_c'] or '',
-        option_d=q['option_d'] or '',
-        correct_answer=q['correct_answer'],
-        question_id=question_id
-    )
-    try:
-        import anthropic
-        client = anthropic.Anthropic(timeout=60.0)
-        response = client.messages.create(
-            model="claude-sonnet-4-6",
-            max_tokens=3000,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        sim = response.content[0].text.strip()
-        # Strip markdown fences
-        if sim.startswith('```'):
-            sim = sim.split('\n', 1)[1] if '\n' in sim else sim[3:]
-        if sim.rstrip().endswith('```'):
-            sim = sim[:sim.rfind('```')].rstrip()
-        if sim.startswith('html'):
-            sim = sim[4:].strip()
-        if len(sim) > 100:
-            return sim
-    except Exception as e:
-        logging.error(f'  Q#{question_id} sim-only call failed: {e}')
-    return '<div style="padding:20px;text-align:center;color:#E5E7EB;font-size:14px;">Visual coming soon</div>'
 
 
 def process_question(conn, question, dry_run=False):
@@ -278,29 +193,20 @@ def process_question(conn, question, dry_run=False):
         logging.error(f'  Q#{qid} FAILED — skipping (will retry next run)')
         return False
 
-    # If simulation is placeholder/empty, make a focused second call just for the visual
-    sim = data['simulation']
-    if len(sim) < 150:
-        logging.info(f'  Q#{qid} simulation too short ({len(sim)} chars), making focused sim call...')
-        sim = generate_simulation_only(q, qid)
-        data['simulation'] = sim
-
     # Store in DB
     conn.execute("""
         UPDATE questions SET
             worked_solution_json = ?,
-            wrong_answer_analyses = ?,
-            simulation_html = ?
+            wrong_answer_analyses = ?
         WHERE id = ?
     """, (
         json.dumps(data['worked_solution']),
         json.dumps(data['wrong_answer_analyses']),
-        data['simulation'],
         qid
     ))
     conn.commit()
 
-    logging.info(f'  Q#{qid} ✓ ({len(data["worked_solution"])} steps, sim={len(data["simulation"])} chars)')
+    logging.info(f'  Q#{qid} ✓ ({len(data["worked_solution"])} steps)')
     return True
 
 
