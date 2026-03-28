@@ -539,9 +539,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 10px 4px;
     border-bottom: 1px solid var(--border);
+    border-radius: 6px;
+    transition: background 0.15s;
+    cursor: pointer;
 }
+
+.workout-row:hover { background: var(--surface-2, rgba(0,0,0,0.03)); }
 
 .workout-row:last-child { border-bottom: none; }
 
@@ -917,20 +922,25 @@
                 {% set dim_name_map  = {'F': 'Fluency', 'U': 'Understanding', 'A': 'Application', 'R': 'Reasoning'} %}
                 {% set d_color = dim_color_map.get(w.focus_dimension, '#FFBA07') %}
                 {% set d_name  = dim_name_map.get(w.focus_dimension, w.focus_dimension) %}
-                <div class="workout-row">
+                <a href="{% if w.completed %}/practice/results/{{ w.id }}{% else %}/practice/today{% endif %}" class="workout-row" style="text-decoration: none; color: inherit;">
                     <div class="workout-meta">
                         <div class="workout-dim-dot" style="background: {{ d_color }};"></div>
                         <div>
                             <div class="workout-info-primary">Day {{ w.day_number }} — {{ d_name }}</div>
-                            <div class="workout-info-secondary">{{ w.completed_at | default('') }}</div>
+                            <div class="workout-info-secondary">{{ w.completed_at | default('In progress') }}</div>
                         </div>
                     </div>
-                    {% if w.score is defined and w.score is not none %}
-                    <div class="workout-score {% if w.score >= 80 %}score-hi{% elif w.score >= 50 %}score-mid{% else %}score-low{% endif %}">
-                        {{ w.score }}%
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        {% if w.score is defined and w.score is not none %}
+                        <div class="workout-score {% if w.score >= 80 %}score-hi{% elif w.score >= 50 %}score-mid{% else %}score-low{% endif %}">
+                            {{ w.score }}%
+                        </div>
+                        {% endif %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
                     </div>
-                    {% endif %}
-                </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
