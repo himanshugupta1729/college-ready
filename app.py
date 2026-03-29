@@ -4557,37 +4557,38 @@ def seed_all():
 
     missing = [t for t in TRACK_SEEDS if track_counts.get(t, 0) == 0]
 
-    if not missing:
-        print(f"[startup] All 14 tracks present ({existing} total questions)")
+    if not missing and existing >= 2000:
+        print(f"[startup] All 14 tracks present, {existing} total questions — fully seeded")
         return
 
-    print(f"[startup] Missing tracks: {missing}. Seeding only these...")
-
-    _seed_conn = sqlite3.connect(DB_PATH)
-    for track_name in missing:
-        mod_name, fn_name = TRACK_SEEDS[track_name]
-
-        if mod_name == '__sat_base__':
-            seed_questions()
-            print(f"[seed] SAT base done")
-            continue
-
-        try:
-            mod = __import__(mod_name)
-            fn = getattr(mod, fn_name, None) if fn_name else (
-                getattr(mod, 'seed', None) or getattr(mod, 'main', None))
-            if fn is None:
-                print(f"[seed] {track_name}: no callable found in {mod_name}")
+    # Seed any missing base tracks
+    if missing:
+        print(f"[startup] Missing tracks: {missing}. Seeding them...")
+        _seed_conn = sqlite3.connect(DB_PATH)
+        for track_name in missing:
+            mod_name, fn_name = TRACK_SEEDS[track_name]
+            if mod_name == '__sat_base__':
+                seed_questions()
+                print(f"[seed] SAT base done")
                 continue
-            sig = inspect.signature(fn)
-            if sig.parameters:
-                fn(_seed_conn)
-            else:
-                fn()
-            print(f"[seed] {track_name} done")
-        except Exception as e:
-            print(f"[seed] {track_name} ERROR: {e}")
-    _seed_conn.close()
+            try:
+                mod = __import__(mod_name)
+                fn = getattr(mod, fn_name, None) if fn_name else (
+                    getattr(mod, 'seed', None) or getattr(mod, 'main', None))
+                if fn is None:
+                    print(f"[seed] {track_name}: no callable found in {mod_name}")
+                    continue
+                sig = inspect.signature(fn)
+                if sig.parameters:
+                    fn(_seed_conn)
+                else:
+                    fn()
+                print(f"[seed] {track_name} done")
+            except Exception as e:
+                print(f"[seed] {track_name} ERROR: {e}")
+        _seed_conn.close()
+    else:
+        print(f"[startup] All 14 base tracks present ({existing} questions). Running supplements...")
 
     # Real College Board questions + SAT supplement (INSERT OR IGNORE — won't duplicate)
     try:
