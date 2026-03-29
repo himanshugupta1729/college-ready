@@ -4541,7 +4541,9 @@ def seed_all():
         except Exception as e:
             print(f"[seed] {label}: {e}")
 
-    # HS course tracks
+    # HS course tracks — varied function signatures: seed(), seed(conn), main()
+    import inspect
+    _seed_conn = sqlite3.connect(DB_PATH)
     for mod_name, label in [
         ('seed_algebra1', 'Algebra 1'),
         ('seed_algebra2', 'Algebra 2'),
@@ -4551,10 +4553,19 @@ def seed_all():
     ]:
         try:
             mod = __import__(mod_name)
-            mod.seed()
+            fn = getattr(mod, 'seed', None) or getattr(mod, 'main', None)
+            if fn is None:
+                print(f"[seed] {label}: no seed() or main() found")
+                continue
+            sig = inspect.signature(fn)
+            if sig.parameters:
+                fn(_seed_conn)
+            else:
+                fn()
             print(f"[seed] {label} done")
         except Exception as e:
-            print(f"[seed] {label}: {e}")
+            print(f"[seed] {label} ERROR: {e}")
+    _seed_conn.close()
 
     # Middle school
     from seed_grade6 import seed as seed_g6
