@@ -4503,84 +4503,101 @@ def seed_all():
         "SELECT track, COUNT(*) FROM questions GROUP BY track").fetchall()}
     conn.close()
 
-    required_tracks = ['sat', 'ap_calc_ab', 'ap_calc_bc', 'ap_stats', 'ap_precalc',
-                        'algebra_1', 'algebra_2', 'geometry', 'precalculus', 'statistics',
-                        'grade_6', 'grade_7', 'grade_7_accelerated', 'grade_8']
-    missing = [t for t in required_tracks if track_counts.get(t, 0) == 0]
+    # Map: track name → (module_name, function_name or None for auto-detect)
+    import inspect
+    TRACK_SEEDS = {
+        'sat':                  ('__sat_base__', None),  # handled specially
+        'ap_calc_ab':           ('seed_ap_calc_ab', 'seed'),
+        'ap_calc_bc':           ('seed_ap_calc_bc', 'seed'),
+        'ap_stats':             ('seed_ap_stats', 'seed'),
+        'ap_precalc':           ('seed_ap_precalc', 'seed'),
+        'algebra_1':            ('seed_algebra1', None),
+        'algebra_2':            ('seed_algebra2', None),
+        'geometry':             ('seed_geometry', None),
+        'precalculus':          ('seed_precalculus', None),
+        'statistics':           ('seed_statistics', None),
+        'grade_6':              ('seed_grade6', 'seed'),
+        'grade_7':              ('seed_grade7', 'seed'),
+        'grade_7_accelerated':  ('seed_grade7_accel', 'seed'),
+        'grade_8':              ('seed_grade8', 'seed'),
+    }
 
-    if existing >= 1000 and not missing:
-        print(f"[startup] Question bank already has {existing} questions across {len(track_counts)} tracks")
+    missing = [t for t in TRACK_SEEDS if track_counts.get(t, 0) == 0]
+
+    if not missing:
+        print(f"[startup] All 14 tracks present ({existing} total questions)")
         return
 
-    if missing:
-        print(f"[startup] Missing tracks: {missing}. Seeding them now...")
+    print(f"[startup] Missing tracks: {missing}. Seeding only these...")
 
-    print(f"[startup] Seeding all tracks (currently {existing} questions)...")
-
-    # SAT base
-    seed_questions()
-
-    # SAT supplement
-    try:
-        from seed_sat_supplement import seed as seed_sat_sup
-        seed_sat_sup()
-    except Exception as e:
-        print(f"[seed] SAT supplement: {e}")
-
-    # AP tracks
-    for mod_name, label in [
-        ('seed_ap_stats', 'AP Stats'),
-        ('seed_ap_calc_ab', 'AP Calc AB'),
-        ('seed_ap_calc_bc', 'AP Calc BC'),
-        ('seed_ap_precalc', 'AP Precalc'),
-    ]:
-        try:
-            mod = __import__(mod_name)
-            mod.seed()
-            print(f"[seed] {label} done")
-        except Exception as e:
-            print(f"[seed] {label}: {e}")
-
-    # HS course tracks — varied function signatures: seed(), seed(conn), main()
-    import inspect
     _seed_conn = sqlite3.connect(DB_PATH)
-    for mod_name, label in [
-        ('seed_algebra1', 'Algebra 1'),
-        ('seed_algebra2', 'Algebra 2'),
-        ('seed_geometry', 'Geometry'),
-        ('seed_precalculus', 'Precalculus'),
-        ('seed_statistics', 'Statistics'),
-    ]:
+    for track_name in missing:
+        mod_name, fn_name = TRACK_SEEDS[track_name]
+
+        if mod_name == '__sat_base__':
+            seed_questions()
+            print(f"[seed] SAT base done")
+            continue
+
         try:
             mod = __import__(mod_name)
-            fn = getattr(mod, 'seed', None) or getattr(mod, 'main', None)
+            fn = getattr(mod, fn_name, None) if fn_name else (
+                getattr(mod, 'seed', None) or getattr(mod, 'main', None))
             if fn is None:
-                print(f"[seed] {label}: no seed() or main() found")
+                print(f"[seed] {track_name}: no callable found in {mod_name}")
                 continue
             sig = inspect.signature(fn)
             if sig.parameters:
                 fn(_seed_conn)
             else:
                 fn()
-            print(f"[seed] {label} done")
+            print(f"[seed] {track_name} done")
         except Exception as e:
-            print(f"[seed] {label} ERROR: {e}")
+            print(f"[seed] {track_name} ERROR: {e}")
     _seed_conn.close()
 
-    # Middle school
-    from seed_grade6 import seed as seed_g6
-    from seed_grade7 import seed as seed_g7
-    from seed_grade7_accel import seed as seed_g7a
-    from seed_grade8 import seed as seed_g8
-    seed_g6()
-    seed_g7()
-    seed_g7a()
-    seed_g8()
+    # Real College Board questions + SAT supplement (INSERT OR IGNORE — won't duplicate)
+    try:
+        from import_real_questions import QUESTIONS as REAL_QS
+        _rq_conn = sqlite3.connect(DB_PATH)
+        imported = 0
+        for q in REAL_QS:
+            # Check if question already exists (by question_text)
+            exists = _rq_conn.execute("SELECT id FROM questions WHERE question_text = ?",
+                                       (q['question_text'],)).fetchone()
+            if not exists:
+                _rq_conn.execute("""INSERT INTO questions (track, sat_domain, fuar_dimension, difficulty,
+                    question_text, question_type, option_a, option_b, option_c, option_d,
+                    correct_answer, explanation, topic_tag)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                    (q['track'], q.get('sat_domain', ''), q['fuar_dimension'], q['difficulty'],
+                     q['question_text'], 'multiple_choice',
+                     q['option_a'], q['option_b'], q['option_c'], q['option_d'],
+                     q['correct_answer'], q['explanation'], q.get('topic_tag', '')))
+                imported += 1
+        _rq_conn.commit()
+        _rq_conn.close()
+        if imported:
+            print(f"[seed] Real questions: {imported} imported")
+    except Exception as e:
+        print(f"[seed] Real questions ERROR: {e}")
+
+    # SAT supplement (fills FUAR gaps in base SAT bank)
+    try:
+        from seed_sat_supplement import seed as seed_sat_sup
+        seed_sat_sup()
+        print("[seed] SAT supplement done")
+    except Exception as e:
+        print(f"[seed] SAT supplement ERROR: {e}")
 
     conn = sqlite3.connect(DB_PATH)
     total = conn.execute("SELECT COUNT(*) FROM questions").fetchone()[0]
+    track_counts = {r[0]: r[1] for r in conn.execute(
+        "SELECT track, COUNT(*) FROM questions GROUP BY track").fetchall()}
     conn.close()
     print(f"[startup] Seeding complete — {total} total questions")
+    for t in sorted(track_counts):
+        print(f"  {t}: {track_counts[t]}")
 
 
 with app.app_context():
