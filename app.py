@@ -3551,6 +3551,39 @@ def debug_student():
     })
 
 
+@app.route('/api/bulk-seed', methods=['POST'])
+def bulk_seed():
+    """Bulk insert questions (deduplicates by question_text). Protected by secret key."""
+    data = request.get_json(force=True)
+    if data.get('api_key') != app.secret_key:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    questions = data.get('questions', [])
+    if not questions:
+        return jsonify({'error': 'No questions'}), 400
+
+    conn = get_db()
+    inserted = 0
+    skipped = 0
+    for q in questions:
+        exists = conn.execute("SELECT id FROM questions WHERE question_text = ?",
+                               (q.get('question_text', ''),)).fetchone()
+        if exists:
+            skipped += 1
+            continue
+        conn.execute("""INSERT INTO questions (track, sat_domain, fuar_dimension, difficulty,
+            question_text, question_type, option_a, option_b, option_c, option_d,
+            correct_answer, explanation, topic_tag)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (q['track'], q.get('sat_domain', ''), q['fuar_dimension'], q['difficulty'],
+             q['question_text'], q.get('question_type', 'multiple_choice'),
+             q['option_a'], q['option_b'], q['option_c'], q['option_d'],
+             q['correct_answer'], q['explanation'], q.get('topic_tag', '')))
+        inserted += 1
+    conn.commit()
+    return jsonify({'inserted': inserted, 'skipped': skipped, 'total': len(questions)})
+
+
 @app.route('/api/clean-test-data', methods=['POST'])
 def clean_test_data():
     """Remove all student data from demo events. Protected by app secret key."""
