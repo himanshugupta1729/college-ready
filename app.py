@@ -4672,6 +4672,47 @@ with app.app_context():
         _fix_conn.execute("UPDATE questions SET question_text='What is the remainder when 2x⁴ − 3x³ + x − 15 is divided by (x + 1)?', correct_answer='A', explanation='By the Remainder Theorem, evaluate p(−1): 2(1) − 3(−1) + (−1) − 15 = 2 + 3 − 1 − 15 = −11.' WHERE id=1508")
         _fix_conn.commit()
         print("✓ Applied 20 question fixes (verification 2026-03-29)")
+
+    # Fix supplement errors (2026-03-30 verification)
+    _sup_check = _fix_conn.execute("SELECT correct_answer FROM questions WHERE question_text LIKE '%x² + y² − 6x + 4y − 3%'").fetchone()
+    if _sup_check and _sup_check[0] != 'B':
+        _sup_fixes = [
+            # Answer corrections
+            ("2x + y = 10 and x − y = 2. What is x + y", "B"),
+            ("x² + y² − 6x + 4y − 3 = 0 represents a circle", "B"),
+            ("f(x) = x/(x−1) for x ≠ 1, what is f(f(f(x)))", "B"),
+            ("polynomial p(x) of degree 3 has p(0)=6, p(1)=0", "A"),
+            ("sum of the first 20 terms of the arithmetic", "B"),
+            ("3^(2x−1) = 27^(x+2)", "B"),
+            ("starts at position x=3 at t=0. Its velocity is v(t)=2t−4", "D"),
+            ("interval of convergence of", "C"),
+            ("Euler's method with step h=0.5 for dy/dx=x+y", "A"),
+            ("remainder when x³ − 2x² + x − 5 is divided by (x − 3)", "B"),
+            ("distance between the polar points (3, π/6) and (5, π/2)", "A"),
+            ("Min=10, Q1=25, Med=40, Q3=55, Max=80. Is the value 85 an outlier", "A"),
+            ("candle is 20 cm tall and burns at 0.4 cm per minute", "B"),
+            ("x + 2y = 10 and 3x - y = 5", "B"),
+            ("f(x) = 3x - 2, for which value of x does f(x) equal f(-x)", "A"),
+            ("200 students found: 80 prefer math, 70 prefer English, 50 prefer sci", "B"),
+        ]
+        for text_sub, ans in _sup_fixes:
+            _fix_conn.execute("UPDATE questions SET correct_answer = ? WHERE question_text LIKE ?",
+                               (ans, f'%{text_sub}%'))
+        # Delete broken questions (no correct option)
+        _broken = [
+            "f(x) = x² − 4x + 3, which of the following is equal to f(x + 2)",
+            "10, 14, 16, 18, 20, 22, 100. What is the outlier fence",
+            "f(x) = x·sin(x), find f''(π)",
+            "velocity is v(t) = t² − 2t. What is the total dist",
+            "marginal cost is MC(x) = 3x² − 10x + 8. The total",
+            "parametric equations x=3t, y=t²−1, find the area",
+            "(x³ + 2x² − 5x − 6) ÷ (x + 2)",
+            "Mia has $120 and spends $15 per week. Her brother has $30",
+        ]
+        for text_sub in _broken:
+            _fix_conn.execute("DELETE FROM questions WHERE question_text LIKE ?", (f'%{text_sub}%',))
+        _fix_conn.commit()
+        print("✓ Applied supplement fixes (verification 2026-03-30)")
     _fix_conn.close()
 
     # Ensure demo event exists
