@@ -4499,6 +4499,28 @@ def seed_all():
 with app.app_context():
     init_db()
     seed_all()
+
+    # --- One-time migration: fix 20 verified-incorrect questions (2026-03-29) ---
+    _fix_conn = sqlite3.connect(DB_PATH)
+    _needs_fix = _fix_conn.execute("SELECT correct_answer FROM questions WHERE id=1008").fetchone()
+    if _needs_fix and _needs_fix[0] == 'C':  # Only run if not already applied
+        _fixes = [
+            (1008, 'D'), (1091, 'B'), (1139, 'C'), (1149, 'A'), (1169, 'A'),
+            (1220, 'B'), (1035, 'C'), (1084, 'D'), (1348, 'A'), (1357, 'B'),
+            (1409, 'C'), (1417, 'A'), (1471, 'B'), (1614, 'A'), (1627, 'A'),
+        ]
+        for qid, ans in _fixes:
+            _fix_conn.execute("UPDATE questions SET correct_answer=? WHERE id=?", (ans, qid))
+        # Fix 5 flawed questions (question text or options needed changing)
+        _fix_conn.execute("UPDATE questions SET question_text='A square piece of metal has a smaller square of side x cut from each corner. The metal is then folded to form a box. If the original square has side 12 and the volume of the box is 128, what is x?', correct_answer='B', explanation='V = x(12-2x)² = 128. Testing x=2: 2(12-4)² = 2×64 = 128. ✓' WHERE id=967")
+        _fix_conn.execute("UPDATE questions SET option_c='(4√2 − 2)/3', correct_answer='C', explanation='u = x²+1, du = 2x dx. Bounds: u=1 to u=2. ∫√u du = [2u^(3/2)/3] from 1 to 2 = (4√2 − 2)/3.' WHERE id=1150")
+        _fix_conn.execute("UPDATE questions SET option_b='9π/2', correct_answer='B', explanation='Area(circle r=3) = 9π. Area(r=2+cosθ) = (1/2)∫(2+cosθ)²dθ = 9π/2. Region = 9π − 9π/2 = 9π/2.' WHERE id=1248")
+        _fix_conn.execute("UPDATE questions SET question_text='A canoe rental costs $12 to rent plus $4 per hour. A kayak costs $6 to rent plus $7 per hour. After how many hours will both rentals cost the same amount?', correct_answer='A', explanation='12 + 4h = 6 + 7h → 6 = 3h → h = 2 hours.' WHERE id=1381")
+        _fix_conn.execute("UPDATE questions SET question_text='What is the remainder when 2x⁴ − 3x³ + x − 15 is divided by (x + 1)?', correct_answer='A', explanation='By the Remainder Theorem, evaluate p(−1): 2(1) − 3(−1) + (−1) − 15 = 2 + 3 − 1 − 15 = −11.' WHERE id=1508")
+        _fix_conn.commit()
+        print("✓ Applied 20 question fixes (verification 2026-03-29)")
+    _fix_conn.close()
+
     # Ensure demo event exists
     conn = get_db()
     conn.execute("""
