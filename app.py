@@ -3496,6 +3496,54 @@ def fix_questions():
     return jsonify({'applied': applied, 'total': len(fixes)})
 
 
+@app.route('/api/debug-student')
+def debug_student():
+    """Debug endpoint to check student state. Pass ?email=xxx or ?name=xxx."""
+    email = request.args.get('email', '')
+    name = request.args.get('name', '')
+    if not email and not name:
+        return jsonify({'error': 'Pass ?email= or ?name='}), 400
+
+    conn = get_db()
+    if email:
+        student = conn.execute("SELECT * FROM students WHERE student_email = ? OR parent_email = ?",
+                                (email, email)).fetchone()
+    else:
+        student = conn.execute("SELECT * FROM students WHERE student_name LIKE ?",
+                                (f'%{name}%',)).fetchone()
+
+    if not student:
+        return jsonify({'error': 'Student not found'})
+
+    sid = student['id']
+    responses = conn.execute("SELECT COUNT(*) as cnt FROM responses WHERE student_id = ?", (sid,)).fetchone()
+    event = None
+    if student['event_code']:
+        event = conn.execute("SELECT event_code, event_name, test_enabled FROM events WHERE event_code = ?",
+                              (student['event_code'],)).fetchone()
+
+    # Check question availability for this track
+    track = student['track']
+    q_count = conn.execute("SELECT COUNT(*) as cnt FROM questions WHERE track = ?", (track,)).fetchone()
+    q_med = conn.execute("SELECT COUNT(*) as cnt FROM questions WHERE track = ? AND difficulty IN (2,3)",
+                          (track,)).fetchone()
+
+    return jsonify({
+        'student': {
+            'id': sid, 'name': student['student_name'], 'email': student['student_email'],
+            'parent_email': student['parent_email'], 'grade': student['grade'],
+            'track': student['track'], 'event_code': student['event_code'],
+            'test_started_at': student['test_started_at'],
+            'test_completed_at': student['test_completed_at'],
+            'archetype': student['archetype'],
+        },
+        'responses': responses['cnt'],
+        'event': dict(event) if event else None,
+        'questions_for_track': q_count['cnt'],
+        'questions_medium_difficulty': q_med['cnt'],
+    })
+
+
 @app.route('/api/clean-test-data', methods=['POST'])
 def clean_test_data():
     """Remove all student data from demo events. Protected by app secret key."""
