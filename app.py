@@ -4491,11 +4491,22 @@ def seed_all():
     """Seed all question banks — SAT, AP, HS courses, middle school. Idempotent."""
     conn = sqlite3.connect(DB_PATH)
     existing = conn.execute("SELECT COUNT(*) FROM questions").fetchone()[0]
+    # Check per-track — some tracks may be missing even if total is high
+    track_counts = {r[0]: r[1] for r in conn.execute(
+        "SELECT track, COUNT(*) FROM questions GROUP BY track").fetchall()}
     conn.close()
 
-    if existing >= 1000:
-        print(f"[startup] Question bank already has {existing} questions")
+    required_tracks = ['sat', 'ap_calc_ab', 'ap_calc_bc', 'ap_stats', 'ap_precalc',
+                        'algebra_1', 'algebra_2', 'geometry', 'precalculus', 'statistics',
+                        'grade_6', 'grade_7', 'grade_7_accelerated', 'grade_8']
+    missing = [t for t in required_tracks if track_counts.get(t, 0) == 0]
+
+    if existing >= 1000 and not missing:
+        print(f"[startup] Question bank already has {existing} questions across {len(track_counts)} tracks")
         return
+
+    if missing:
+        print(f"[startup] Missing tracks: {missing}. Seeding them now...")
 
     print(f"[startup] Seeding all tracks (currently {existing} questions)...")
 
