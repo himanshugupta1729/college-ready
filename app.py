@@ -3528,6 +3528,11 @@ def debug_student():
     q_med = conn.execute("SELECT COUNT(*) as cnt FROM questions WHERE track = ? AND difficulty IN (2,3)",
                           (track,)).fetchone()
 
+    # All track counts
+    all_tracks = conn.execute("SELECT track, COUNT(*) as cnt FROM questions GROUP BY track ORDER BY track").fetchall()
+    track_summary = {r['track']: r['cnt'] for r in all_tracks}
+    total_questions = conn.execute("SELECT COUNT(*) as cnt FROM questions").fetchone()['cnt']
+
     return jsonify({
         'student': {
             'id': sid, 'name': student['student_name'], 'email': student['student_email'],
@@ -3541,6 +3546,8 @@ def debug_student():
         'event': dict(event) if event else None,
         'questions_for_track': q_count['cnt'],
         'questions_medium_difficulty': q_med['cnt'],
+        'total_questions': total_questions,
+        'all_track_counts': track_summary,
     })
 
 
