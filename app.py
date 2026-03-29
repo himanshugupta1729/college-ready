@@ -4623,6 +4623,21 @@ def seed_all():
     except Exception as e:
         print(f"[seed] SAT supplement ERROR: {e}")
 
+    # Supplement seeds — additional questions for 3x variety + 28-day practice
+    _sup_modules = [
+        'seed_grade6_supplement', 'seed_grade7_supplement', 'seed_grade8_supplement',
+        'seed_grade7_accel_supplement', 'seed_algebra1_supplement', 'seed_geometry_supplement',
+        'seed_algebra2_supplement', 'seed_precalculus_supplement', 'seed_statistics_supplement',
+        'seed_ap_calc_ab_supplement', 'seed_ap_calc_bc_supplement', 'seed_ap_precalc_supplement',
+        'seed_ap_stats_supplement', 'seed_sat_supplement2',
+    ]
+    for sup_mod in _sup_modules:
+        try:
+            mod = __import__(sup_mod)
+            mod.seed()
+        except Exception as e:
+            print(f"[seed] {sup_mod} ERROR: {e}")
+
     conn = sqlite3.connect(DB_PATH)
     total = conn.execute("SELECT COUNT(*) FROM questions").fetchone()[0]
     track_counts = {r[0]: r[1] for r in conn.execute(
