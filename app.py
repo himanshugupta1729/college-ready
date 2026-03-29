@@ -3452,6 +3452,40 @@ def import_solutions():
     return jsonify({'imported': imported, 'total': len(solutions)})
 
 
+@app.route('/api/fix-questions', methods=['POST'])
+def fix_questions():
+    """Apply question corrections (answer key, question text, options). Protected by secret key."""
+    data = request.get_json(force=True)
+    if data.get('api_key') != app.secret_key:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    fixes = data.get('fixes', [])
+    if not fixes:
+        return jsonify({'error': 'No fixes provided'}), 400
+
+    conn = get_db()
+    applied = 0
+    for fix in fixes:
+        qid = fix.get('id')
+        if not qid:
+            continue
+        # Build dynamic SET clause from provided fields
+        allowed = ['correct_answer', 'question_text', 'option_a', 'option_b',
+                    'option_c', 'option_d', 'explanation']
+        updates = []
+        values = []
+        for field in allowed:
+            if field in fix:
+                updates.append(f"{field} = ?")
+                values.append(fix[field])
+        if updates:
+            values.append(qid)
+            conn.execute(f"UPDATE questions SET {', '.join(updates)} WHERE id = ?", values)
+            applied += 1
+    conn.commit()
+    return jsonify({'applied': applied, 'total': len(fixes)})
+
+
 @app.route('/api/clean-test-data', methods=['POST'])
 def clean_test_data():
     """Remove all student data from demo events. Protected by app secret key."""
