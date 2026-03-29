@@ -2522,8 +2522,18 @@ def test_complete():
     # Calculate FUAR scores
     fuar_scores = calculate_fuar_scores(student_id)
     if not fuar_scores:
-        flash('Something went wrong with scoring. Please contact support.', 'danger')
-        return redirect(url_for('landing'))
+        # No responses found — likely a session issue during deploy restart.
+        # Reset test state so student can retry cleanly.
+        conn.execute("UPDATE students SET test_started_at = NULL WHERE id = ?", (student_id,))
+        conn.commit()
+        # Clear test session data
+        for key in ['question_ids', 'module1_ids', 'module2_ids', 'current_question',
+                     'current_module', 'answered_questions', 'test_start_time',
+                     'time_limit', 'is_demo', 'adaptive_route', 'track']:
+            session.pop(key, None)
+        app.logger.error(f'test_complete with no responses: student_id={student_id}')
+        flash('Your test session was interrupted. Please click Start Test to try again.', 'warning')
+        return redirect(url_for('test_intro'))
 
     # Save FUAR scores (archetype assigned after GRIC quiz)
     conn.execute("""
