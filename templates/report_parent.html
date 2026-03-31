@@ -147,9 +147,59 @@ body { background: #F9FAFB !important; color: #191919; }
   .pr-topic-grid { grid-template-columns: 1fr; }
 }
 @media print {
-  .pr-cta { display: none; }
-  body { background: white !important; }
-  .pr-card { box-shadow: none; border: 1px solid #ddd; }
+  /* Hide non-print elements */
+  .pr-cta { display: none !important; }
+  nav { display: none !important; }
+  body::before { display: none !important; }
+
+  /* Force white background, no shadows */
+  body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pr-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+
+  /* Force desktop layout — override mobile breakpoints */
+  .pr { max-width: 100%; padding: 0 12px 20px; }
+  .pr-hero { flex-direction: row !important; }
+  .pr-score-row { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+  .pr-fuar-grid { grid-template-columns: 1fr 1fr !important; }
+  .pr-pct-grid { grid-template-columns: 1fr 1fr 1fr !important; }
+  .pr-topic-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Math Skills Profile — force the two-column layout (bars + learning summary) */
+  .pr-card > div[style*="grid-template-columns"] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Keep sections together — avoid orphaned elements across pages */
+  .pr-card { break-inside: avoid; page-break-inside: avoid; margin-bottom: 10px; }
+  .pr-score-row { break-inside: avoid; page-break-inside: avoid; }
+  .pr-steps { break-inside: avoid; page-break-inside: avoid; }
+  .pr-step { break-inside: avoid; page-break-inside: avoid; }
+  .pr-fuar-item { break-inside: avoid; }
+  .pr-pct-grid { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Tighten spacing for print */
+  .pr-top { padding: 12px 0; margin-bottom: 16px; }
+  .pr-section-label { margin-bottom: 10px; }
+  .pr-score-row { margin-bottom: 12px; }
+  .pr-score-note { margin-bottom: 12px !important; }
+  .pr-card { padding: 16px 18px; margin-bottom: 10px; }
+
+  /* Ensure colored backgrounds print */
+  .pr-score-block.predicted { background: #FFFBEB !important; }
+  .pr-score-block.readiness { background: #F0F9FF !important; }
+  .pr-archetype-box { background: #F9FAFB !important; }
+  .pr-fuar-fill { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .pr-fuar-bar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .badge-strong { background: #D1FAE5 !important; color: #065F46 !important; }
+  .badge-growth { background: #FEF3C7 !important; color: #92400E !important; }
+  .pr-pct-block.active { background: #FFFBEB !important; }
+  .pr-topic-dot { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .pr-step-num { background: #FFBA07 !important; color: #191919 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+  /* Footer */
+  .pr-footer { font-size: 10px; padding: 10px 0; }
 }
 {% endblock %}
 
