@@ -693,12 +693,13 @@ body {
         ('A', 'Application',   fuar_scores.A, 'a'),
         ('R', 'Reasoning',     fuar_scores.R, 'r')
     ] %}
-    {% set strongest_key = 'F' %}
-    {% set strongest_val = fuar_scores.F %}
-    {% if fuar_scores.U > strongest_val %}{% set strongest_key = 'U' %}{% set strongest_val = fuar_scores.U %}{% endif %}
-    {% if fuar_scores.A > strongest_val %}{% set strongest_key = 'A' %}{% set strongest_val = fuar_scores.A %}{% endif %}
-    {% if fuar_scores.R > strongest_val %}{% set strongest_key = 'R' %}{% set strongest_val = fuar_scores.R %}{% endif %}
     {% set dim_names = {'F': 'Fluency', 'U': 'Understanding', 'A': 'Application', 'R': 'Reasoning'} %}
+    {% set strongest_val = [fuar_scores.F, fuar_scores.U, fuar_scores.A, fuar_scores.R] | max %}
+    {% set strongest_list = [] %}
+    {% if fuar_scores.F >= strongest_val %}{% set _ = strongest_list.append('Fluency') %}{% endif %}
+    {% if fuar_scores.U >= strongest_val %}{% set _ = strongest_list.append('Understanding') %}{% endif %}
+    {% if fuar_scores.A >= strongest_val %}{% set _ = strongest_list.append('Application') %}{% endif %}
+    {% if fuar_scores.R >= strongest_val %}{% set _ = strongest_list.append('Reasoning') %}{% endif %}
 
     <div class="ar-profile-row">
 
@@ -718,7 +719,7 @@ body {
             </div>
             {% endfor %}
 
-            <div class="ar-fuar-strongest">⭐ Strongest: {{ dim_names[strongest_key] }}</div>
+            <div class="ar-fuar-strongest">⭐ Strongest: {{ strongest_list | join(' & ') }}</div>
         </div>
 
         {# Right: This Is You #}

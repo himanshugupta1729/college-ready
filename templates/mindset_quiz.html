@@ -229,7 +229,7 @@
       <div class="section-header">
         <span class="section-icon">{{ section.icon }}</span>
         <div>
-          <div class="section-title">{{ section.title }}</div>
+          <div class="section-title">Your Math Personality</div>
           <div class="section-subtitle">Section {{ loop.index }} of 4</div>
         </div>
       </div>
@@ -281,6 +281,9 @@
 
 <script>
 (function() {
+  // Clear test flag state now that test is complete
+  try { localStorage.removeItem('flaggedQuestions'); } catch(e) {}
+
   const totalSections = {{ sections|length }};
   let currentSection = -1; // -1 = intro
 

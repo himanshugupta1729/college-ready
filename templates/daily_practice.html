@@ -296,7 +296,7 @@
                 <div class="day-title">{{ focus_dim.name | default('Math Practice') }}</div>
             </div>
             <div class="practice-meta">
-                <div class="q-counter">8 questions</div>
+                <div class="q-counter">{{ questions | length if questions is defined and questions else question_ids | length }} questions</div>
                 <div class="time-badge">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -313,7 +313,7 @@
             <div class="focus-icon">{{ focus_dim.icon | default('🎯') }}</div>
             <p>
                 <strong>{{ focus_dim.name | default('Practice') }}</strong> —
-                {{ focus_dim.student_desc | default('8 questions designed to sharpen this skill. Take your time — no timer pressure.') }}
+                {{ focus_dim.student_desc | default('Questions designed to sharpen this skill. Take your time — no timer pressure.') }}
             </p>
         </div>
     </div>

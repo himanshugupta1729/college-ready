@@ -162,11 +162,11 @@ body::before { position: fixed; z-index: 9999; }
     cursor: pointer;
     transition: all 0.15s;
 }
-.btn-flag:hover { border-color: #F59E0B; color: #D97706; background: #FFFBEB; }
+.btn-flag:hover { border-color: #F97316; color: #EA580C; background: #FFF7ED; }
 .btn-flag.flagged {
-    background: #FFFBEB;
-    border-color: #F59E0B;
-    color: #D97706;
+    background: #FFF7ED;
+    border-color: #F97316;
+    color: #EA580C;
 }
 
 /* ── Question body ── */
@@ -372,8 +372,8 @@ body::before { position: fixed; z-index: 9999; }
 .q-nav-dot.current { background: var(--accent); color: #191919; border-color: var(--accent); font-weight: 700; }
 .q-nav-dot.answered { background: #10B981; color: #fff; border-color: #10B981; }
 .q-nav-dot.answered:hover { background: #059669; }
-.q-nav-dot.flagged { border-color: #F59E0B; background: #FFFBEB; color: #D97706; }
-.q-nav-dot.flagged.answered { background: #F59E0B; color: #fff; border-color: #F59E0B; }
+.q-nav-dot.flagged { border-color: #F97316; background: #FFF7ED; color: #EA580C; }
+.q-nav-dot.flagged.answered { background: #F97316; color: #fff; border-color: #F97316; }
 
 /* ── Bottom action bar ── */
 .test-footer {
@@ -507,7 +507,7 @@ body::before { position: fixed; z-index: 9999; }
                         ('D', question.option_d)
                     ] %}
                     {% for letter, text in options %}
-                    <div class="option-card" data-value="{{ letter }}" role="button" tabindex="0" aria-label="Option {{ letter }}: {{ text }}">
+                    <div class="option-card{% if selected_answer == letter %} selected{% endif %}" data-value="{{ letter }}" role="button" tabindex="0" aria-label="Option {{ letter }}: {{ text }}">
                         <div class="option-letter">{{ letter }}</div>
                         <div class="option-text">{{ text }}</div>
                         <div class="option-eliminate" onclick="event.stopPropagation(); eliminateOption(this.parentElement)" title="Eliminate">✕</div>
@@ -524,7 +524,7 @@ body::before { position: fixed; z-index: 9999; }
             <span class="q-map-title">Question Map</span>
             <span class="q-map-legend">
                 <span style="color: #10B981;">● Answered</span> &nbsp;
-                <span style="color: #F59E0B;">● Flagged</span> &nbsp;
+                <span style="color: #F97316;">● Flagged</span> &nbsp;
                 <span style="color: var(--text-secondary);">● Unanswered</span>
             </span>
         </div>
@@ -586,13 +586,15 @@ body::before { position: fixed; z-index: 9999; }
     const DANGER_THRESHOLD = 300;   // 5 minutes — force show + red
 
     /* ── State ── */
-    let selectedAnswer = null;
+    let selectedAnswer = {% if selected_answer %}"{{ selected_answer }}"{% else %}null{% endif %};
     let questionStartTime = Date.now();
     let totalSecondsLeft = TIME_REMAINING_SECONDS;
     let timerInterval = null;
     let submitted = false;
+    let isInternalNavigation = false;  // Flag to suppress beforeunload on internal nav
     let timerVisible = false;  // hidden by default
     let isFlagged = false;
+    const CURRENT_INDEX = {{ current_index }};
 
     /* ── DOM refs ── */
     const timerEl      = document.getElementById('timer');
@@ -669,11 +671,47 @@ body::before { position: fixed; z-index: 9999; }
         }
     };
 
+    /* ── Pre-selected answer (revisiting) ── */
+    if (selectedAnswer) {
+        answerInput.value = selectedAnswer;
+        btnNext.disabled = false;
+    }
+
+    /* ── Flag persistence via localStorage ── */
+    function getFlaggedSet() {
+        try {
+            return new Set(JSON.parse(localStorage.getItem('flaggedQuestions') || '[]'));
+        } catch(e) { return new Set(); }
+    }
+    function saveFlaggedSet(s) {
+        localStorage.setItem('flaggedQuestions', JSON.stringify(Array.from(s)));
+    }
+
+    // Initialize flag state from localStorage
+    var flaggedSet = getFlaggedSet();
+    isFlagged = flaggedSet.has(CURRENT_INDEX);
+    btnFlag.classList.toggle('flagged', isFlagged);
+    flagText.textContent = isFlagged ? 'Flagged' : 'Flag';
+
+    // Apply flagged class to nav dots from localStorage
+    document.querySelectorAll('.q-nav-dot').forEach(function(dot) {
+        var dotIdx = parseInt(dot.getAttribute('href').split('q=')[1], 10);
+        if (flaggedSet.has(dotIdx)) {
+            dot.classList.add('flagged');
+        }
+    });
+
     /* ── Mark for Review ── */
     window.toggleFlag = function() {
         isFlagged = !isFlagged;
         btnFlag.classList.toggle('flagged', isFlagged);
         flagText.textContent = isFlagged ? 'Flagged' : 'Flag';
+
+        // Persist to localStorage
+        var fs = getFlaggedSet();
+        if (isFlagged) { fs.add(CURRENT_INDEX); } else { fs.delete(CURRENT_INDEX); }
+        saveFlaggedSet(fs);
+
         // Update nav dot if exists
         var currentDot = document.querySelector('.q-nav-dot.current');
         if (currentDot) {
@@ -745,6 +783,7 @@ body::before { position: fixed; z-index: 9999; }
     function submitAnswer() {
         if (submitted || !selectedAnswer) return;
         submitted = true;
+        isInternalNavigation = true;
         clearInterval(timerInterval);
         timeSpentInput.value = Math.round((Date.now() - questionStartTime) / 1000);
         btnNext.disabled = true;
@@ -754,9 +793,20 @@ body::before { position: fixed; z-index: 9999; }
 
     btnNext.addEventListener('click', submitAnswer);
 
-    /* ── Prevent accidental navigation ── */
+    /* ── Mark question map and skip as internal navigation ── */
+    document.querySelectorAll('.q-nav-dot').forEach(function(dot) {
+        dot.addEventListener('click', function() { isInternalNavigation = true; });
+    });
+    // Skip button form
+    var skipForm = document.querySelector('.btn-skip');
+    if (skipForm) {
+        skipForm.addEventListener('click', function() { isInternalNavigation = true; });
+    }
+
+    /* ── Prevent accidental navigation (only for real leaves, not internal nav) ── */
     window.addEventListener('beforeunload', function(e) {
-        if (!submitted && selectedAnswer) {
+        if (isInternalNavigation || submitted) return;
+        if (selectedAnswer) {
             e.preventDefault();
             e.returnValue = '';
         }

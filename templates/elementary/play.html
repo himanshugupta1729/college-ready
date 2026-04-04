@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Family Math Night</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;background:#FFFFFF;color:#191919;-webkit-tap-highlight-color:transparent}
+
+/* --- Entry / Setup modes --- */
+.page-center{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.page-center .logo{font-weight:800;font-size:1.6rem;color:#FFBA07;margin-bottom:8px}
+.page-center h1{font-size:1.8rem;font-weight:800;margin-bottom:8px;text-align:center}
+.page-center .sub{color:#666;font-size:0.95rem;margin-bottom:32px;text-align:center}
+.form-card{background:#F8F9FA;border-radius:16px;padding:28px;width:100%;max-width:400px}
+.form-card label{display:block;font-weight:600;font-size:0.85rem;color:#555;margin-bottom:6px;margin-top:16px}
+.form-card label:first-child{margin-top:0}
+.form-card input,.form-card select{width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:10px;font-family:'Inter',sans-serif;font-size:1rem;outline:none;transition:border-color 0.2s}
+.form-card input:focus,.form-card select:focus{border-color:#FFBA07}
+.form-card select{appearance:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='2' fill='none'/%3E%3C/svg%3E") no-repeat right 16px center #fff;padding-right:40px}
+.btn-y{display:block;width:100%;padding:16px;border:none;border-radius:12px;background:#FFBA07;color:#191919;font-family:'Inter',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;margin-top:24px;transition:all 0.2s}
+.btn-y:hover{background:#ffc933;transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,186,7,0.35)}
+.btn-y:active{transform:translateY(0)}
+
+/* Grade band selector */
+.grade-options{display:flex;gap:12px;margin-top:8px}
+.grade-opt{flex:1;padding:16px;border:2px solid #e0e0e0;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.2s;background:#fff}
+.grade-opt.selected{border-color:#FFBA07;background:rgba(255,186,7,0.08)}
+.grade-opt .emoji{font-size:1.8rem;display:block;margin-bottom:4px}
+.grade-opt .label{font-weight:700;font-size:0.95rem}
+
+/* --- Game mode --- */
+.game-top{position:sticky;top:0;z-index:50;background:#FFBA07;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.game-top .logo{font-weight:800;font-size:1.1rem;color:#191919}
+.game-top .family-name{font-weight:600;font-size:0.85rem;color:rgba(0,0,0,0.6)}
+.game-top .score-badge{background:rgba(0,0,0,0.1);padding:6px 14px;border-radius:16px;font-weight:800;font-size:0.95rem}
+
+.game-content{padding:20px;min-height:calc(100vh - 56px);display:flex;flex-direction:column;align-items:center}
+
+/* Waiting state */
+.waiting{text-align:center;padding-top:80px}
+.waiting .big-emoji{font-size:4rem;margin-bottom:16px;animation:bounce 1.5s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.waiting h2{font-size:1.5rem;font-weight:700;margin-bottom:8px}
+.waiting p{color:#666;font-size:1rem}
+
+/* Question mode */
+.q-header{text-align:center;margin-bottom:16px;width:100%}
+.q-header .round-tag{display:inline-block;padding:4px 12px;border-radius:10px;font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.q-header .round-tag.r1{background:rgba(255,186,7,0.15);color:#b88a00}
+.q-header .round-tag.r3{background:rgba(156,39,176,0.15);color:#9C27B0}
+.q-header .q-label-mobile{font-weight:600;font-size:0.85rem;color:#888;margin-bottom:4px}
+.q-header .q-text-mobile{font-size:1.15rem;font-weight:700;line-height:1.4;color:#191919}
+
+/* Player timer */
+.player-timer{width:100%;height:4px;background:#e0e0e0;border-radius:2px;margin-bottom:20px;overflow:hidden}
+.player-timer .fill{height:100%;background:linear-gradient(90deg,#FFBA07,#FF8C00);border-radius:2px;transition:width 1s linear;width:100%}
+
+/* Answer buttons */
+.answer-buttons{width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px}
+.answer-btn{width:100%;padding:18px 20px;border:2px solid #e0e0e0;border-radius:14px;background:#fff;font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:600;text-align:left;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.15s;-webkit-user-select:none;user-select:none}
+.answer-btn:active{transform:scale(0.97)}
+.answer-btn .letter{width:36px;height:36px;border-radius:10px;background:#F0F0F0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex-shrink:0}
+.answer-btn.selected{border-color:#FFBA07;background:rgba(255,186,7,0.06)}
+.answer-btn.selected .letter{background:#FFBA07;color:#191919}
+.answer-btn.correct{border-color:#00C853;background:rgba(0,200,83,0.08)}
+.answer-btn.correct .letter{background:#00C853;color:#fff}
+.answer-btn.wrong{border-color:#FF5252;background:rgba(255,82,82,0.06)}
+.answer-btn.wrong .letter{background:#FF5252;color:#fff}
+.answer-btn.dimmed{opacity:0.4;pointer-events:none}
+
+/* Feedback */
+.feedback{text-align:center;margin-top:20px;padding:16px;border-radius:12px;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.feedback.correct{background:rgba(0,200,83,0.1);color:#00873a}
+.feedback.wrong{background:rgba(255,82,82,0.1);color:#c62828}
+.feedback .points{font-weight:800;font-size:1.2rem}
+.feedback .msg{font-size:0.9rem;margin-top:4px}
+.feedback .fun-fact{font-size:0.85rem;color:#666;margin-top:8px;font-style:italic}
+
+.submitted-msg{text-align:center;padding:32px 0;color:#888;font-weight:600;font-size:1rem}
+
+/* Code entry (Round 2) */
+.code-section{text-align:center;padding-top:40px;width:100%}
+.code-section h2{font-size:1.5rem;font-weight:800;margin-bottom:8px}
+.code-section .sub{color:#666;margin-bottom:32px;font-size:0.95rem}
+.code-digits{display:flex;justify-content:center;gap:10px;margin-bottom:24px}
+.code-digit{width:48px;height:56px;border:2px solid #e0e0e0;border-radius:10px;text-align:center;font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:800;outline:none;transition:border-color 0.2s}
+.code-digit:focus{border-color:#FFBA07}
+.code-digits.shake{animation:shake 0.4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+.code-feedback{font-weight:600;font-size:0.95rem;margin-top:8px;min-height:24px}
+.code-feedback.error{color:#FF5252}
+.code-feedback.success{color:#00C853}
+
+/* Code cracked celebration */
+.code-cracked{text-align:center;padding-top:40px}
+.code-cracked .emoji{font-size:4rem;animation:popIn 0.5s ease}
+@keyframes popIn{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+.code-cracked h2{font-size:1.5rem;font-weight:800;color:#00C853;margin:12px 0 4px}
+.code-cracked .rank{font-size:1.1rem;color:#666}
+
+/* Result / Archetype */
+.result-section{text-align:center;padding-top:40px;width:100%;max-width:400px}
+.result-section .arch-icon{font-size:5rem;margin-bottom:12px;animation:popIn 0.5s ease}
+.result-section .arch-label{font-size:0.85rem;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:4px}
+.result-section .arch-name{font-size:2rem;font-weight:900;margin-bottom:8px}
+.result-section .arch-desc{font-size:1rem;color:#555;line-height:1.6;margin-bottom:28px}
+.result-section .score-card{background:#F8F9FA;border-radius:14px;padding:20px;margin-bottom:20px}
+.result-section .score-card .label{font-size:0.8rem;color:#888;text-transform:uppercase;font-weight:600}
+.result-section .score-card .value{font-size:2rem;font-weight:900;color:#FFBA07}
+.result-section .cta-btn{display:block;width:100%;padding:16px;border:none;border-radius:12px;background:#FFBA07;color:#191919;font-family:'Inter',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;text-decoration:none;text-align:center;margin-bottom:12px}
+.result-section .share-btn{display:block;width:100%;padding:16px;border:2px solid #e0e0e0;border-radius:12px;background:#fff;color:#191919;font-family:'Inter',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;text-align:center}
+
+/* Mini confetti for code cracked */
+.mini-confetti{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:200}
+</style>
+</head>
+<body>
+
+{% if mode == 'entry' %}
+<!-- EVENT CODE ENTRY -->
+<div class="page-center">
+    <div class="logo">Cuemath</div>
+    <h1>Family Math Night</h1>
+    <p class="sub">Enter your event code to get started</p>
+    <div class="form-card">
+        <label>Event Code</label>
+        <input type="text" id="entryCode" placeholder="e.g. MATH2026" style="text-transform:uppercase;text-align:center;font-weight:700;font-size:1.2rem;letter-spacing:2px" maxlength="20" autofocus>
+        <button class="btn-y" onclick="goToEvent()">Join Event</button>
+    </div>
+</div>
+<script>
+document.getElementById('entryCode').addEventListener('keydown', e => { if (e.key === 'Enter') goToEvent(); });
+function goToEvent() {
+    const code = document.getElementById('entryCode').value.trim().toUpperCase();
+    if (code) window.location.href = '/play/' + code;
+}
+</script>
+
+{% elif mode == 'setup' %}
+<!-- SETUP -->
+<div class="page-center">
+    <div class="logo">Cuemath</div>
+    <h1>Set Up Your Event</h1>
+    <p class="sub">Event Code: <strong>{{ event_code }}</strong></p>
+    <form class="form-card" method="POST" action="/elementary/{{ event_code }}/setup">
+        <label>School Name</label>
+        <input type="text" name="school_name" placeholder="Lincoln Elementary" required value="{{ event['school_name'] if event else '' }}">
+        <label>Event Date</label>
+        <input type="date" name="event_date" value="{{ event['event_date'] if event else '' }}">
+        <label>Grade Band</label>
+        <div class="grade-options">
+            <div class="grade-opt selected" onclick="selectGrade(this,'k2')">
+                <span class="emoji">🧒</span>
+                <span class="label">K — 2</span>
+            </div>
+            <div class="grade-opt" onclick="selectGrade(this,'35')">
+                <span class="emoji">🧑</span>
+                <span class="label">3 — 5</span>
+            </div>
+        </div>
+        <input type="hidden" name="grade_band" id="gradeBand" value="k2">
+        <button type="submit" class="btn-y">Create Event</button>
+    </form>
+</div>
+<script>
+function selectGrade(el, val) {
+    document.querySelectorAll('.grade-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('gradeBand').value = val;
+}
+</script>
+
+{% elif mode == 'game' %}
+<!-- GAME MODE -->
+{% if not family %}
+<!-- REGISTRATION -->
+<div class="page-center">
+    <div class="logo">Cuemath</div>
+    <h1>Welcome to Math Night!</h1>
+    <p class="sub">{{ event['school_name'] }}</p>
+    <form class="form-card" id="regForm">
+        <label>Parent's Name</label>
+        <input type="text" id="regParent" placeholder="Jane Smith" required>
+        <label>Parent's Email</label>
+        <input type="email" id="regEmail" placeholder="jane@email.com" required>
+        <label>Child's Name</label>
+        <input type="text" id="regChild" placeholder="Alex" required>
+        <label>Child's Grade</label>
+        <select id="regGrade">
+            <option value="K">Kindergarten</option>
+            <option value="1">1st Grade</option>
+            <option value="2" selected>2nd Grade</option>
+            <option value="3">3rd Grade</option>
+            <option value="4">4th Grade</option>
+            <option value="5">5th Grade</option>
+        </select>
+        <button type="submit" class="btn-y">Join the Game!</button>
+    </form>
+</div>
+<script>
+document.getElementById('regForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        parent_name: document.getElementById('regParent').value,
+        parent_email: document.getElementById('regEmail').value,
+        child_name: document.getElementById('regChild').value,
+        child_grade: document.getElementById('regGrade').value,
+    };
+    fetch('/play/{{ event_code }}/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    }).then(r => r.json()).then(d => {
+        if (d.status === 'ok') window.location.reload();
+    });
+});
+</script>
+
+{% else %}
+<!-- ACTIVE GAME BOARD -->
+<div class="game-top">
+    <div>
+        <div class="logo">Cuemath</div>
+        <div class="family-name">{{ family['child_name'] }}</div>
+    </div>
+    <div class="score-badge" id="scoreBadge">{{ family['total_score'] }} pts</div>
+</div>
+
+<div class="game-content" id="gameContent">
+    <div class="waiting" id="waitingState">
+        <div class="big-emoji">🎯</div>
+        <h2>Get Ready!</h2>
+        <p>Waiting for the host to start...</p>
+    </div>
+</div>
+
+<script>
+const EVENT_CODE = '{{ event_code }}';
+const FAMILY_ID = {{ family['id'] }};
+const GRADE_BAND = '{{ event["grade_band"] }}';
+const QUESTIONS = {{ questions | tojson }};
+const ARCHETYPES_K2 = {{ archetypes_k2 | tojson }};
+const ARCHETYPES_35 = {{ archetypes_35 | tojson }};
+
+let lastState = null;
+let myScore = {{ family['total_score'] }};
+let answered = {};  // "round-qnum": true
+let questionStartTime = null;
+let timerInterval = null;
+let r2Cracked = {{ 'true' if family['round2_completed'] else 'false' }};
+
+function poll() {
+    fetch(`/elementary/${EVENT_CODE}/state`)
+        .then(r => r.json())
+        .then(state => {
+            const stateStr = JSON.stringify({r: state.round, q: state.question});
+            if (stateStr !== JSON.stringify({r: lastState?.round, q: lastState?.question})) {
+                lastState = state;
+                updateGameBoard(state);
+            }
+            document.getElementById('scoreBadge').textContent = myScore + ' pts';
+        });
+}
+setInterval(poll, 2000);
+poll();
+
+function updateGameBoard(state) {
+    const content = document.getElementById('gameContent');
+    const r = state.round;
+    const q = state.question;
+
+    if (r === 0 || r === 5) {
+        // Waiting or event over
+        if (r === 5) {
+            content.innerHTML = `
+                <div class="waiting">
+                    <div class="big-emoji">🏆</div>
+                    <h2>Great Job!</h2>
+                    <p>Thanks for playing! Final score: <strong>${myScore} pts</strong></p>
+                </div>`;
+        } else {
+            content.innerHTML = `
+                <div class="waiting">
+                    <div class="big-emoji">🎯</div>
+                    <h2>Get Ready!</h2>
+                    <p>Waiting for the host to start...</p>
+                </div>`;
+        }
+    } else if (r === 1 || r === 3) {
+        showQuestionMode(r, q);
+    } else if (r === 2) {
+        showCodeEntry();
+    } else if (r === 4) {
+        showArchetype();
+    }
+}
+
+function showQuestionMode(round, qNum) {
+    const content = document.getElementById('gameContent');
+    const roundKey = round === 1 ? 'round1' : 'round3';
+    const qList = QUESTIONS[roundKey];
+    if (qNum < 1 || qNum > qList.length) {
+        content.innerHTML = `<div class="waiting"><div class="big-emoji">⏳</div><h2>Hang tight!</h2><p>Next question coming up...</p></div>`;
+        return;
+    }
+    const qData = qList[qNum - 1];
+    const key = round + '-' + qNum;
+
+    if (answered[key]) {
+        content.innerHTML = `<div class="submitted-msg">✓ Answer submitted! Waiting for next question...</div>`;
+        return;
+    }
+
+    questionStartTime = Date.now();
+    const letters = ['A', 'B', 'C', 'D'];
+    const roundLabel = round === 1 ? 'Round 1 — Warm-Up' : 'Round 3 — Parent Quiz';
+    const roundClass = round === 1 ? 'r1' : 'r3';
+
+    // Build visual HTML (scaled down for phone)
+    let visualHtml = '';
+    if (qData.visual) {
+        visualHtml = `<div class="q-visual-mobile" style="margin:8px 0;transform:scale(0.75);transform-origin:center top">${qData.visual}</div>`;
+    }
+
+    let html = `
+        <div class="q-header">
+            <div class="round-tag ${roundClass}">${roundLabel}</div>
+            <div class="q-label-mobile">${qData.label || ''} • Q${qNum} of ${qList.length}</div>
+            <div class="q-text-mobile">${qData.question}</div>
+            ${visualHtml}
+        </div>
+        <div class="player-timer"><div class="fill" id="pTimerFill"></div></div>
+        <div class="answer-buttons" id="answerBtns">`;
+
+    qData.options.forEach((opt, i) => {
+        html += `<button class="answer-btn" onclick="submitAnswer(${round},${qNum},${i},this)" data-idx="${i}">
+            <span class="letter">${letters[i]}</span>
+            <span>${opt}</span>
+        </button>`;
+    });
+
+    html += `</div><div id="feedbackArea"></div>`;
+    content.innerHTML = html;
+
+    // Timer (45 seconds)
+    clearInterval(timerInterval);
+    let remaining = 45;
+    timerInterval = setInterval(() => {
+        remaining--;
+        const fill = document.getElementById('pTimerFill');
+        if (fill) fill.style.width = (remaining / 45 * 100) + '%';
+        if (remaining <= 0) clearInterval(timerInterval);
+    }, 1000);
+}
+
+function submitAnswer(round, qNum, selected, btnEl) {
+    const key = round + '-' + qNum;
+    if (answered[key]) return;
+    answered[key] = true;
+
+    const elapsed = Date.now() - questionStartTime;
+
+    // Disable all buttons, highlight selected
+    document.querySelectorAll('.answer-btn').forEach(b => {
+        b.style.pointerEvents = 'none';
+    });
+    btnEl.classList.add('selected');
+
+    fetch(`/play/${EVENT_CODE}/answer`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({round, question_number: qNum, selected_answer: selected, time_taken_ms: elapsed})
+    }).then(r => r.json()).then(result => {
+        myScore = result.new_total;
+        document.getElementById('scoreBadge').textContent = myScore + ' pts';
+
+        // Show correct/wrong on buttons
+        document.querySelectorAll('.answer-btn').forEach((b, i) => {
+            if (i === result.correct_answer) {
+                b.classList.add('correct');
+            } else if (i === selected && !result.correct) {
+                b.classList.add('wrong');
+            } else {
+                b.classList.add('dimmed');
+            }
+        });
+
+        const fb = document.getElementById('feedbackArea');
+        if (result.correct) {
+            fb.innerHTML = `<div class="feedback correct">
+                <div class="points">+${result.points_earned} pts!</div>
+                <div class="msg">Correct! Nice work!</div>
+                <div class="fun-fact">${result.fun_fact}</div>
+            </div>`;
+        } else {
+            fb.innerHTML = `<div class="feedback wrong">
+                <div class="points">0 pts</div>
+                <div class="msg">Not quite — but now you know!</div>
+                <div class="fun-fact">${result.fun_fact}</div>
+            </div>`;
+        }
+    }).catch(() => {
+        answered[key] = false;
+        btnEl.classList.remove('selected');
+        document.querySelectorAll('.answer-btn').forEach(b => b.style.pointerEvents = '');
+    });
+}
+
+function showCodeEntry() {
+    const content = document.getElementById('gameContent');
+
+    if (r2Cracked) {
+        content.innerHTML = `
+            <div class="code-cracked">
+                <div class="emoji">🎉</div>
+                <h2>Code Cracked!</h2>
+                <p class="rank">Waiting for next round...</p>
+            </div>`;
+        return;
+    }
+
+    content.innerHTML = `
+        <div class="code-section">
+            <h2>🔐 Enter Your Secret Code</h2>
+            <p class="sub">Solve the worksheet puzzles to find the 6-digit code</p>
+            <div class="code-digits" id="codeDigits">
+                <input type="tel" maxlength="1" class="code-digit" data-idx="0" autofocus>
+                <input type="tel" maxlength="1" class="code-digit" data-idx="1">
+                <input type="tel" maxlength="1" class="code-digit" data-idx="2">
+                <input type="tel" maxlength="1" class="code-digit" data-idx="3">
+                <input type="tel" maxlength="1" class="code-digit" data-idx="4">
+                <input type="tel" maxlength="1" class="code-digit" data-idx="5">
+            </div>
+            <button class="btn-y" style="max-width:300px;margin:0 auto" onclick="submitCode()">Submit Code</button>
+            <div class="code-feedback" id="codeFeedback"></div>
+        </div>`;
+
+    // Auto-advance focus
+    const digits = document.querySelectorAll('.code-digit');
+    digits.forEach((d, i) => {
+        d.addEventListener('input', () => {
+            if (d.value && i < 5) digits[i + 1].focus();
+        });
+        d.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !d.value && i > 0) {
+                digits[i - 1].focus();
+            }
+            if (e.key === 'Enter') submitCode();
+        });
+    });
+    digits[0].focus();
+}
+
+function submitCode() {
+    const digits = document.querySelectorAll('.code-digit');
+    let code = '';
+    digits.forEach(d => code += d.value);
+    if (code.length !== 6) {
+        document.getElementById('codeFeedback').textContent = 'Enter all 6 digits!';
+        document.getElementById('codeFeedback').className = 'code-feedback error';
+        return;
+    }
+
+    fetch(`/play/${EVENT_CODE}/code`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({code})
+    }).then(r => r.json()).then(result => {
+        if (result.correct) {
+            r2Cracked = true;
+            myScore += result.points_earned;
+            document.getElementById('scoreBadge').textContent = myScore + ' pts';
+
+            // Celebration
+            spawnMiniConfetti(40);
+            const content = document.getElementById('gameContent');
+            content.innerHTML = `
+                <div class="code-cracked">
+                    <div class="emoji">🎉</div>
+                    <h2>You Cracked the Code!</h2>
+                    <p class="rank">Rank: #${result.completion_rank} • +${result.points_earned} pts!</p>
+                </div>`;
+        } else {
+            const container = document.getElementById('codeDigits');
+            container.classList.add('shake');
+            setTimeout(() => container.classList.remove('shake'), 500);
+            document.getElementById('codeFeedback').textContent = 'Wrong code — try again!';
+            document.getElementById('codeFeedback').className = 'code-feedback error';
+            // Clear digits
+            document.querySelectorAll('.code-digit').forEach(d => d.value = '');
+            document.querySelector('.code-digit').focus();
+        }
+    });
+}
+
+function showArchetype() {
+    const content = document.getElementById('gameContent');
+
+    // Try to get archetype from server
+    fetch(`/play/${EVENT_CODE}/result`)
+        .then(r => r.text())
+        .then(html => {
+            // Instead, just fetch state and show archetype locally
+            // The archetype is assigned server-side when round 4 starts
+        });
+
+    // Poll for archetype assignment
+    fetch(`/elementary/${EVENT_CODE}/state`).then(r => r.json()).then(state => {
+        // Show a waiting message, archetype will be on the result page
+        content.innerHTML = `
+            <div class="waiting">
+                <div class="big-emoji">✨</div>
+                <h2>Your Archetype Is Being Revealed!</h2>
+                <p>Look at the screen...</p>
+                <p style="margin-top:16px"><a href="/play/${EVENT_CODE}/result" style="color:#FFBA07;font-weight:700;text-decoration:none">See Your Result →</a></p>
+            </div>`;
+    });
+}
+
+function spawnMiniConfetti(count) {
+    const colors = ['#FFBA07', '#FF5252', '#00C853', '#2196F3', '#E91E63'];
+    for (let i = 0; i < count; i++) {
+        const c = document.createElement('div');
+        c.className = 'mini-confetti';
+        c.style.position = 'fixed';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.top = '-10px';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.width = (5 + Math.random() * 6) + 'px';
+        c.style.height = (5 + Math.random() * 6) + 'px';
+        c.style.borderRadius = '2px';
+        c.style.transition = `top ${2 + Math.random() * 2}s ease, transform ${2 + Math.random()}s ease`;
+        document.body.appendChild(c);
+        requestAnimationFrame(() => {
+            c.style.top = '110vh';
+            c.style.transform = `rotate(${Math.random() * 720}deg)`;
+        });
+        setTimeout(() => c.remove(), 5000);
+    }
+}
+</script>
+
+{% endif %}
+
+{% elif mode == 'result' %}
+<!-- RESULT PAGE -->
+<div class="game-top">
+    <div>
+        <div class="logo">Cuemath</div>
+        <div class="family-name">{{ family['child_name'] }}</div>
+    </div>
+    <div class="score-badge">{{ family['total_score'] }} pts</div>
+</div>
+<div class="game-content">
+    <div class="result-section">
+        <div class="arch-label">Your Math Archetype</div>
+        <div class="arch-icon">{{ archetype.get('icon', '⭐') }}</div>
+        <div class="arch-name" style="color:{{ archetype.get('color', '#FFBA07') }}">{{ archetype.get('name', 'Math Star') }}</div>
+        <div class="arch-desc">{{ archetype.get('description', '') }}</div>
+        <div class="score-card">
+            <div class="label">Final Score</div>
+            <div class="value">{{ family['total_score'] }}</div>
+        </div>
+        <a class="cta-btn" href="https://www.cuemath.com/mathgym/" target="_blank">Try MathGym Free →</a>
+        <button class="share-btn" onclick="shareResult()">Share Your Result</button>
+    </div>
+</div>
+<script>
+function shareResult() {
+    const text = `I'm a {{ archetype.get('name', 'Math Star') }} {{ archetype.get('icon', '⭐') }}! I scored {{ family['total_score'] }} points at Family Math Night. Try MathGym: https://www.cuemath.com/mathgym/`;
+    if (navigator.share) {
+        navigator.share({title: 'My Math Archetype', text: text}).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!'));
+    }
+}
+</script>
+{% endif %}
+
+</body>
+</html>

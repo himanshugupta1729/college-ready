@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crack the Code - 3-5 Family Math Night</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+        }
+
+        @page {
+            size: 297mm 210mm;
+            margin: 0;
+        }
+
+        .worksheet {
+            width: 297mm;
+            height: 210mm;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 12mm 0 8mm 0;
+            background: linear-gradient(135deg, #FFBA07 0%, #FFD700 100%);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12mm;
+        }
+
+        .logo {
+            font-size: 18mm;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .header-text h1 {
+            font-size: 11mm;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: 0.5mm;
+        }
+
+        .header-text p {
+            font-size: 6mm;
+            color: #2c2c2c;
+            margin-top: 1mm;
+            font-weight: 500;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: #f0f0f0;
+            padding: 6mm 12mm;
+            text-align: center;
+            font-size: 5.5mm;
+            color: #1a1a1a;
+            border-bottom: 2mm solid #FFBA07;
+            font-weight: 500;
+        }
+
+        /* Main content container */
+        .content {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* Fold line */
+        .fold-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1mm;
+            background: repeating-linear-gradient(
+                90deg,
+                #FFBA07,
+                #FFBA07 3mm,
+                transparent 3mm,
+                transparent 6mm
+            );
+            z-index: 10;
+        }
+
+        /* Zone containers */
+        .zone {
+            flex: 1;
+            padding: 8mm 10mm;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .student-zone {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+        }
+
+        .parent-zone {
+            background: linear-gradient(135deg, #fff3e0 0%, #fff8f0 100%);
+        }
+
+        .zone-title {
+            font-size: 7mm;
+            font-weight: 700;
+            margin-bottom: 6mm;
+            padding-bottom: 3mm;
+            border-bottom: 2mm solid #FFBA07;
+            text-align: center;
+        }
+
+        .student-zone .zone-title {
+            color: #0d47a1;
+        }
+
+        .parent-zone .zone-title {
+            color: #e65100;
+        }
+
+        /* Puzzle cards */
+        .puzzle {
+            background: white;
+            border: 2mm solid #FFBA07;
+            border-radius: 4mm;
+            padding: 6mm;
+            margin-bottom: 5mm;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .puzzle-number {
+            position: absolute;
+            top: -6mm;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10mm;
+            height: 10mm;
+            background: #FFBA07;
+            border: 2mm solid white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 5mm;
+            color: #1a1a1a;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .puzzle-content {
+            margin-top: 4mm;
+        }
+
+        .puzzle-text {
+            font-size: 5mm;
+            color: #1a1a1a;
+            margin-bottom: 3mm;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .puzzle-math {
+            background: #f9f9f9;
+            border-left: 3mm solid #FFD700;
+            padding: 3mm 4mm;
+            font-size: 5.5mm;
+            color: #1a1a1a;
+            margin: 2mm 0;
+            border-radius: 2mm;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .puzzle-hint {
+            background: #f9f9f9;
+            border-left: 2mm solid #FFD700;
+            padding: 3mm 4mm;
+            font-size: 4.5mm;
+            color: #555;
+            margin: 3mm 0;
+            border-radius: 2mm;
+        }
+
+        .answer-choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3mm;
+            margin-top: 3mm;
+        }
+
+        .choice {
+            background: #f5f5f5;
+            border: 1.5mm solid #ddd;
+            border-radius: 3mm;
+            padding: 3mm;
+            text-align: center;
+            font-size: 5mm;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .choice:hover {
+            background: #fffacd;
+            border-color: #FFBA07;
+        }
+
+        .code-box-label {
+            font-size: 4.5mm;
+            color: #666;
+            margin-top: 3mm;
+            font-weight: 600;
+        }
+
+        /* Footer - Code area */
+        .footer {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5cc 100%);
+            padding: 6mm 12mm;
+            text-align: center;
+            border-top: 3mm dashed #FFBA07;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '🔐 TOP SECRET 🔐';
+            position: absolute;
+            top: -6mm;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 5mm;
+            font-weight: 700;
+            color: #FFBA07;
+            background: white;
+            padding: 1mm 8mm;
+            border: 2mm solid #FFBA07;
+            border-radius: 3mm;
+            letter-spacing: 1mm;
+        }
+
+        .code-instruction {
+            font-size: 5mm;
+            color: #1a1a1a;
+            font-weight: 600;
+            margin-top: 6mm;
+            margin-bottom: 4mm;
+        }
+
+        .code-display {
+            display: flex;
+            justify-content: center;
+            gap: 3mm;
+            align-items: center;
+            margin-bottom: 3mm;
+        }
+
+        .code-text {
+            font-size: 5.5mm;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .code-boxes {
+            display: flex;
+            gap: 2mm;
+        }
+
+        .code-box {
+            width: 7mm;
+            height: 7mm;
+            border: 2mm solid #1a1a1a;
+            border-radius: 1.5mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-weight: 700;
+            font-size: 4mm;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .worksheet {
+                width: 297mm;
+                height: 210mm;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                page-break-after: avoid;
+            }
+
+            @page {
+                size: 297mm 210mm;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="worksheet">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">🧮</div>
+                <div class="header-text">
+                    <h1>CRACK THE CODE</h1>
+                    <p>Family Math Night Challenge</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            🎯 Solve your side's puzzles • Each answer gives you ONE digit of the secret code • Enter all 6 digits on the app to WIN!
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Fold Line -->
+            <div class="fold-line"></div>
+
+            <!-- STUDENT ZONE (Left) -->
+            <div class="zone student-zone">
+                <div class="zone-title">⭐ STUDENT ZONE</div>
+
+                <!-- Puzzle 1 -->
+                <div class="puzzle">
+                    <div class="puzzle-number">1</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-text">Complete the pattern:</div>
+                        <div class="puzzle-math">1 , 3 , 5 , ___ , 9</div>
+                        <div class="puzzle-text"><strong>What's the missing number?</strong></div>
+                        <div class="answer-choices">
+                            <div class="choice">A) 6</div>
+                            <div class="choice">B) 7</div>
+                            <div class="choice">C) 8</div>
+                            <div class="choice">D) 9</div>
+                        </div>
+                        <div class="code-box-label">Write your answer in Code Box 1 →</div>
+                    </div>
+                </div>
+
+                <!-- Puzzle 2 -->
+                <div class="puzzle">
+                    <div class="puzzle-number">2</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-text">You have 10 cookies. Share them equally among 5 friends.</div>
+                        <div class="puzzle-text"><strong>How many cookies does each friend get?</strong></div>
+                        <div class="puzzle-hint">💡 Hint: Divide 10 by 5</div>
+                        <div class="answer-choices">
+                            <div class="choice">A) 1</div>
+                            <div class="choice">B) 2</div>
+                            <div class="choice">C) 3</div>
+                            <div class="choice">D) 5</div>
+                        </div>
+                        <div class="code-box-label">Write your answer in Code Box 2 →</div>
+                    </div>
+                </div>
+
+                <!-- Puzzle 3 -->
+                <div class="puzzle">
+                    <div class="puzzle-number">3</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-text">Solve this multiplication:</div>
+                        <div class="puzzle-math">2 × 3 = ___</div>
+                        <div class="answer-choices">
+                            <div class="choice">A) 4</div>
+                            <div class="choice">B) 5</div>
+                            <div class="choice">C) 6</div>
+                            <div class="choice">D) 8</div>
+                        </div>
+                        <div class="code-box-label">Write your answer in Code Box 3 →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARENT ZONE (Right) -->
+            <div class="zone parent-zone">
+                <div class="zone-title">👨‍👩‍👧 PARENT ZONE</div>
+
+                <!-- Puzzle 4 -->
+                <div class="puzzle">
+                    <div class="puzzle-number">4</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-text">You need to tile a room that is 12 ft × 15 ft. Tiles come in boxes of 45 (each tile is 1 ft × 1 ft).</div>
+                        <div class="puzzle-text"><strong>How many BOXES of tiles do you need?</strong></div>
+                        <div class="puzzle-hint">💡 Hint: Find total area, then divide by 45</div>
+                        <div class="answer-choices">
+                            <div class="choice">A) 3</div>
+                            <div class="choice">B) 4</div>
+                            <div class="choice">C) 5</div>
+                            <div class="choice">D) 6</div>
+                        </div>
+                        <div class="code-box-label">Write your answer in Code Box 4 →</div>
+                    </div>
+                </div>
+
+                <!-- Puzzle 5 -->
+                <div class="puzzle">
+                    <div class="puzzle-number">5</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-text">You invested $1,000 and earned 10% interest. Then the market dropped 10%.</div>
+                        <div class="puzzle-text"><strong>What percentage of your original $1,000 did you actually lose? (Round to nearest whole %)</strong></div>
+                        <div class="puzzle-hint">💡 Step 1: $1,000 + 10% = $1,100 &nbsp; Step 2: $1,100 - 10% = ?</div>
+                        <div class="answer-choices">
+                            <div class="choice">A) 0%</div>
+                            <div class="choice">B) 1%</div>
+                            <div class="choice">C) 5%</div>
+                            <div class="choice">D) 10%</div>
+                        </div>
+                        <div class="code-box-label">Write your answer in Code Box 5 →</div>
+                    </div>
+                </div>
+
+                <!-- Puzzle 6 -->
+                <div class="puzzle">
+                    <div class="puzzle-number">6</div>
+                    <div class="puzzle-content">
+                        <div class="puzzle-text">A train leaves at 2:15 PM and arrives at 7:15 PM.</div>
+                        <div class="puzzle-text"><strong>How many hours was the journey?</strong></div>
+                        <div class="puzzle-hint">💡 Hint: Count from 2:15 to 7:15</div>
+                        <div class="answer-choices">
+                            <div class="choice">A) 4</div>
+                            <div class="choice">B) 4.5</div>
+                            <div class="choice">C) 5</div>
+                            <div class="choice">D) 6</div>
+                        </div>
+                        <div class="code-box-label">Write your answer in Code Box 6 →</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer - Code Entry -->
+        <div class="footer">
+            <div class="code-instruction">YOUR SECRET CODE:</div>
+            <div class="code-display">
+                <span class="code-text">📱</span>
+                <div class="code-boxes">
+                    <div class="code-box"></div>
+                    <div class="code-box"></div>
+                    <div class="code-box"></div>
+                    <div class="code-box"></div>
+                    <div class="code-box"></div>
+                    <div class="code-box"></div>
+                </div>
+                <span class="code-text">🎁</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

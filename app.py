@@ -8,6 +8,7 @@ archetype, and a personalized daily practice plan.
 import os
 import io
 import csv
+import re
 import logging
 import json
 import random
@@ -1483,7 +1484,7 @@ def calculate_analytics(student_id):
         pct = round(data['correct'] / data['total'] * 100, 1) if data['total'] > 0 else 0
         status = 'strong' if pct >= 70 else ('developing' if pct >= 45 else 'needs_work')
         topic_heatmap.append({
-            'domain': domain.replace('_', ' ').title(),
+            'domain': re.sub(r'\s+\d+$', '', domain.replace('_', ' ').title()),
             'accuracy': pct,
             'correct': data['correct'],
             'total': data['total'],
@@ -2460,14 +2461,30 @@ def register():
 @app.route('/test/intro')
 @login_required
 def test_intro():
-    student = get_db().execute("SELECT * FROM students WHERE id = ?",
+    conn = get_db()
+    student = conn.execute("SELECT * FROM students WHERE id = ?",
                                 (session['student_id'],)).fetchone()
     config = TRACK_CONFIG.get(student['track'], TRACK_CONFIG['sat'])
-    info = {
-        'name': config['name'],
-        'time': config['time_minutes'],
-        'questions': config['total_questions'],
-    }
+
+    # Check if this is a demo event — show demo-specific numbers
+    event = None
+    if student['event_code']:
+        event = conn.execute("SELECT * FROM events WHERE event_code = ?",
+                              (student['event_code'],)).fetchone()
+    is_demo = event and event['is_demo']
+
+    if is_demo:
+        info = {
+            'name': config['name'],
+            'time': 10,        # demo is 10 minutes
+            'questions': 10,   # demo is 10 questions
+        }
+    else:
+        info = {
+            'name': config['name'],
+            'time': config['time_minutes'],
+            'questions': config['total_questions'],
+        }
     return render_template('test_intro.html', student=student, track_info=info)
 
 
@@ -2609,18 +2626,17 @@ def test_question():
     time_remaining = max(0, time_limit - elapsed)
 
     # Build question navigator data for current module
-    config = TRACK_CONFIG.get(session.get('track', 'sat'), TRACK_CONFIG['sat'])
-    total = config['total_questions']
-
-    # Module boundaries
+    # Use actual question count (not config total) — important for demo mode
     module1_count = len(session.get('module1_ids', []))
     if current_module == 1:
         nav_start = 0
         nav_end = module1_count
+        total = module1_count
         module_label = "Module 1"
     else:
         nav_start = 0
         nav_end = len(question_ids)
+        total = len(question_ids)
         module_label = "Module 2"
 
     # Build navigator: which questions are answered, current, skipped
@@ -2630,6 +2646,16 @@ def test_question():
         status = 'current' if i == current else ('answered' if qid in answered_set else 'unanswered')
         nav_items.append({'index': i, 'number': i + 1, 'status': status})
 
+    # Check if student already answered this question (for revisiting via question map)
+    student_id = session['student_id']
+    existing_response = conn.execute(
+        "SELECT selected_answer FROM responses WHERE student_id = ? AND question_id = ?",
+        (student_id, question_ids[current])
+    ).fetchone()
+    selected_answer = existing_response['selected_answer'] if existing_response else None
+
+    answered_count = len(answered_set)
+
     return render_template('test_question.html',
                            question=question,
                            current=current + 1,
@@ -2637,7 +2663,9 @@ def test_question():
                            time_remaining=int(time_remaining),
                            nav_items=nav_items,
                            module_label=module_label,
-                           current_index=current)
+                           current_index=current,
+                           selected_answer=selected_answer,
+                           answered_count=answered_count)
 
 
 @app.route('/test/answer', methods=['POST'])
