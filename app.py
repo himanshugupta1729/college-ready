@@ -851,6 +851,151 @@ def assign_archetype(fuar_scores, gric_scores=None, grade=None):
     return ARCHETYPE_MATRIX.get((fuar_dominant, mindset), 'sigma')
 
 
+# ---------- Elementary Math Night Data ----------
+
+ELEMENTARY_QUESTIONS = {
+    'k2': {
+        'round1': [
+            {
+                'id': 1, 'label': 'Kids First!', 'fuar': 'R',
+                'question': 'What comes next in the pattern?',
+                'visual': '<div style="display:flex;gap:16px;justify-content:center;font-size:3rem;margin:20px 0">🟦🔴🟦🔴🟦<span style="font-size:4rem;color:#FFBA07">?</span></div>',
+                'options': ['🟦', '🔴', '🟢', '⭐'],
+                'correct': 1,
+                'fun_fact': 'You found the pattern! Red and blue take turns — patterns are everywhere in math!'
+            },
+            {
+                'id': 2, 'label': 'Family Team!', 'fuar': 'R',
+                'question': 'Which one does NOT belong?',
+                'visual': '<div style="display:flex;gap:24px;justify-content:center;font-size:4rem;margin:20px 0"><span style="padding:10px;border-radius:12px;background:#f0f0f0">🍎</span><span style="padding:10px;border-radius:12px;background:#f0f0f0">🍊</span><span style="padding:10px;border-radius:12px;background:#f0f0f0">🚗</span><span style="padding:10px;border-radius:12px;background:#f0f0f0">🍌</span></div>',
+                'options': ['🍎 Apple', '🍊 Orange', '🚗 Car', '🍌 Banana'],
+                'correct': 2,
+                'fun_fact': 'The car doesn\'t belong — it\'s not a fruit! Sorting things into groups is how scientists think!'
+            },
+            {
+                'id': 3, 'label': 'Kids First!', 'fuar': 'U',
+                'question': 'How many triangles can you count?',
+                'visual': '<div style="text-align:center;margin:20px 0"><svg width="280" height="200" viewBox="0 0 280 200"><polygon points="140,10 30,190 250,190" fill="none" stroke="#FFBA07" stroke-width="3"/><line x1="85" y1="100" x2="195" y2="100" stroke="#FFBA07" stroke-width="3"/><line x1="140" y1="10" x2="140" y2="190" stroke="#FFBA07" stroke-width="3"/></svg></div>',
+                'options': ['2', '3', '4', '5'],
+                'correct': 2,
+                'fun_fact': 'There are 4 triangles! The big one, plus 3 smaller ones inside. Looking carefully is a math superpower!'
+            },
+            {
+                'id': 4, 'label': 'Parents\' Turn!', 'fuar': 'A',
+                'question': 'You have 10 cookies. You eat some. Now you have 6. How many did you eat?',
+                'visual': '<div style="text-align:center;font-size:3rem;margin:20px 0">🍪🍪🍪🍪🍪🍪🍪🍪🍪🍪 ➡️ 🍪🍪🍪🍪🍪🍪</div>',
+                'options': ['2', '3', '4', '5'],
+                'correct': 2,
+                'fun_fact': '10 - 6 = 4 cookies eaten! Subtraction tells us what\'s missing.'
+            },
+            {
+                'id': 5, 'label': 'Family Team!', 'fuar': 'R',
+                'question': 'Which puzzle piece completes the picture?',
+                'visual': '<div style="text-align:center;margin:20px 0"><div style="display:inline-grid;grid-template-columns:1fr 1fr;gap:4px;background:#333;padding:4px;border-radius:8px"><div style="background:#4CAF50;width:100px;height:80px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:2.5rem">⬆️</div><div style="background:#4CAF50;width:100px;height:80px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:2.5rem">➡️</div><div style="background:#4CAF50;width:100px;height:80px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:2.5rem">⬇️</div><div style="background:#FFBA07;width:100px;height:80px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:2.5rem">❓</div></div></div>',
+                'options': ['⬆️', '⬇️', '⬅️', '➡️'],
+                'correct': 2,
+                'fun_fact': 'The arrows go clockwise: up, right, down, then LEFT! Rotating patterns are everywhere — clocks, wheels, seasons!'
+            },
+        ],
+        'round2_code': '594831',
+        'round3': [
+            {'id': 1, 'question': 'What is 15% tip on a $60 dinner?', 'options': ['$7', '$8', '$9', '$10'], 'correct': 2, 'fun_fact': 'Tip trick: 10% is $6, half of that is $3, so 15% = $9!'},
+            {'id': 2, 'question': 'Your kid\'s class has 24 students. 1/3 are absent today. How many are here?', 'options': ['8', '12', '16', '18'], 'correct': 2, 'fun_fact': '24 \u00f7 3 = 8 absent, so 24 - 8 = 16 present!'},
+            {'id': 3, 'question': 'A recipe calls for \u00be cup of flour. You\'re making double. How much flour?', 'options': ['1 cup', '1\u00bc cups', '1\u00bd cups', '1\u00be cups'], 'correct': 2, 'fun_fact': '\u00be \u00d7 2 = 6/4 = 1\u00bd cups. Cooking is delicious math!'},
+            {'id': 4, 'question': 'Sale: 25% off a $80 jacket. What do you pay?', 'options': ['$55', '$60', '$65', '$70'], 'correct': 1, 'fun_fact': '25% of $80 = $20 off. You pay $60!'},
+            {'id': 5, 'question': 'Your car gets 30 miles per gallon. Gas costs $4/gallon. How much for a 150-mile trip?', 'options': ['$15', '$20', '$25', '$30'], 'correct': 1, 'fun_fact': '150 \u00f7 30 = 5 gallons \u00d7 $4 = $20!'},
+            {'id': 6, 'question': 'You run 3 miles in 27 minutes. What\'s your pace per mile?', 'options': ['7 min', '8 min', '9 min', '10 min'], 'correct': 2, 'fun_fact': '27 \u00f7 3 = 9 minutes per mile. Not bad!'},
+            {'id': 7, 'question': 'A shirt was $40, marked up 50%, then discounted 50%. What\'s the price now?', 'options': ['$40', '$35', '$30', '$25'], 'correct': 2, 'fun_fact': 'Tricky! $40 \u00d7 1.5 = $60, then $60 \u00d7 0.5 = $30. Not back to $40!'},
+            {'id': 8, 'question': '🎤 KIDS TAKE OVER! How many fingers do you have on both hands?', 'options': ['5', '8', '10', '12'], 'correct': 2, 'fun_fact': '10 fingers — and every one of them helps you count!'},
+        ],
+    },
+    '35': {
+        'round1': [
+            {
+                'id': 1, 'label': 'Kids First!', 'fuar': 'F',
+                'question': 'What is 48 \u00d7 5?',
+                'visual': '<div style="text-align:center;margin:20px 0;font-size:3.5rem;font-weight:800;color:#FFBA07">48 \u00d7 5 = ?</div>',
+                'options': ['200', '220', '240', '250'], 'correct': 2,
+                'fun_fact': 'Quick trick: 48 \u00d7 5 = 48 \u00d7 10 \u00f7 2 = 480 \u00f7 2 = 240!'
+            },
+            {
+                'id': 2, 'label': 'Family Team!', 'fuar': 'R',
+                'question': '1, 1, 2, 3, 5, 8, __ \u2014 What comes next?',
+                'visual': '<div style="display:flex;gap:12px;justify-content:center;margin:20px 0"><span style="background:#16213e;color:#FFBA07;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800">1</span><span style="background:#16213e;color:#FFBA07;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800">1</span><span style="background:#16213e;color:#FFBA07;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800">2</span><span style="background:#16213e;color:#FFBA07;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800">3</span><span style="background:#16213e;color:#FFBA07;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800">5</span><span style="background:#16213e;color:#FFBA07;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800">8</span><span style="background:#FFBA07;color:#1a1a2e;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:900">?</span></div>',
+                'options': ['10', '11', '13', '15'], 'correct': 2,
+                'fun_fact': 'This is the Fibonacci sequence! Each number = sum of the two before it.'
+            },
+            {
+                'id': 3, 'label': 'Parents\' Turn!', 'fuar': 'A',
+                'question': 'A store sells 3 notebooks for $7. How much for 12 notebooks?',
+                'visual': '<div style="text-align:center;margin:20px 0;font-size:2.5rem">\U0001f4d3\U0001f4d3\U0001f4d3 = $7<br><span style="font-size:1.5rem;color:#8892b0">How much for 12?</span></div>',
+                'options': ['$21', '$24', '$28', '$36'], 'correct': 2,
+                'fun_fact': '12 notebooks = 4 sets of 3, so 4 \u00d7 $7 = $28!'
+            },
+            {
+                'id': 4, 'label': 'Kids First!', 'fuar': 'F',
+                'question': 'What is \u00be + \u00bd?',
+                'visual': '<div style="text-align:center;margin:20px 0"><div style="display:inline-flex;gap:20px;align-items:center"><div style="position:relative;width:80px;height:80px"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#333" stroke-width="3"/><path d="M40,4 A36,36 0 1,1 4,40 L40,40 Z" fill="#FFBA07"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.2rem">\u00be</div></div><div style="font-size:2.5rem;font-weight:800;color:#FFBA07">+</div><div style="position:relative;width:80px;height:80px"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="#333" stroke-width="3"/><path d="M40,4 A36,36 0 0,1 40,76 L40,40 Z" fill="#2196F3"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:800;font-size:1.2rem">\u00bd</div></div></div></div>',
+                'options': ['1', '1\u00bc', '1\u00bd', '2'], 'correct': 1,
+                'fun_fact': '\u00be + \u00bd = \u00be + 2/4 = 5/4 = 1\u00bc!'
+            },
+            {
+                'id': 5, 'label': 'Family Team!', 'fuar': 'R',
+                'question': 'If \u25b2 + \u25b2 + \u25cf = 17, and \u25b2 = 5, what is \u25cf?',
+                'visual': '<div style="text-align:center;margin:20px 0;font-size:2.8rem"><span style="color:#FF9800">\u25b2</span> + <span style="color:#FF9800">\u25b2</span> + <span style="color:#2196F3">\u25cf</span> = 17<br><span style="font-size:1.5rem;color:#8892b0"><span style="color:#FF9800">\u25b2</span> = 5</span></div>',
+                'options': ['5', '6', '7', '8'], 'correct': 2,
+                'fun_fact': '5 + 5 + \u25cf = 17, so \u25cf = 7. You just solved algebra!'
+            },
+        ],
+        'round2_code': '726415',
+        'round3': [
+            {'id': 1, 'question': 'What is 18% tip on a $85 dinner?', 'options': ['$12.30', '$13.60', '$15.30', '$17.00'], 'correct': 2, 'fun_fact': 'Quick: 20% = $17, minus 2% ($1.70) = $15.30!'},
+            {'id': 2, 'question': 'A store has 30% off, then an extra 20% off. What\'s the total discount?', 'options': ['50%', '44%', '56%', '36%'], 'correct': 1, 'fun_fact': '70% \u00d7 80% = 56% of original price. So 44% off \u2014 not 50%!'},
+            {'id': 3, 'question': 'Your recipe serves 4. You need to serve 10. It calls for \u2154 cup sugar. How much?', 'options': ['1 cup', '1\u2153 cups', '1\u2154 cups', '2 cups'], 'correct': 2, 'fun_fact': 'Scale factor: 10/4 = 2.5. So \u2154 \u00d7 2.5 = 5/3 = 1\u2154 cups!'},
+            {'id': 4, 'question': 'A car depreciates 15% per year. Bought at $30,000. Value after 2 years?', 'options': ['$21,000', '$21,675', '$22,500', '$25,500'], 'correct': 1, 'fun_fact': 'Year 1: $30K \u00d7 0.85 = $25,500. Year 2: $25,500 \u00d7 0.85 = $21,675!'},
+            {'id': 5, 'question': 'You invest $1,000 at 5% annual interest. How much after 1 year?', 'options': ['$1,005', '$1,050', '$1,500', '$1,055'], 'correct': 1, 'fun_fact': '$1,000 \u00d7 1.05 = $1,050. Your money works while you sleep!'},
+            {'id': 6, 'question': 'A room is 12ft \u00d7 15ft. Paint covers 350 sq ft per gallon. Enough for the floor?', 'options': ['Yes (180 sq ft)', 'No (180 sq ft)', 'Yes (150 sq ft)', 'No (200 sq ft)'], 'correct': 0, 'fun_fact': '12 \u00d7 15 = 180 sq ft. One gallon covers 350, so yes \u2014 plenty!'},
+            {'id': 7, 'question': 'Probability: flip 2 coins. What\'s the chance both are heads?', 'options': ['10%', '25%', '33%', '50%'], 'correct': 1, 'fun_fact': 'HH, HT, TH, TT \u2014 four outcomes, one is HH = 25%!'},
+            {'id': 8, 'question': '\U0001f3a4 KIDS TAKE OVER! A rectangle has length 8 and width 5. What\'s the perimeter?', 'options': ['13', '26', '30', '40'], 'correct': 1, 'fun_fact': 'Perimeter = 2 \u00d7 (8 + 5) = 2 \u00d7 13 = 26!'},
+        ],
+    }
+}
+
+ELEMENTARY_ARCHETYPES_K2 = {
+    'F': {'name': 'Speed Spark', 'icon': '\u26a1', 'color': '#00C853', 'description': 'Lightning-fast with numbers! You solve problems quickly and love math races.'},
+    'U': {'name': 'Deep Thinker', 'icon': '\U0001f9e0', 'color': '#2196F3', 'description': 'You understand WHY math works, not just HOW. You ask the best questions!'},
+    'A': {'name': 'Problem Solver', 'icon': '\U0001f3af', 'color': '#FF9800', 'description': 'You use math in the real world \u2014 shopping, cooking, sports, everywhere!'},
+    'R': {'name': 'Pattern Seeker', 'icon': '\U0001f50d', 'color': '#E91E63', 'description': 'You spot patterns others miss. Puzzles and mysteries are your thing!'},
+}
+
+ELEMENTARY_ARCHETYPES_35 = {
+    'F_engaged': {'key': 'sigma', 'name': 'The Perfectionist', 'icon': '\u03c3', 'color': '#3B82F6', 'description': 'You don\'t skip steps \u2014 and that\'s why you rarely get things wrong. Precision is your superpower!'},
+    'F_guarded': {'key': 'delta', 'name': 'The Relentless', 'icon': '\u03b4', 'color': '#EF4444', 'description': 'You outwork everyone. When you set your mind to a problem, nothing stops you!'},
+    'U_engaged': {'key': 'pi', 'name': 'The Philosopher', 'icon': '\u03c0', 'color': '#8B5CF6', 'description': 'You need to know WHY before you\'ll accept HOW. You think deeper than most!'},
+    'U_guarded': {'key': 'lambda', 'name': 'The Strategist', 'icon': '\u03bb', 'color': '#14B8A6', 'description': 'You see the big picture and find the smartest way to solve any problem.'},
+    'A_engaged': {'key': 'gamma', 'name': 'The Inventor', 'icon': '\u03b3', 'color': '#F59E0B', 'description': 'You see math in everything \u2014 sports stats, cooking, building. Real-world is your playground!'},
+    'A_guarded': {'key': 'theta', 'name': 'The Engineer', 'icon': '\u03b8', 'color': '#10B981', 'description': 'You love building and figuring out how things work. Math is your toolkit!'},
+    'R_engaged': {'key': 'phi', 'name': 'The Explorer', 'icon': '\u03c6', 'color': '#EC4899', 'description': 'You see patterns everywhere and love discovering mathematical secrets!'},
+    'R_guarded': {'key': 'alpha', 'name': 'The Detective', 'icon': '\u03b1', 'color': '#6366F1', 'description': 'You crack codes and solve puzzles. Logic is your magnifying glass!'},
+}
+
+
+def get_elementary_archetype(fuar_scores, grade_band):
+    """Assign archetype based on FUAR scores for elementary events."""
+    dims = {'F': fuar_scores.get('F', 0), 'U': fuar_scores.get('U', 0),
+            'A': fuar_scores.get('A', 0), 'R': fuar_scores.get('R', 0)}
+    dominant = max(dims, key=dims.get)
+
+    if grade_band == 'k2':
+        return ELEMENTARY_ARCHETYPES_K2.get(dominant, ELEMENTARY_ARCHETYPES_K2['F'])
+
+    # For 3-5, use engaged/guarded split (simple heuristic: high score = engaged)
+    total = sum(dims.values())
+    mindset = 'engaged' if dims[dominant] > total * 0.35 else 'guarded'
+    key = f'{dominant}_{mindset}'
+    return ELEMENTARY_ARCHETYPES_35.get(key, ELEMENTARY_ARCHETYPES_35['F_engaged'])
+
+
 # ---------- Database ----------
 
 def get_db():
@@ -1059,6 +1204,54 @@ def init_db():
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
         except Exception:
             pass  # Column already exists
+
+    conn.executescript("""
+        CREATE TABLE IF NOT EXISTS elementary_events (
+            id INTEGER PRIMARY KEY,
+            event_code TEXT UNIQUE NOT NULL,
+            school_name TEXT NOT NULL,
+            event_date TEXT,
+            grade_band TEXT DEFAULT 'k2',
+            current_round INTEGER DEFAULT 0,
+            current_question INTEGER DEFAULT 0,
+            round_started_at TEXT,
+            status TEXT DEFAULT 'waiting',
+            created_at TEXT DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS elementary_families (
+            id INTEGER PRIMARY KEY,
+            event_id INTEGER NOT NULL,
+            parent_name TEXT NOT NULL,
+            parent_email TEXT NOT NULL,
+            child_name TEXT NOT NULL,
+            child_grade TEXT,
+            total_score INTEGER DEFAULT 0,
+            round2_completion_time INTEGER,
+            round2_completed INTEGER DEFAULT 0,
+            archetype TEXT,
+            fuar_f INTEGER DEFAULT 0,
+            fuar_u INTEGER DEFAULT 0,
+            fuar_a INTEGER DEFAULT 0,
+            fuar_r INTEGER DEFAULT 0,
+            created_at TEXT DEFAULT (datetime('now')),
+            FOREIGN KEY (event_id) REFERENCES elementary_events(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS elementary_answers (
+            id INTEGER PRIMARY KEY,
+            family_id INTEGER NOT NULL,
+            round INTEGER NOT NULL,
+            question_number INTEGER NOT NULL,
+            selected_answer INTEGER,
+            is_correct INTEGER DEFAULT 0,
+            time_taken_ms INTEGER,
+            fuar_dimension TEXT,
+            answered_at TEXT DEFAULT (datetime('now')),
+            FOREIGN KEY (family_id) REFERENCES elementary_families(id),
+            UNIQUE(family_id, round, question_number)
+        );
+    """)
 
     conn.commit()
     conn.close()
@@ -4649,6 +4842,425 @@ def seed_all():
         print(f"  {t}: {track_counts[t]}")
 
 
+# ============================================================
+# ELEMENTARY MATH NIGHT
+# ============================================================
+
+@app.route('/elementary/')
+def elementary_index():
+    """Event code entry page — redirects to setup or presenter."""
+    code = request.args.get('code', '').strip().upper()
+    if code:
+        conn = get_db()
+        event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+        if event:
+            return redirect(f'/elementary/{code}/present')
+        return redirect(f'/elementary/{code}/setup')
+    # Simple entry page
+    return render_template('elementary/play.html', mode='entry', event_code=None, event=None, family=None)
+
+
+@app.route('/elementary/<code>/setup', methods=['GET', 'POST'])
+def elementary_setup(code):
+    code = code.upper()
+    conn = get_db()
+    if request.method == 'POST':
+        school_name = request.form.get('school_name', 'School')
+        grade_band = request.form.get('grade_band', 'k2')
+        event_date = request.form.get('event_date', datetime.now().strftime('%Y-%m-%d'))
+        conn.execute("""
+            INSERT INTO elementary_events (event_code, school_name, event_date, grade_band, status)
+            VALUES (?, ?, ?, ?, 'waiting')
+            ON CONFLICT(event_code) DO UPDATE SET school_name=excluded.school_name,
+            grade_band=excluded.grade_band, event_date=excluded.event_date
+        """, (code, school_name, event_date, grade_band))
+        conn.commit()
+        return redirect(f'/elementary/{code}/present')
+
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    return render_template('elementary/play.html', mode='setup', event_code=code, event=event, family=None)
+
+
+@app.route('/elementary/<code>/present')
+def elementary_present(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return redirect(f'/elementary/{code}/setup')
+    questions = ELEMENTARY_QUESTIONS.get(event['grade_band'], ELEMENTARY_QUESTIONS['k2'])
+    archetypes = ELEMENTARY_ARCHETYPES_K2 if event['grade_band'] == 'k2' else ELEMENTARY_ARCHETYPES_35
+    return render_template('elementary/present.html', event=event, questions=questions,
+                           archetypes=archetypes, event_code=code)
+
+
+@app.route('/elementary/<code>/advance', methods=['POST'])
+def elementary_advance(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    current_round = event['current_round']
+    current_question = event['current_question']
+    grade_band = event['grade_band']
+    questions = ELEMENTARY_QUESTIONS.get(grade_band, ELEMENTARY_QUESTIONS['k2'])
+
+    # State machine: advance through rounds and questions
+    # Round 0 = waiting/welcome -> Round 1 Q1
+    # Round 1 Q1..Q7 -> Round 2 (worksheet)
+    # Round 2 -> Round 3 Q1
+    # Round 3 Q1..Q8 -> Round 4 (archetype reveal)
+    # Round 4 -> Round 5 (final leaderboard)
+
+    r1_count = len(questions['round1'])
+    r3_count = len(questions['round3'])
+
+    if current_round == 0:
+        # Start round 1
+        new_round, new_q = 1, 1
+        conn.execute("UPDATE elementary_events SET status='active' WHERE event_code=?", (code,))
+    elif current_round == 1:
+        if current_question < r1_count:
+            new_round, new_q = 1, current_question + 1
+        else:
+            # Move to round 2
+            new_round, new_q = 2, 0
+            conn.execute("UPDATE elementary_events SET round_started_at=datetime('now') WHERE event_code=?", (code,))
+    elif current_round == 2:
+        # Move to round 3
+        new_round, new_q = 3, 1
+    elif current_round == 3:
+        if current_question < r3_count:
+            new_round, new_q = 3, current_question + 1
+        else:
+            # Move to archetype reveal
+            new_round, new_q = 4, 0
+            # Calculate archetypes for all families
+            families = conn.execute("SELECT id, fuar_f, fuar_u, fuar_a, fuar_r FROM elementary_families WHERE event_id=?",
+                                     (event['id'],)).fetchall()
+            for fam in families:
+                scores = {'F': fam['fuar_f'], 'U': fam['fuar_u'], 'A': fam['fuar_a'], 'R': fam['fuar_r']}
+                arch = get_elementary_archetype(scores, grade_band)
+                conn.execute("UPDATE elementary_families SET archetype=? WHERE id=?",
+                             (json.dumps(arch), fam['id']))
+    elif current_round == 4:
+        new_round, new_q = 5, 0
+        conn.execute("UPDATE elementary_events SET status='completed' WHERE event_code=?", (code,))
+    else:
+        new_round, new_q = current_round, current_question
+
+    conn.execute("UPDATE elementary_events SET current_round=?, current_question=? WHERE event_code=?",
+                 (new_round, new_q, code))
+    conn.commit()
+
+    return jsonify({'round': new_round, 'question': new_q, 'status': 'ok'})
+
+
+@app.route('/elementary/<code>/state')
+def elementary_state(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    family_count = conn.execute("SELECT COUNT(*) FROM elementary_families WHERE event_id=?",
+                                 (event['id'],)).fetchone()[0]
+
+    # Get answer count for current question
+    answer_count = 0
+    if event['current_round'] in (1, 3) and event['current_question'] > 0:
+        answer_count = conn.execute(
+            "SELECT COUNT(*) FROM elementary_answers a JOIN elementary_families f ON a.family_id=f.id "
+            "WHERE f.event_id=? AND a.round=? AND a.question_number=?",
+            (event['id'], event['current_round'], event['current_question'])).fetchone()[0]
+
+    # Get answer stats for reveal
+    correct_count = 0
+    if event['current_round'] in (1, 3) and event['current_question'] > 0:
+        correct_count = conn.execute(
+            "SELECT COUNT(*) FROM elementary_answers a JOIN elementary_families f ON a.family_id=f.id "
+            "WHERE f.event_id=? AND a.round=? AND a.question_number=? AND a.is_correct=1",
+            (event['id'], event['current_round'], event['current_question'])).fetchone()[0]
+
+    # Top 5 leaderboard
+    top5 = conn.execute(
+        "SELECT child_name, parent_name, total_score FROM elementary_families WHERE event_id=? ORDER BY total_score DESC LIMIT 5",
+        (event['id'],)).fetchall()
+
+    # Round 2 completions
+    r2_completions = []
+    if event['current_round'] == 2:
+        r2_completions = [dict(r) for r in conn.execute(
+            "SELECT child_name, parent_name, round2_completion_time FROM elementary_families "
+            "WHERE event_id=? AND round2_completed=1 ORDER BY round2_completion_time ASC",
+            (event['id'],)).fetchall()]
+    r2_completed_count = conn.execute(
+        "SELECT COUNT(*) FROM elementary_families WHERE event_id=? AND round2_completed=1",
+        (event['id'],)).fetchone()[0]
+
+    return jsonify({
+        'round': event['current_round'],
+        'question': event['current_question'],
+        'status': event['status'],
+        'round_started_at': event['round_started_at'],
+        'total_families': family_count,
+        'answer_count': answer_count,
+        'correct_count': correct_count,
+        'r2_completed_count': r2_completed_count,
+        'r2_completions': r2_completions,
+        'leaderboard': [{'child_name': r['child_name'], 'parent_name': r['parent_name'],
+                         'score': r['total_score']} for r in top5],
+    })
+
+
+@app.route('/play/<code>')
+def elementary_play(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return "Event not found", 404
+
+    family = None
+    if 'elem_family_id' in session:
+        family = conn.execute("SELECT * FROM elementary_families WHERE id=? AND event_id=?",
+                               (session['elem_family_id'], event['id'])).fetchone()
+
+    questions = ELEMENTARY_QUESTIONS.get(event['grade_band'], ELEMENTARY_QUESTIONS['k2'])
+    archetypes_k2 = ELEMENTARY_ARCHETYPES_K2
+    archetypes_35 = ELEMENTARY_ARCHETYPES_35
+    return render_template('elementary/play.html', mode='game', event=event, event_code=code,
+                           family=family, questions=questions,
+                           archetypes_k2=archetypes_k2, archetypes_35=archetypes_35)
+
+
+@app.route('/play/<code>/register', methods=['POST'])
+def elementary_register(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    data = request.get_json() if request.is_json else request.form
+    parent_name = data.get('parent_name', '').strip()
+    parent_email = data.get('parent_email', '').strip()
+    child_name = data.get('child_name', '').strip()
+    child_grade = data.get('child_grade', '')
+
+    if not parent_name or not parent_email or not child_name:
+        if request.is_json:
+            return jsonify({'error': 'All fields required'}), 400
+        return redirect(f'/play/{code}')
+
+    # Check if already registered with this email
+    existing = conn.execute(
+        "SELECT id FROM elementary_families WHERE event_id=? AND parent_email=?",
+        (event['id'], parent_email)).fetchone()
+    if existing:
+        session['elem_family_id'] = existing['id']
+        if request.is_json:
+            return jsonify({'status': 'ok', 'family_id': existing['id']})
+        return redirect(f'/play/{code}')
+
+    cur = conn.execute(
+        "INSERT INTO elementary_families (event_id, parent_name, parent_email, child_name, child_grade) VALUES (?,?,?,?,?)",
+        (event['id'], parent_name, parent_email, child_name, child_grade))
+    conn.commit()
+    session['elem_family_id'] = cur.lastrowid
+
+    if request.is_json:
+        return jsonify({'status': 'ok', 'family_id': cur.lastrowid})
+    return redirect(f'/play/{code}')
+
+
+@app.route('/play/<code>/answer', methods=['POST'])
+def elementary_answer(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    family_id = session.get('elem_family_id')
+    if not family_id:
+        return jsonify({'error': 'Not registered'}), 403
+
+    family = conn.execute("SELECT * FROM elementary_families WHERE id=? AND event_id=?",
+                           (family_id, event['id'])).fetchone()
+    if not family:
+        return jsonify({'error': 'Family not found'}), 404
+
+    data = request.get_json()
+    round_num = data.get('round')
+    question_number = data.get('question_number')
+    selected_answer = data.get('selected_answer')
+    time_taken_ms = data.get('time_taken_ms', 45000)
+
+    # Check if already answered
+    existing = conn.execute(
+        "SELECT id FROM elementary_answers WHERE family_id=? AND round=? AND question_number=?",
+        (family_id, round_num, question_number)).fetchone()
+    if existing:
+        return jsonify({'error': 'Already answered', 'duplicate': True}), 400
+
+    # Look up correct answer
+    grade_band = event['grade_band']
+    questions = ELEMENTARY_QUESTIONS.get(grade_band, ELEMENTARY_QUESTIONS['k2'])
+    round_key = 'round1' if round_num == 1 else 'round3'
+    q_list = questions.get(round_key, [])
+
+    if question_number < 1 or question_number > len(q_list):
+        return jsonify({'error': 'Invalid question'}), 400
+
+    q = q_list[question_number - 1]
+    correct = q['correct']
+    is_correct = 1 if selected_answer == correct else 0
+
+    # Score: +100 base if correct, +50 if < 15s, +25 if < 30s
+    points = 0
+    if is_correct:
+        points = 100
+        if time_taken_ms < 15000:
+            points += 50
+        elif time_taken_ms < 30000:
+            points += 25
+
+    fuar_dim = q.get('fuar', '')
+
+    conn.execute(
+        "INSERT INTO elementary_answers (family_id, round, question_number, selected_answer, is_correct, time_taken_ms, fuar_dimension) "
+        "VALUES (?,?,?,?,?,?,?)",
+        (family_id, round_num, question_number, selected_answer, is_correct, time_taken_ms, fuar_dim))
+
+    # Update score and FUAR
+    conn.execute("UPDATE elementary_families SET total_score = total_score + ? WHERE id=?",
+                 (points, family_id))
+    if fuar_dim and is_correct:
+        fuar_col = f'fuar_{fuar_dim.lower()}'
+        if fuar_col in ('fuar_f', 'fuar_u', 'fuar_a', 'fuar_r'):
+            conn.execute(f"UPDATE elementary_families SET {fuar_col} = {fuar_col} + 1 WHERE id=?",
+                         (family_id,))
+
+    conn.commit()
+
+    new_total = conn.execute("SELECT total_score FROM elementary_families WHERE id=?",
+                              (family_id,)).fetchone()['total_score']
+
+    return jsonify({
+        'correct': bool(is_correct),
+        'correct_answer': correct,
+        'points_earned': points,
+        'new_total': new_total,
+        'fun_fact': q.get('fun_fact', ''),
+    })
+
+
+@app.route('/play/<code>/code', methods=['POST'])
+def elementary_code_submit(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    family_id = session.get('elem_family_id')
+    if not family_id:
+        return jsonify({'error': 'Not registered'}), 403
+
+    family = conn.execute("SELECT * FROM elementary_families WHERE id=? AND event_id=?",
+                           (family_id, event['id'])).fetchone()
+    if not family:
+        return jsonify({'error': 'Family not found'}), 404
+
+    if family['round2_completed']:
+        return jsonify({'correct': True, 'already_completed': True, 'points_earned': 0})
+
+    data = request.get_json()
+    submitted_code = data.get('code', '').strip()
+
+    grade_band = event['grade_band']
+    correct_code = ELEMENTARY_QUESTIONS.get(grade_band, {}).get('round2_code', '')
+
+    if submitted_code != correct_code:
+        return jsonify({'correct': False, 'points_earned': 0})
+
+    # Calculate completion time from round start
+    completion_time = 0
+    if event['round_started_at']:
+        try:
+            started = datetime.strptime(event['round_started_at'], '%Y-%m-%d %H:%M:%S')
+            completion_time = int((datetime.utcnow() - started).total_seconds())
+        except Exception:
+            completion_time = 0
+
+    # Points: 500 base + time bonus (max 500 for fastest)
+    time_bonus = max(0, 500 - completion_time)  # 1 point per second saved
+    points = 500 + time_bonus
+
+    # Get completion rank
+    rank = conn.execute(
+        "SELECT COUNT(*) FROM elementary_families WHERE event_id=? AND round2_completed=1",
+        (event['id'],)).fetchone()[0] + 1
+
+    conn.execute(
+        "UPDATE elementary_families SET round2_completed=1, round2_completion_time=?, total_score=total_score+? WHERE id=?",
+        (completion_time, points, family_id))
+    conn.commit()
+
+    return jsonify({
+        'correct': True,
+        'points_earned': points,
+        'completion_time': completion_time,
+        'completion_rank': rank,
+    })
+
+
+@app.route('/play/<code>/result')
+def elementary_result(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return "Event not found", 404
+
+    family_id = session.get('elem_family_id')
+    if not family_id:
+        return redirect(f'/play/{code}')
+
+    family = conn.execute("SELECT * FROM elementary_families WHERE id=?", (family_id,)).fetchone()
+    if not family or not family['archetype']:
+        return redirect(f'/play/{code}')
+
+    archetype = json.loads(family['archetype'])
+    return render_template('elementary/play.html', mode='result', event=event, event_code=code,
+                           family=family, archetype=archetype)
+
+
+@app.route('/elementary/<code>/leaderboard')
+def elementary_leaderboard(code):
+    code = code.upper()
+    conn = get_db()
+    event = conn.execute("SELECT * FROM elementary_events WHERE event_code = ?", (code,)).fetchone()
+    if not event:
+        return jsonify({'error': 'Event not found'}), 404
+
+    families = conn.execute(
+        "SELECT child_name, parent_name, total_score, archetype FROM elementary_families "
+        "WHERE event_id=? ORDER BY total_score DESC",
+        (event['id'],)).fetchall()
+
+    return jsonify({
+        'families': [{'child_name': f['child_name'], 'parent_name': f['parent_name'],
+                      'score': f['total_score'],
+                      'archetype': json.loads(f['archetype']) if f['archetype'] else None}
+                     for f in families]
+    })
+
+
 with app.app_context():
     init_db()
     seed_all()
@@ -4715,11 +5327,19 @@ with app.app_context():
         print("✓ Applied supplement fixes (verification 2026-03-30)")
     _fix_conn.close()
 
-    # Ensure demo event exists
+    # Ensure demo and foundation events exist
     conn = get_db()
     conn.execute("""
         INSERT OR IGNORE INTO events (event_code, event_name, school_name, event_date, location, event_type, grade_min, grade_max, test_enabled, is_demo, test_enabled_at)
         VALUES ('DEMO-2026', 'Product Demo', 'Demo School', '2026-12-31', 'Online', 'high_school', 6, 12, 1, 1, datetime('now'))
+    """)
+    conn.execute("""
+        INSERT OR IGNORE INTO events (event_code, event_name, school_name, event_date, location, event_type, grade_min, grade_max, test_enabled, is_demo, test_enabled_at)
+        VALUES ('FOUNDATION-2026', 'Foundation Math Night', 'Demo School', '2026-12-31', 'Online', 'middle_school', 6, 8, 1, 0, datetime('now'))
+    """)
+    conn.execute("""
+        INSERT OR IGNORE INTO events (event_code, event_name, school_name, event_date, location, event_type, grade_min, grade_max, test_enabled, is_demo, test_enabled_at)
+        VALUES ('FOUNDATION-DEMO', 'Foundation Math Night Demo', 'Demo School', '2026-12-31', 'Online', 'middle_school', 6, 8, 1, 1, datetime('now'))
     """)
     conn.commit()
 
